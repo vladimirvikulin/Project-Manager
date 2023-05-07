@@ -12,7 +12,9 @@ function App() {
       {id: 3, title: 'Три', status: true},
     ]
   )
-  
+  const [edit, setEdit] = useState(null)
+  const [value, setValue] = useState('')
+
   const addTask = (newTask) => {
     setTasks([...tasks, newTask])
   }
@@ -23,12 +25,24 @@ function App() {
 
   const statusTask = (task) => {
     setTasks(tasks.filter( i => {
-        if (i.id === task.id) {
-          i.status = !i.status
-        }
+        if (i.id === task.id) i.status = !i.status
         return i
       }
     ))
+  }
+  const editTask = (task) => {
+    setEdit(task.id)
+    setValue(task.title)
+   }
+
+  const saveTask = (task) => {
+    setTasks(tasks.filter( i => {
+      if (i.id === task.id) i.title = value
+      setEdit(null)
+      setValue('')
+      return i
+    }
+  ))
   }
 
   return (
@@ -36,7 +50,9 @@ function App() {
       <Header/>
       <AddTaskForm add={addTask}/>
       {tasks.length
-        ? <List remove={removeTask} status={statusTask} title = {'Список 1'} tasks = {tasks}/>
+        ? <List 
+        remove={removeTask} status={statusTask} edit={edit} editTask={editTask} value={value} setValue={setValue} save={saveTask} 
+        title = {'Список 1'} tasks = {tasks}/>
         : <h1 className="list">Список задач порожній</h1>
       }
     </div>
