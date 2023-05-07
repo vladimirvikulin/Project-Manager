@@ -4,7 +4,7 @@ const Task = (props) => {
     return (
      <div className="task">
          <div>
-            {props.task.id} {props.task.title}
+            {props.number}. {props.task.title}
          </div>
          <div>
             <button>Змінити</button>
