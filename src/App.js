@@ -16,11 +16,16 @@ function App() {
   const addTask = (newTask) => {
     setTasks([...tasks, newTask])
   }
+
+  const removeTask = (task) => {
+    setTasks(tasks.filter(i => i.id !== task.id))
+  }
+
   return (
     <div className= 'App'>
       <Header/>
       <AddTaskForm add={addTask}/>
-      <List title = {'Список 1'} tasks = {tasks}/>
+      <List remove={removeTask} title = {'Список 1'} tasks = {tasks}/>
     </div>
   );
 }

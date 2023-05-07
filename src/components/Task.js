@@ -8,7 +8,9 @@ const Task = (props) => {
          </div>
          <div>
             <button>Змінити</button>
-            <button>Видалити</button>
+            <button onClick={() => props.remove(props.task)}>
+               Видалити
+            </button>
             <button>Закрити</button>
          </div>
     </div>
