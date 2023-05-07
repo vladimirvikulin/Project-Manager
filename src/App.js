@@ -25,7 +25,10 @@ function App() {
     <div className= 'App'>
       <Header/>
       <AddTaskForm add={addTask}/>
-      <List remove={removeTask} title = {'Список 1'} tasks = {tasks}/>
+      {tasks.length
+        ? <List remove={removeTask} title = {'Список 1'} tasks = {tasks}/>
+        : <h1 className="list">Список задач порожній</h1>
+      }
     </div>
   );
 }
