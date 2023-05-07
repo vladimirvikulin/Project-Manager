@@ -21,12 +21,22 @@ function App() {
     setTasks(tasks.filter(i => i.id !== task.id))
   }
 
+  const statusTask = (task) => {
+    setTasks(tasks.filter( i => {
+        if (i.id === task.id) {
+          i.status = !i.status
+        }
+        return i
+      }
+    ))
+  }
+
   return (
     <div className= 'App'>
       <Header/>
       <AddTaskForm add={addTask}/>
       {tasks.length
-        ? <List remove={removeTask} title = {'Список 1'} tasks = {tasks}/>
+        ? <List remove={removeTask} status={statusTask} title = {'Список 1'} tasks = {tasks}/>
         : <h1 className="list">Список задач порожній</h1>
       }
     </div>

@@ -38,3 +38,8 @@
     font-size: 20px;
     text-align: center; 
 }
+
+.close {
+    color: gray;
+    text-decoration: line-through;
+}
