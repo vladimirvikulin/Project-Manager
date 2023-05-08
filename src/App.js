@@ -1,25 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './styles/App.css'
 import Header from './components/Header';
 import List from './components/List';
-import AddGroupForm from './components/AddGroupForm';
 
 function App() {
-  const [groups, setGroups] = useState([])
-  const addGroup = (newGroup) => {
-    setGroups([...groups, newGroup])
-  }
-  const removeGroup = (group) => {
-    setGroups(groups.filter(i => i.id !== group.id))
-  }
   return (
     <div className= 'App'>
-      <Header groups = {groups}/>
-      <AddGroupForm addGroup = {addGroup}/>
-      {groups.length
-        ? <List groups={groups} removeGroup={removeGroup}/>
-        : <h1 className="list">Список груп порожній</h1>
-      }
+      <Header/>
+      <List/>
     </div>
   );
 }
