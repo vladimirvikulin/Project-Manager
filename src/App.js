@@ -2,58 +2,20 @@ import React, { useState } from 'react';
 import './styles/App.css'
 import Header from './components/Header';
 import List from './components/List';
-import AddTaskForm from './components/AddTaskForm';
+import AddGroupForm from './components/AddGroupForm';
 
 function App() {
-  const [tasks, setTasks] = useState (
-    [
-      {id: 1, title: 'Один', status: true},
-      {id: 2, title: 'Два', status: true},
-      {id: 3, title: 'Три', status: true},
-    ]
-  )
-  const [edit, setEdit] = useState(null)
-  const [value, setValue] = useState('')
-
-  const addTask = (newTask) => {
-    setTasks([...tasks, newTask])
+  const [groups, setGroups] = useState([])
+  const addGroup = (newGroup) => {
+    setGroups([...groups, newGroup])
   }
-
-  const removeTask = (task) => {
-    setTasks(tasks.filter(i => i.id !== task.id))
-  }
-
-  const statusTask = (task) => {
-    setTasks(tasks.filter( i => {
-        if (i.id === task.id) i.status = !i.status
-        return i
-      }
-    ))
-  }
-  const editTask = (task) => {
-    setEdit(task.id)
-    setValue(task.title)
-   }
-
-  const saveTask = (task) => {
-    setTasks(tasks.filter( i => {
-      if (i.id === task.id) i.title = value
-      setEdit(null)
-      setValue('')
-      return i
-    }
-  ))
-  }
-
   return (
     <div className= 'App'>
-      <Header/>
-      <AddTaskForm add={addTask}/>
-      {tasks.length
-        ? <List 
-        remove={removeTask} status={statusTask} edit={edit} editTask={editTask} value={value} setValue={setValue} save={saveTask} 
-        title = {'Список 1'} tasks = {tasks}/>
-        : <h1 className="list">Список задач порожній</h1>
+      <Header groups = {groups}/>
+      <AddGroupForm addGroup = {addGroup}/>
+      {groups.length
+        ? <List groups={groups}/>
+        : <h1 className="list">Список груп порожній</h1>
       }
     </div>
   );

@@ -1,13 +1,11 @@
 import React from 'react';
-import Task from './Task';
+import ListGroup from './ListGroup';
 
-const List = ({remove, status, title, edit, editTask, value, setValue, save, tasks}) => {
+const List = ({groups}) => {
+
     return (
         <div>
-            <h1 className="list">{title}</h1>
-            {tasks.map((task, index) => <Task 
-            remove={remove} status={status} edit={edit} editTask={editTask} value={value} setValue={setValue} save={save}
-            number={index + 1} task={task} key={task.id}/>)}
+            {groups.map((group) => <ListGroup  group={group} key={group.id}/>)}
         </div>
     );
 };

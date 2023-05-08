@@ -21,7 +21,7 @@ const Task = (props) => {
          {
          props.edit === props.task.id ? 
             <div>
-               <button onClick={() => props.save(props.task)}>
+               <button onClick={() => props.saveTask(props.task)}>
                   Зберегти
                </button>
             </div>
@@ -30,10 +30,10 @@ const Task = (props) => {
                <button onClick={() => props.editTask(props.task)}>
                   Змінити
                </button>
-               <button onClick={() => props.remove(props.task)}>
+               <button onClick={() => props.removeTask(props.task)}>
                   Видалити
                </button>
-               <button onClick={() => props.status(props.task)}>
+               <button onClick={() => props.statusTask(props.task)}>
                   {
                      props.task.status ? 'Закрити' : 'Відкрити'
                   }
