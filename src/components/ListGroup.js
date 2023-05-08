@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AddTaskForm from './AddTaskForm';
 import Task from './Task';
 
-const ListGroup = ({group}) => {
+const ListGroup = ({group, removeGroup}) => {
     const [tasks, setTasks] = useState ([])
     const [edit, setEdit] = useState(null)
     const [value, setValue] = useState('')
@@ -40,6 +40,9 @@ const ListGroup = ({group}) => {
         <div>
             <h1 className="list">{group.title}</h1>
             <AddTaskForm add={addTask}/>
+            <button onClick={() => removeGroup(group)}>
+                  Видалити групу
+               </button>
             {tasks.length ? 
                 <div>
                 {tasks.map((task, index) => <Task 

@@ -9,12 +9,15 @@ function App() {
   const addGroup = (newGroup) => {
     setGroups([...groups, newGroup])
   }
+  const removeGroup = (group) => {
+    setGroups(groups.filter(i => i.id !== group.id))
+  }
   return (
     <div className= 'App'>
       <Header groups = {groups}/>
       <AddGroupForm addGroup = {addGroup}/>
       {groups.length
-        ? <List groups={groups}/>
+        ? <List groups={groups} removeGroup={removeGroup}/>
         : <h1 className="list">Список груп порожній</h1>
       }
     </div>
