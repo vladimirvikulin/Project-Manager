@@ -1,8 +1,12 @@
-import React from 'react';
+import React,{useState} from 'react';
 
 const Task = (props) => {
+   const [priority, setPriority] = useState(false)
+   const priorityTask = () => {
+      setPriority(!priority)
+   }
     return (
-     <div className='task'>
+     <div className={priority ? 'priorityTask' : 'task'}>
          {
          props.edit === props.task.id ? 
             <div>
@@ -14,7 +18,10 @@ const Task = (props) => {
                />
             </div>
             : 
-            <div className={!props.task.status ? 'close' : ''}>         
+            <div className={!props.task.status ? 'close' : ''}>
+               <button onClick={() => priorityTask(props.task)}>
+                  Пріорітет
+               </button>    
                {props.number}. {props.task.title}
             </div>
          }
