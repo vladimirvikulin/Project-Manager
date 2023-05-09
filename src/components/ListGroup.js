@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
 import AddTaskForm from './AddTaskForm';
+import { Link } from "react-router-dom";
 import Task from './Task';
 
-const ListGroup = ({group, removeGroup}) => {
+const ListGroup = ({group, removeGroup, addCompleted, addNotCompleted}) => {
     const [tasks, setTasks] = useState ([])
     const [edit, setEdit] = useState(null)
     const [value, setValue] = useState('')
+    let completed = 0
+    let notCompleted = 0
+
+    const checkCompleted = () => {
+        tasks.map((i) => i.status ? completed++ : notCompleted++)
+        addCompleted(completed)
+        addNotCompleted(notCompleted)
+        completed = 0
+        notCompleted = 0
+    }
     
     const addTask = (newTask) => {
         setTasks([...tasks, newTask])
+        checkCompleted()
     }
     
     const removeTask = (task) => {
         setTasks(tasks.filter(i => i.id !== task.id))
+        checkCompleted()
     }
     
     const statusTask = (task) => {
@@ -21,6 +34,7 @@ const ListGroup = ({group, removeGroup}) => {
             return i
           }
         ))
+        checkCompleted()
     }
     const editTask = (task) => {
         setEdit(task.id)
@@ -38,6 +52,9 @@ const ListGroup = ({group, removeGroup}) => {
     }
     return (
         <div>
+            <div className='link'>
+              <Link to='/statistics'>Статистика</Link>
+            </div>
             <h1 className="list">{group.title}</h1>
             <AddTaskForm add={addTask}/>
             <button onClick={() => removeGroup(group)}>
