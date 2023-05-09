@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import ListGroup from './ListGroup';
-import AddGroupForm from './AddGroupForm';
+import ListGroup from '../components/ListGroup';
+import AddGroupForm from '../components/AddGroupForm'
+import '../styles/App.css'
 
-const List = () => {
+const List = ({addCompleted, addNotCompleted}) => {
     const [groups, setGroups] = useState([])
     const addGroup = (newGroup) => {
       setGroups([...groups, newGroup])
@@ -16,7 +17,10 @@ const List = () => {
             {groups.length
                 ?
                 <div>
-                     {groups.map((group) => <ListGroup  group={group} removeGroup={removeGroup} key={group.id}/>)}
+                     {groups.map((group) => <ListGroup 
+                     group={group} removeGroup={removeGroup}
+                     addCompleted={addCompleted} addNotCompleted={addNotCompleted}
+                     key={group.id}/>)}
                 </div>
                 : <h1 className="list">Список груп порожній</h1>
             }
