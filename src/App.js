@@ -1,18 +1,18 @@
-import React,{useState} from 'react';
+import React from 'react';
 import './styles/App.css'
 import Header from './components/Header';
 import List from './pages/List';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TaskStatistics from './pages/TaskStatistics'
+import { connect } from 'react-redux';
+import { setCompleted, setNotCompleted } from './db/store';
 
-function App() {
-  const [completedTask, setCompletedTask] = useState(0)
-  const [notCompletedTask, setNotCompletedTask] = useState(0)
+function App(props) {
   const addCompleted = (num) => {
-    setCompletedTask(num)
+    props.setCompleted(num)
   }
   const addNotCompleted = (num) => {
-    setNotCompletedTask(num)
+    props.setNotCompleted(num)
   }
   return (
     <div className= 'App'>
@@ -20,11 +20,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<List addCompleted={addCompleted} addNotCompleted={addNotCompleted}/>} />
-          <Route path="/statistics" element={<TaskStatistics completedTask={completedTask} notCompletedTask={notCompletedTask}/>}/>
+          <Route path="/statistics" element={<TaskStatistics completedTask={props.completed} notCompletedTask={props.notCompleted}/>}/>
         </Routes>
       </BrowserRouter>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    completed: state.completed,
+    notCompleted: state.notCompleted
+  }
+}
+
+export default connect(mapStateToProps, { setCompleted, setNotCompleted })(App);

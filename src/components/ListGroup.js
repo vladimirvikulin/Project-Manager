@@ -7,25 +7,21 @@ const ListGroup = ({group, removeGroup, addCompleted, addNotCompleted}) => {
     const [tasks, setTasks] = useState ([])
     const [edit, setEdit] = useState(null)
     const [value, setValue] = useState('')
-    let completed = 0
-    let notCompleted = 0
 
     const checkCompleted = () => {
-        tasks.map((i) => i.status ? completed++ : notCompleted++)
+        let completed = 0
+        let notCompleted = 0
+        tasks.map((i) => i.status ? ++notCompleted : ++completed)
         addCompleted(completed)
         addNotCompleted(notCompleted)
-        completed = 0
-        notCompleted = 0
     }
     
     const addTask = (newTask) => {
         setTasks([...tasks, newTask])
-        checkCompleted()
     }
     
     const removeTask = (task) => {
         setTasks(tasks.filter(i => i.id !== task.id))
-        checkCompleted()
     }
     
     const statusTask = (task) => {
@@ -34,7 +30,6 @@ const ListGroup = ({group, removeGroup, addCompleted, addNotCompleted}) => {
             return i
           }
         ))
-        checkCompleted()
     }
     const editTask = (task) => {
         setEdit(task.id)
@@ -53,7 +48,7 @@ const ListGroup = ({group, removeGroup, addCompleted, addNotCompleted}) => {
     return (
         <div>
             <div className='link'>
-              <Link to='/statistics'>Статистика</Link>
+              <Link onClick={checkCompleted} to='/statistics'>Статистика</Link>
             </div>
             <h1 className="list">{group.title}</h1>
             <AddTaskForm add={addTask}/>
