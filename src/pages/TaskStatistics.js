@@ -6,7 +6,7 @@ import '../styles/App.css'
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const TaskStatistics = ({completedTask, notCompletedTask}) => {
+const TaskStatistics = ({completedTask, notCompletedTask, loadGroupsFromLocal}) => {
   const data = {
     labels: ['Виконані', 'Невиконані'],
     datasets: [
@@ -28,7 +28,7 @@ const TaskStatistics = ({completedTask, notCompletedTask}) => {
   return (
   <div className='pieChart'>
     <div className='link'>
-      <Link to='/'>Список</Link>
+      <Link onClick={loadGroupsFromLocal} to='/'>Список</Link>
     </div>
     <Pie data={data}/>;
   </div>

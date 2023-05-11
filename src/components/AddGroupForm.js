@@ -7,6 +7,7 @@ const AddGroupForm = ({addGroup}) => {
         const newGroup = {
           id: Date.now(),
           title,
+          tasks: [],
         }
         addGroup(newGroup)
         setTitle('')

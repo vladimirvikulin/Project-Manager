@@ -1,16 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ListGroup from '../components/ListGroup';
 import AddGroupForm from '../components/AddGroupForm'
 import '../styles/App.css'
 
-const List = ({addCompleted, addNotCompleted}) => {
-    const [groups, setGroups] = useState([])
-    const addGroup = (newGroup) => {
-      setGroups([...groups, newGroup])
-    }
-    const removeGroup = (group) => {
-      setGroups(groups.filter(i => i.id !== group.id))
-    }
+const List = ({groups, setGroups, addGroup, removeGroup, addCompleted, addNotCompleted, setLocalGroups}) => {
     return (
         <div>
             <AddGroupForm addGroup = {addGroup}/>
@@ -18,7 +11,7 @@ const List = ({addCompleted, addNotCompleted}) => {
                 ?
                 <div>
                      {groups.map((group) => <ListGroup 
-                     group={group} removeGroup={removeGroup}
+                     group={group} groups={groups} setGroups={setGroups} removeGroup={removeGroup} setLocalGroups={setLocalGroups}
                      addCompleted={addCompleted} addNotCompleted={addNotCompleted}
                      key={group.id}/>)}
                 </div>

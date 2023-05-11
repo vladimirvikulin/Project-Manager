@@ -3,47 +3,55 @@ import AddTaskForm from './AddTaskForm';
 import { Link } from "react-router-dom";
 import Task from './Task';
 
-const ListGroup = ({group, removeGroup, addCompleted, addNotCompleted}) => {
-    const [tasks, setTasks] = useState ([])
+const ListGroup = ({group, groups, setGroups, removeGroup, addCompleted, addNotCompleted, setLocalGroups}) => {
     const [edit, setEdit] = useState(null)
     const [value, setValue] = useState('')
 
     const checkCompleted = () => {
         let completed = 0
         let notCompleted = 0
-        tasks.map((i) => i.status ? ++notCompleted : ++completed)
+        group.tasks.map((i) => i.status ? ++notCompleted : ++completed)
         addCompleted(completed)
         addNotCompleted(notCompleted)
+        setLocalGroups(groups)
     }
     
     const addTask = (newTask) => {
-        setTasks([...tasks, newTask])
+        group.tasks.push(newTask)
+        setGroups([...groups])
     }
     
     const removeTask = (task) => {
-        setTasks(tasks.filter(i => i.id !== task.id))
+        let i = group.tasks.indexOf(task);
+        if(i >= 0) {
+            group.tasks.splice(i,1);
+        }
+        setGroups([...groups])
     }
     
     const statusTask = (task) => {
-        setTasks(tasks.filter( i => {
+        group.tasks.filter( i => {
             if (i.id === task.id) i.status = !i.status
             return i
           }
-        ))
+        )
+        setGroups([...groups])
     }
+
     const editTask = (task) => {
         setEdit(task.id)
         setValue(task.title)
        }
     
     const saveTask = (task) => {
-        setTasks(tasks.filter( i => {
+        group.tasks.filter( i => {
           if (i.id === task.id) i.title = value
           setEdit(null)
           setValue('')
           return i
         }
-      ))
+        )
+        setGroups([...groups])
     }
     return (
         <div>
@@ -55,9 +63,9 @@ const ListGroup = ({group, removeGroup, addCompleted, addNotCompleted}) => {
             <button onClick={() => removeGroup(group)}>
                   Видалити групу
                </button>
-            {tasks.length ? 
+            {group.tasks.length ? 
                 <div>
-                {tasks.map((task, index) => <Task 
+                {group.tasks.map((task, index) => <Task 
                 removeTask={removeTask} statusTask={statusTask} edit={edit} editTask={editTask} value={value} setValue={setValue} saveTask={saveTask}
                 number={index + 1} task={task} key={task.id}/>)}
                  </div>
