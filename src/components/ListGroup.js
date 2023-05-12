@@ -3,6 +3,7 @@ import AddTaskForm from './AddTaskForm';
 import { Link } from "react-router-dom";
 import Task from './Task';
 import MyButton from './ui/button/MyButton';
+import '../styles/List.css'
 
 const ListGroup = ({group, groups, setGroups, removeGroup, addCompleted, addNotCompleted, setLocalGroups}) => {
     const [edit, setEdit] = useState(null)
