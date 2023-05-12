@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import MyButton from './ui/button/MyButton';
 
 const AddTaskForm = ({add}) => {
     const [title, setTitle] = useState('')
@@ -21,7 +22,7 @@ const AddTaskForm = ({add}) => {
                     type = 'text' 
                     placeholder = 'Назва задачі'
                 />
-                <button onClick = {addNewTask}>Додати задачу</button>
+                <MyButton onClick = {addNewTask}>Додати задачу</MyButton>
             </form>
         </div>
     );

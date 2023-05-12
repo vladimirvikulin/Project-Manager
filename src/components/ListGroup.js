@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AddTaskForm from './AddTaskForm';
 import { Link } from "react-router-dom";
 import Task from './Task';
+import MyButton from './ui/button/MyButton';
 
 const ListGroup = ({group, groups, setGroups, removeGroup, addCompleted, addNotCompleted, setLocalGroups}) => {
     const [edit, setEdit] = useState(null)
@@ -60,9 +61,9 @@ const ListGroup = ({group, groups, setGroups, removeGroup, addCompleted, addNotC
             </div>
             <h1 className="list">{group.title}</h1>
             <AddTaskForm add={addTask}/>
-            <button onClick={() => removeGroup(group)}>
+            <MyButton onClick={() => removeGroup(group)}>
                   Видалити групу
-               </button>
+               </MyButton>
             {group.tasks.length ? 
                 <div>
                 {group.tasks.map((task, index) => <Task 

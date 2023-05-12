@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import MyButton from './ui/button/MyButton';
 
 const AddGroupForm = ({addGroup}) => {
     const [title, setTitle] = useState('')
@@ -21,7 +22,7 @@ const AddGroupForm = ({addGroup}) => {
                     type = 'text' 
                     placeholder = 'Назва групи'
                 />
-                <button onClick = {addNewGroup}>Додати групу</button>
+                <MyButton onClick = {addNewGroup}>Додати групу</MyButton>
             </form>
         </div>
     );
