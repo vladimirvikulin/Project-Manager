@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import MyButton from './ui/button/MyButton';
+import MyInput from './ui/input/MyInput';
 
 const AddTaskForm = ({add}) => {
     const [title, setTitle] = useState('')
@@ -16,7 +17,7 @@ const AddTaskForm = ({add}) => {
     return (
         <div>
             <form>
-                <input 
+                <MyInput 
                     value = {title} 
                     onChange = {e => setTitle(e.target.value)} 
                     type = 'text' 

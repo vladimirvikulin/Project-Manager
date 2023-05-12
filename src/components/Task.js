@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import MyButton from './ui/button/MyButton';
+import MyInput from './ui/input/MyInput';
 
 const Task = (props) => {
    const [priority, setPriority] = useState(false)
@@ -11,7 +12,7 @@ const Task = (props) => {
          {
          props.edit === props.task.id ? 
             <div>
-               <input 
+               <MyInput 
                   value = {props.value} 
                   onChange = {e => props.setValue(e.target.value)} 
                   type = 'text' 
