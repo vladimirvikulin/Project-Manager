@@ -9,6 +9,7 @@ import { setCompleted, setNotCompleted, setLocalGroups } from './db/store';
 
 function App(props) {
   const [groups, setGroups] = useState([])
+  const [selectedSort, setSelectedSort] = useState('')
   const addGroup = (newGroup) => {
     setGroups([...groups, newGroup])
   }
@@ -24,6 +25,14 @@ function App(props) {
   const loadGroupsFromLocal = () => {
     setGroups(props.localGroups)
   }
+  const sort = (sort) => {
+    setSelectedSort(sort)
+    if (sort === 'groupTitle') setGroups([...groups].sort((a, b) => a['title'].localeCompare(b['title'])))
+    else if (sort === 'taskTitle') {
+      groups.map((g) => g.tasks.sort((a, b) => a['title'].localeCompare(b['title'])))
+      setGroups(groups)
+    }
+  }
   return (
     <div className= 'App'>
       <Header/>
@@ -33,7 +42,8 @@ function App(props) {
           <List 
             groups={groups} setGroups={setGroups} addGroup={addGroup} removeGroup={removeGroup}
             addCompleted={addCompleted} addNotCompleted={addNotCompleted} 
-            setLocalGroups={props.setLocalGroups} localGroups={props.localGroups}/>} 
+            setLocalGroups={props.setLocalGroups} localGroups={props.localGroups}
+            selectedSort={selectedSort} sort={sort}/>} 
           />
           <Route path="/statistics" element={<TaskStatistics completedTask={props.completed} notCompletedTask={props.notCompleted} loadGroupsFromLocal={loadGroupsFromLocal}/>}/>
         </Routes>
