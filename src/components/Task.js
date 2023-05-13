@@ -1,4 +1,7 @@
 import React,{useState} from 'react';
+import MyButton from './ui/button/MyButton';
+import MyInput from './ui/input/MyInput';
+import '../styles/Task.css'
 
 const Task = (props) => {
    const [priority, setPriority] = useState(false)
@@ -6,11 +9,11 @@ const Task = (props) => {
       setPriority(!priority)
    }
     return (
-     <div className={priority ? 'priorityTask' : 'task'}>
+     <div className={priority ? 'priorityTask task' : 'task'}>
          {
          props.edit === props.task.id ? 
             <div>
-               <input 
+               <MyInput 
                   value = {props.value} 
                   onChange = {e => props.setValue(e.target.value)} 
                   type = 'text' 
@@ -19,32 +22,32 @@ const Task = (props) => {
             </div>
             : 
             <div className={!props.task.status ? 'close' : ''}>
-               <button onClick={() => priorityTask(props.task)}>
+               <MyButton onClick={() => priorityTask(props.task)}>
                   Пріорітет
-               </button>    
+               </MyButton>    
                {props.number}. {props.task.title}
             </div>
          }
          {
          props.edit === props.task.id ? 
             <div>
-               <button onClick={() => props.saveTask(props.task)}>
+               <MyButton onClick={() => props.saveTask(props.task)}>
                   Зберегти
-               </button>
+               </MyButton>
             </div>
             :
             <div>
-               <button onClick={() => props.editTask(props.task)}>
+               <MyButton onClick={() => props.editTask(props.task)}>
                   Змінити
-               </button>
-               <button onClick={() => props.removeTask(props.task)}>
+               </MyButton>
+               <MyButton onClick={() => props.removeTask(props.task)}>
                   Видалити
-               </button>
-               <button onClick={() => props.statusTask(props.task)}>
+               </MyButton>
+               <MyButton onClick={() => props.statusTask(props.task)}>
                   {
                      props.task.status ? 'Закрити' : 'Відкрити'
                   }
-               </button>
+               </MyButton>
             </div>
          }
     </div>
