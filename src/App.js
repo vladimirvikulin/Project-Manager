@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useMemo, useState} from 'react';
 import './styles/App.css'
 import Header from './components/Header';
 import List from './pages/List';
@@ -25,14 +25,19 @@ function App(props) {
   const loadGroupsFromLocal = () => {
     setGroups(props.localGroups)
   }
+  const sorted = useMemo ( () => {
+      if (selectedSort === 'groupTitle') return [...groups].sort((a, b) => a['title'].localeCompare(b['title']))
+      else if (selectedSort === 'taskTitle') {
+        [...groups].map((g) => g.tasks.sort((a, b) => a['title'].localeCompare(b['title'])))
+        return groups
+    }
+    return groups
+  }, [selectedSort, groups])
+
   const sort = (sort) => {
     setSelectedSort(sort)
-    if (sort === 'groupTitle') setGroups([...groups].sort((a, b) => a['title'].localeCompare(b['title'])))
-    else if (sort === 'taskTitle') {
-      groups.map((g) => g.tasks.sort((a, b) => a['title'].localeCompare(b['title'])))
-      setGroups(groups)
-    }
   }
+
   return (
     <div className= 'App'>
       <Header/>
@@ -40,7 +45,7 @@ function App(props) {
         <Routes>
           <Route path="/" element={
           <List 
-            groups={groups} setGroups={setGroups} addGroup={addGroup} removeGroup={removeGroup}
+            groups={sorted} setGroups={setGroups} addGroup={addGroup} removeGroup={removeGroup}
             addCompleted={addCompleted} addNotCompleted={addNotCompleted} 
             setLocalGroups={props.setLocalGroups} localGroups={props.localGroups}
             selectedSort={selectedSort} sort={sort}/>} 
