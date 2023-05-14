@@ -10,6 +10,7 @@ import { setCompleted, setNotCompleted, setLocalGroups } from './db/store';
 function App(props) {
   const [groups, setGroups] = useState([])
   const [selectedSort, setSelectedSort] = useState('')
+  const [searchGroup, setSearchGroup] = useState('')
   const addGroup = (newGroup) => {
     setGroups([...groups, newGroup])
   }
@@ -25,7 +26,7 @@ function App(props) {
   const loadGroupsFromLocal = () => {
     setGroups(props.localGroups)
   }
-  const sorted = useMemo ( () => {
+  const sorted = useMemo (() => {
       if (selectedSort === 'groupTitle') return [...groups].sort((a, b) => a['title'].localeCompare(b['title']))
       else if (selectedSort === 'taskTitle') {
         [...groups].map((g) => g.tasks.sort((a, b) => a['title'].localeCompare(b['title'])))
@@ -33,11 +34,14 @@ function App(props) {
     }
     return groups
   }, [selectedSort, groups])
+  const sortedAndSearch = useMemo (() => {
+    return sorted.filter(group => group.title.toLowerCase().includes(searchGroup))
+  }, [sorted, searchGroup] )
 
   const sort = (sort) => {
     setSelectedSort(sort)
   }
-
+  
   return (
     <div className= 'App'>
       <Header/>
@@ -45,10 +49,12 @@ function App(props) {
         <Routes>
           <Route path="/" element={
           <List 
-            groups={sorted} setGroups={setGroups} addGroup={addGroup} removeGroup={removeGroup}
+            sortedAndSearch={sortedAndSearch} groups={groups} setGroups={setGroups} addGroup={addGroup} removeGroup={removeGroup}
             addCompleted={addCompleted} addNotCompleted={addNotCompleted} 
             setLocalGroups={props.setLocalGroups} localGroups={props.localGroups}
-            selectedSort={selectedSort} sort={sort}/>} 
+            selectedSort={selectedSort} sort={sort}
+            searchGroup={searchGroup} setSearchGroup={setSearchGroup}
+            />} 
           />
           <Route path="/statistics" element={<TaskStatistics completedTask={props.completed} notCompletedTask={props.notCompleted} loadGroupsFromLocal={loadGroupsFromLocal}/>}/>
         </Routes>

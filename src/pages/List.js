@@ -3,12 +3,18 @@ import ListGroup from '../components/ListGroup';
 import AddGroupForm from '../components/AddGroupForm'
 import '../styles/App.css'
 import MySelect from '../components/ui/select/MySelect';
+import MyInput from '../components/ui/input/MyInput';
 
-const List = ({groups, setGroups, addGroup, removeGroup, addCompleted, addNotCompleted, setLocalGroups, selectedSort, sort}) => {
+const List = ({sortedAndSearch, groups, setGroups, addGroup, removeGroup, addCompleted, addNotCompleted, setLocalGroups, selectedSort, sort, searchGroup, setSearchGroup}) => {
     return (
         <div>
             <AddGroupForm addGroup = {addGroup}/>
             <div>
+                <MyInput
+                    value={searchGroup}
+                    onChange={e =>setSearchGroup(e.target.value)}
+                    placeholder='Пошук...'
+                />
                 <MySelect
                     value={selectedSort}
                     onChange={sort}
@@ -19,10 +25,10 @@ const List = ({groups, setGroups, addGroup, removeGroup, addCompleted, addNotCom
                     ]}
                 />
             </div>
-            {groups.length
+            {sortedAndSearch.length
                 ?
                 <div>
-                     {groups.map((group) => <ListGroup 
+                     {sortedAndSearch.map((group) => <ListGroup 
                      group={group} groups={groups} setGroups={setGroups} removeGroup={removeGroup} setLocalGroups={setLocalGroups}
                      addCompleted={addCompleted} addNotCompleted={addNotCompleted}
                      key={group.id}/>)}
