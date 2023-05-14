@@ -9,8 +9,7 @@ import { setCompleted, setNotCompleted, setLocalGroups } from './db/store';
 
 function App(props) {
   const [groups, setGroups] = useState([])
-  const [selectedSort, setSelectedSort] = useState('')
-  const [searchGroup, setSearchGroup] = useState('')
+  const [filter, setFilter] = useState({selectedSort: '', searchGroup: ''})
   const addGroup = (newGroup) => {
     setGroups([...groups, newGroup])
   }
@@ -27,21 +26,18 @@ function App(props) {
     setGroups(props.localGroups)
   }
   const sorted = useMemo (() => {
-      if (selectedSort === 'groupTitle') return [...groups].sort((a, b) => a['title'].localeCompare(b['title']))
-      else if (selectedSort === 'taskTitle') {
+      if (filter.selectedSort === 'groupTitle') return [...groups].sort((a, b) => a['title'].localeCompare(b['title']))
+      else if (filter.selectedSort === 'taskTitle') {
         [...groups].map((g) => g.tasks.sort((a, b) => a['title'].localeCompare(b['title'])))
         return groups
     }
     return groups
-  }, [selectedSort, groups])
-  const sortedAndSearch = useMemo (() => {
-    return sorted.filter(group => group.title.toLowerCase().includes(searchGroup))
-  }, [sorted, searchGroup] )
+    }, [filter.selectedSort, groups])
 
-  const sort = (sort) => {
-    setSelectedSort(sort)
-  }
-  
+  const sortedAndSearch = useMemo (() => {
+    return sorted.filter(group => group.title.toLowerCase().includes(filter.searchGroup))
+  }, [sorted, filter.searchGroup])
+
   return (
     <div className= 'App'>
       <Header/>
@@ -52,8 +48,7 @@ function App(props) {
             sortedAndSearch={sortedAndSearch} groups={groups} setGroups={setGroups} addGroup={addGroup} removeGroup={removeGroup}
             addCompleted={addCompleted} addNotCompleted={addNotCompleted} 
             setLocalGroups={props.setLocalGroups} localGroups={props.localGroups}
-            selectedSort={selectedSort} sort={sort}
-            searchGroup={searchGroup} setSearchGroup={setSearchGroup}
+            filter={filter} setFilter={setFilter}
             />} 
           />
           <Route path="/statistics" element={<TaskStatistics completedTask={props.completed} notCompletedTask={props.notCompleted} loadGroupsFromLocal={loadGroupsFromLocal}/>}/>

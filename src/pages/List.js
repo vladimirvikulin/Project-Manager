@@ -2,29 +2,13 @@ import React from 'react';
 import ListGroup from '../components/ListGroup';
 import AddGroupForm from '../components/AddGroupForm'
 import '../styles/App.css'
-import MySelect from '../components/ui/select/MySelect';
-import MyInput from '../components/ui/input/MyInput';
+import GroupsFilter from '../components/GroupsFilter';
 
-const List = ({sortedAndSearch, groups, setGroups, addGroup, removeGroup, addCompleted, addNotCompleted, setLocalGroups, selectedSort, sort, searchGroup, setSearchGroup}) => {
+const List = ({sortedAndSearch, groups, setGroups, addGroup, removeGroup, addCompleted, addNotCompleted, setLocalGroups, filter, setFilter}) => {
     return (
         <div>
             <AddGroupForm addGroup = {addGroup}/>
-            <div>
-                <MyInput
-                    value={searchGroup}
-                    onChange={e =>setSearchGroup(e.target.value)}
-                    placeholder='Пошук...'
-                />
-                <MySelect
-                    value={selectedSort}
-                    onChange={sort}
-                    defaultValue='Сортування'
-                    options={[
-                        {value: 'groupTitle', name: 'За назвою групи'},
-                        {value: 'taskTitle', name: 'За назвою задачі'}
-                    ]}
-                />
-            </div>
+            <GroupsFilter filter={filter} setFilter={setFilter}/>
             {sortedAndSearch.length
                 ?
                 <div>
