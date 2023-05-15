@@ -3,11 +3,18 @@ import ListGroup from '../components/ListGroup';
 import AddGroupForm from '../components/AddGroupForm'
 import '../styles/App.css'
 import GroupsFilter from '../components/GroupsFilter';
+import MyModal from '../components/ui/modal/MyModal';
+import MyButton from '../components/ui/button/MyButton';
 
-const List = ({sortedAndSearch, groups, setGroups, addGroup, removeGroup, addCompleted, addNotCompleted, setLocalGroups, filter, setFilter}) => {
+const List = ({sortedAndSearch, groups, setGroups, addGroup, removeGroup, addCompleted, addNotCompleted, setLocalGroups, filter, setFilter, modalGroupVisible, setModalGroupVisible}) => {
     return (
         <div>
-            <AddGroupForm addGroup = {addGroup}/>
+            <MyButton onClick={() => setModalGroupVisible(true)}>
+                Створити групу
+            </MyButton>
+            <MyModal visible={modalGroupVisible} setVisible={setModalGroupVisible}>
+                <AddGroupForm addGroup = {addGroup}/>
+            </MyModal>
             <GroupsFilter filter={filter} setFilter={setFilter}/>
             {sortedAndSearch.length
                 ?
