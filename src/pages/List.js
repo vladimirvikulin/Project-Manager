@@ -6,17 +6,17 @@ import GroupsFilter from '../components/GroupsFilter';
 import MyModal from '../components/ui/modal/MyModal';
 import MyButton from '../components/ui/button/MyButton';
 
-const List = ({sortedAndSearch, groups, setGroups, addGroup, removeGroup, addCompleted, addNotCompleted, setLocalGroups, filter, setFilter, modalGroupVisible, setModalGroupVisible}) => {
+const List = (props) => {
     return (
         <div>
-            <MyButton onClick={() => setModalGroupVisible(true)}>
+            <MyButton onClick={() => props.setModalGroupVisible(true)}>
                 Створити групу
             </MyButton>
-            <MyModal visible={modalGroupVisible} setVisible={setModalGroupVisible}>
-                <AddGroupForm addGroup = {addGroup}/>
+            <MyModal visible={props.modalGroupVisible} setVisible={props.setModalGroupVisible}>
+                <AddGroupForm addGroup = {props.addGroup}/>
             </MyModal>
-            <GroupsFilter filter={filter} setFilter={setFilter}/>
-            {sortedAndSearch.length
+            <GroupsFilter filter={props.filter} setFilter={props.setFilter}/>
+            {props.sortedAndSearch.length
                 ?
                 <div>
                      {sortedAndSearch.map((group) => <ListGroup 

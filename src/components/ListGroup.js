@@ -6,7 +6,15 @@ import MyButton from './ui/button/MyButton';
 import '../styles/List.css'
 import MyModal from './ui/modal/MyModal';
 
-const ListGroup = ({group, groups, setGroups, removeGroup, addCompleted, addNotCompleted, setLocalGroups}) => {
+const ListGroup = ({
+  group, 
+  groups, 
+  setGroups, 
+  removeGroup, 
+  addCompleted, 
+  addNotCompleted, 
+  setLocalGroups
+}) => {
     const [edit, setEdit] = useState(null)
     const [value, setValue] = useState('')
     const [modalTaskVisible, setModalTaskVisible] = useState(false)

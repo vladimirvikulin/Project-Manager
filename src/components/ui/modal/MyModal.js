@@ -1,14 +1,15 @@
 import React from 'react';
-import classes from './MyModal.module.css'
-const MyModal = (props) => {
-    const modalClasses = [classes.myModal]
-    if (props.visible) {
-        modalClasses.push(classes.active)
-    }
+import styles from './MyModal.module.css'
+const MyModal = ({ visible, setVisible, children }) => {
+    const { myModal, active, myModalContent } = styles;
+    const modalClasses = [myModal, visible && active];
+    const closeModal = () => {
+        setVisible(false);
+    };
     return (
-        <div onClick={() => props.setVisible(false)} className={modalClasses.join(' ')}>
-            <div onClick={(e) => e.stopPropagation()} className={classes.myModalContent}>
-                {props.children}
+        <div onClick={() => closeModal} className={modalClasses.join(' ')}>
+            <div onClick={(e) => e.stopPropagation()} className={myModalContent}>
+                {children}
             </div>
         </div>
     );

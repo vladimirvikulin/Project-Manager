@@ -16,7 +16,7 @@ function App(props) {
     setModalGroupVisible(false)
   }
   const removeGroup = (group) => {
-    setGroups(groups.filter(i => i.id !== group.id))
+    setGroups(groups.filter((i) => i.id !== group.id))
   }
   const addCompleted = (num) => {
     props.setCompleted(num)
