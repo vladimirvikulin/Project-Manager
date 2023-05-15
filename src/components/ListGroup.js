@@ -4,11 +4,20 @@ import { Link } from "react-router-dom";
 import Task from './Task';
 import MyButton from './ui/button/MyButton';
 import '../styles/List.css'
+import MyModal from './ui/modal/MyModal';
 
-const ListGroup = ({group, groups, setGroups, removeGroup, addCompleted, addNotCompleted, setLocalGroups}) => {
+const ListGroup = ({
+  group, 
+  groups, 
+  setGroups, 
+  removeGroup, 
+  addCompleted, 
+  addNotCompleted, 
+  setLocalGroups
+}) => {
     const [edit, setEdit] = useState(null)
     const [value, setValue] = useState('')
-
+    const [modalTaskVisible, setModalTaskVisible] = useState(false)
     const checkCompleted = () => {
         let completed = 0
         let notCompleted = 0
@@ -21,6 +30,7 @@ const ListGroup = ({group, groups, setGroups, removeGroup, addCompleted, addNotC
     const addTask = (newTask) => {
         group.tasks.push(newTask)
         setGroups([...groups])
+        setModalTaskVisible(false)
     }
     
     const removeTask = (task) => {
@@ -61,7 +71,12 @@ const ListGroup = ({group, groups, setGroups, removeGroup, addCompleted, addNotC
               <Link onClick={checkCompleted} to='/statistics'>Статистика</Link>
             </div>
             <h1 className="list">{group.title}</h1>
-            <AddTaskForm add={addTask}/>
+            <MyButton onClick={() => setModalTaskVisible(true)}>
+                Створити задачу
+            </MyButton>
+            <MyModal visible={modalTaskVisible} setVisible={setModalTaskVisible}>
+                <AddTaskForm add={addTask}/>
+            </MyModal>
             <MyButton onClick={() => removeGroup(group)}>
                   Видалити групу
                </MyButton>

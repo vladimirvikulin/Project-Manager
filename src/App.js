@@ -10,11 +10,13 @@ import { setCompleted, setNotCompleted, setLocalGroups } from './db/store';
 function App(props) {
   const [groups, setGroups] = useState([])
   const [filter, setFilter] = useState({selectedSort: '', searchGroup: ''})
+  const [modalGroupVisible, setModalGroupVisible] = useState(false)
   const addGroup = (newGroup) => {
     setGroups([...groups, newGroup])
+    setModalGroupVisible(false)
   }
   const removeGroup = (group) => {
-    setGroups(groups.filter(i => i.id !== group.id))
+    setGroups(groups.filter((i) => i.id !== group.id))
   }
   const addCompleted = (num) => {
     props.setCompleted(num)
@@ -49,6 +51,7 @@ function App(props) {
             addCompleted={addCompleted} addNotCompleted={addNotCompleted} 
             setLocalGroups={props.setLocalGroups} localGroups={props.localGroups}
             filter={filter} setFilter={setFilter}
+            modalGroupVisible={modalGroupVisible} setModalGroupVisible={setModalGroupVisible}
             />} 
           />
           <Route path="/statistics" element={<TaskStatistics completedTask={props.completed} notCompletedTask={props.notCompleted} loadGroupsFromLocal={loadGroupsFromLocal}/>}/>

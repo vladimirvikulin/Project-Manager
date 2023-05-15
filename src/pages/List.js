@@ -3,13 +3,20 @@ import ListGroup from '../components/ListGroup';
 import AddGroupForm from '../components/AddGroupForm'
 import '../styles/App.css'
 import GroupsFilter from '../components/GroupsFilter';
+import MyModal from '../components/ui/modal/MyModal';
+import MyButton from '../components/ui/button/MyButton';
 
-const List = ({sortedAndSearch, groups, setGroups, addGroup, removeGroup, addCompleted, addNotCompleted, setLocalGroups, filter, setFilter}) => {
+const List = (props) => {
     return (
         <div>
-            <AddGroupForm addGroup = {addGroup}/>
-            <GroupsFilter filter={filter} setFilter={setFilter}/>
-            {sortedAndSearch.length
+            <MyButton onClick={() => props.setModalGroupVisible(true)}>
+                Створити групу
+            </MyButton>
+            <MyModal visible={props.modalGroupVisible} setVisible={props.setModalGroupVisible}>
+                <AddGroupForm addGroup = {props.addGroup}/>
+            </MyModal>
+            <GroupsFilter filter={props.filter} setFilter={props.setFilter}/>
+            {props.sortedAndSearch.length
                 ?
                 <div>
                      {sortedAndSearch.map((group) => <ListGroup 
