@@ -1,17 +1,17 @@
 import React,{useState} from 'react';
 import MyButton from './ui/button/MyButton';
 import MyInput from './ui/input/MyInput';
-import '../styles/Task.css'
+import '../styles/Task.css';
 
 const Task = (props) => {
-   const [priority, setPriority] = useState(false)
-   const priorityTask = () => {
-      setPriority(!priority)
-   }
+    const [priority, setPriority] = useState(false);
+    const priorityTask = () => {
+        setPriority(!priority);
+    }
     return (
-     <div className={priority ? 'priorityTask task' : 'task'}>
-         {
-         props.edit === props.task.id ? 
+        <div className={priority ? 'priorityTask task' : 'task'}>
+        {
+            props.edit === props.task.id ? 
             <div>
                <MyInput 
                   value = {props.value} 
@@ -27,9 +27,9 @@ const Task = (props) => {
                </MyButton>    
                {props.number}. {props.task.title}
             </div>
-         }
-         {
-         props.edit === props.task.id ? 
+        }
+        {
+        props.edit === props.task.id ? 
             <div>
                <MyButton onClick={() => props.saveTask(props.task)}>
                   Зберегти
@@ -49,7 +49,7 @@ const Task = (props) => {
                   }
                </MyButton>
             </div>
-         }
+        }
     </div>
     );
 };

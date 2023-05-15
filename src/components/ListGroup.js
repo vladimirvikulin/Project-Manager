@@ -15,22 +15,22 @@ const ListGroup = ({
   addNotCompleted, 
   setLocalGroups
 }) => {
-    const [edit, setEdit] = useState(null)
-    const [value, setValue] = useState('')
-    const [modalTaskVisible, setModalTaskVisible] = useState(false)
+    const [edit, setEdit] = useState(null);
+    const [value, setValue] = useState('');
+    const [modalTaskVisible, setModalTaskVisible] = useState(false);
     const checkCompleted = () => {
-        let completed = 0
-        let notCompleted = 0
-        group.tasks.map((i) => i.status ? ++notCompleted : ++completed)
-        addCompleted(completed)
-        addNotCompleted(notCompleted)
-        setLocalGroups(groups)
+        let completed = 0;
+        let notCompleted = 0;
+        group.tasks.map((i) => i.status ? ++notCompleted : ++completed);
+        addCompleted(completed);
+        addNotCompleted(notCompleted);
+        setLocalGroups(groups);
     }
     
     const addTask = (newTask) => {
-        group.tasks.push(newTask)
-        setGroups([...groups])
-        setModalTaskVisible(false)
+        group.tasks.push(newTask);
+        setGroups([...groups]);
+        setModalTaskVisible(false);
     }
     
     const removeTask = (task) => {
@@ -38,32 +38,32 @@ const ListGroup = ({
         if(i >= 0) {
             group.tasks.splice(i,1);
         }
-        setGroups([...groups])
+        setGroups([...groups]);
     }
     
     const statusTask = (task) => {
         group.tasks.filter( i => {
-            if (i.id === task.id) i.status = !i.status
-            return i
+            if (i.id === task.id) i.status = !i.status;
+            return i;
           }
         )
-        setGroups([...groups])
+        setGroups([...groups]);
     }
 
     const editTask = (task) => {
-        setEdit(task.id)
-        setValue(task.title)
-       }
+        setEdit(task.id);
+        setValue(task.title);
+    }
     
     const saveTask = (task) => {
         group.tasks.filter( i => {
-          if (i.id === task.id) i.title = value
-          setEdit(null)
-          setValue('')
-          return i
+            if (i.id === task.id) i.title = value;
+            setEdit(null);
+            setValue('');
+            return i;
         }
         )
-        setGroups([...groups])
+        setGroups([...groups]);
     }
     return (
         <div>
@@ -79,7 +79,7 @@ const ListGroup = ({
             </MyModal>
             <MyButton onClick={() => removeGroup(group)}>
                   Видалити групу
-               </MyButton>
+            </MyButton>
             {group.tasks.length ? 
                 <div>
                 {group.tasks.map((task, index) => <Task 

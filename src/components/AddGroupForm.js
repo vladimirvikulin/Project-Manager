@@ -5,14 +5,14 @@ import MyInput from './ui/input/MyInput';
 const AddGroupForm = ({addGroup}) => {
     const [title, setTitle] = useState('')
     const addNewGroup = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         const newGroup = {
           id: Date.now(),
           title,
           tasks: [],
         }
-        addGroup(newGroup)
-        setTitle('')
+        addGroup(newGroup);
+        setTitle('');
       }
     return (
         <div>

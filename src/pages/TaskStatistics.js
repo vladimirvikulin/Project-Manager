@@ -2,7 +2,7 @@ import React from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import { Link } from "react-router-dom";
-import '../styles/App.css'
+import '../styles/App.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

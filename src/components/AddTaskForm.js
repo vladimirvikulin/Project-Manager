@@ -5,14 +5,14 @@ import MyInput from './ui/input/MyInput';
 const AddTaskForm = ({add}) => {
     const [title, setTitle] = useState('')
     const addNewTask = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         const newTask = {
           id: Date.now(),
           title,
           status: true,
         }
-        add(newTask)
-        setTitle('')
+        add(newTask);
+        setTitle('');
       }
     return (
         <div>
