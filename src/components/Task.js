@@ -4,12 +4,13 @@ import MyInput from './ui/input/MyInput';
 import '../styles/Task.css';
 
 const Task = (props) => {
-    const [priority, setPriority] = useState(false);
+   const [priority, setPriority] = useState(false);
     const priorityTask = () => {
-        setPriority(!priority);
+      props.task.priority = !props.task.priority;
+      setPriority(props.task.priority)
     }
     return (
-        <div className={priority ? 'priorityTask task' : 'task'}>
+        <div className={props.task.priority ? 'priorityTask task' : 'task'}>
         {
             props.edit === props.task.id ? 
             <div>
@@ -22,7 +23,7 @@ const Task = (props) => {
             </div>
             : 
             <div className={!props.task.status ? 'close' : ''}>
-               <MyButton onClick={() => priorityTask(props.task)}>
+               <MyButton onClick={() => priorityTask()}>
                   Пріорітет
                </MyButton>    
                {props.number}. {props.task.title}

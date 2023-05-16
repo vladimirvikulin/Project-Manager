@@ -10,6 +10,7 @@ const AddTaskForm = ({add}) => {
           id: Date.now(),
           title,
           status: true,
+          priority: false,
         }
         add(newTask);
         setTitle('');
