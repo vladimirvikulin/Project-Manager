@@ -13,17 +13,3 @@
 .App {
     width: 800px;
 }
-
-.header {
-    height: 85px;
-    font-size: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color:white;
-    background-color:coral;
-}
-
-.link {
-    float: right;
-}

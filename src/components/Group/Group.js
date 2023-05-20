@@ -11,9 +11,6 @@ const ListGroup = ({
   groups, 
   setGroups, 
   removeGroup, 
-  addCompleted, 
-  addNotCompleted, 
-  setLocalGroups
 }) => {
     const [edit, setEdit] = useState(null);
     const [value, setValue] = useState('');
@@ -22,9 +19,6 @@ const ListGroup = ({
         let completed = 0;
         let notCompleted = 0;
         group.tasks.map((i) => i.status ? ++notCompleted : ++completed);
-        addCompleted(completed);
-        addNotCompleted(notCompleted);
-        setLocalGroups(groups);
     }
     
     const addTask = (newTask) => {
@@ -81,7 +75,7 @@ const ListGroup = ({
                 <div>
                 {group.tasks.map((task, index) => <Task 
                 removeTask={removeTask} statusTask={statusTask} edit={edit} editTask={editTask} value={value} setValue={setValue} saveTask={saveTask}
-                number={index + 1} task={task} key={task.id}/>)}
+                number={index + 1} task={task} key={task._id}/>)}
                  </div>
                 : <h1 className={styles.groupHeader}>Список задач порожній</h1>
             }
