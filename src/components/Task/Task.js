@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
-import MyButton from './ui/button/MyButton';
-import MyInput from './ui/input/MyInput';
-import '../styles/Task.css';
+import MyButton from '../ui/button/MyButton';
+import MyInput from '../ui/input/MyInput';
+import styles from './Task.module.css';
 
 const Task = (props) => {
    const [priority, setPriority] = useState(false);
@@ -10,7 +10,7 @@ const Task = (props) => {
       setPriority(props.task.priority)
     }
     return (
-        <div className={props.task.priority ? 'priorityTask task' : 'task'}>
+        <div className={props.task.priority ? `${styles.priorityTask} ${styles.task}` : styles.task}>
         {
             props.edit === props.task.id ? 
             <div>
@@ -22,7 +22,7 @@ const Task = (props) => {
                />
             </div>
             : 
-            <div className={!props.task.status ? 'close' : ''}>
+            <div className={!props.task.status ? styles.close : ''}>
                <MyButton onClick={() => priorityTask()}>
                   Пріорітет
                </MyButton>    
