@@ -1,12 +1,12 @@
 import React,{useMemo, useState} from 'react';
-import { Header } from './components/Header';
-import List from './pages/ToDoList/List';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import TaskStatistics from './pages/TaskStatistics'
 import { connect } from 'react-redux';
 import { setCompleted, setNotCompleted, setLocalGroups } from './db/store';
-import { Login } from './pages/Login';
-import { Registration } from './pages/Registration';
+import Header  from './components/Header/Header';
+import List from './pages/ToDoList/List';
+import TaskStatistics from './pages/TaskStatistics'
+import Login from './pages/Login/Login';
+import Registration from './pages/Registration/Registration';
 
 
 function App(props) {

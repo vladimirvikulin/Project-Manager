@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import MyButton from '../ui/button/MyButton';
 import { Link } from "react-router-dom";
 
-export const Header = () => {
+const Header = () => {
   const isAuth = false;
 
   const onClickLogout = () => {};
@@ -39,3 +39,5 @@ export const Header = () => {
     </div>
   );
 };
+
+export default Header;
