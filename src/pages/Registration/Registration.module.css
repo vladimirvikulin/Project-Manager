@@ -1,0 +1,18 @@
+.root {
+  width: 400px;
+  padding: 50px;
+  border: 1px solid khaki;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.field {
+  margin-bottom: 20px !important;
+}
+
+.title {
+  color: khaki;
+  text-align: center !important;
+  font-weight: bold !important;
+  margin-bottom: 30px !important;
+}
