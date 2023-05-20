@@ -1,7 +1,5 @@
 import React,{useMemo, useState} from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { connect } from 'react-redux';
-import { setCompleted, setNotCompleted, setLocalGroups } from './db/store';
 import Header  from './components/Header/Header';
 import List from './pages/ToDoList/List';
 import TaskStatistics from './pages/TaskStatistics'
@@ -9,7 +7,7 @@ import Login from './pages/Login/Login';
 import Registration from './pages/Registration/Registration';
 
 
-function App(props) {
+function App() {
   	const [groups, setGroups] = useState([]);
   	const [filter, setFilter] = useState({selectedSort: '', searchGroup: ''});
   	const [modalGroupVisible, setModalGroupVisible] = useState(false);
@@ -19,15 +17,6 @@ function App(props) {
   	}
   	const removeGroup = (group) => {
     	setGroups(groups.filter((i) => i.id !== group.id));
-  	}
-  	const addCompleted = (num) => {
-    	props.setCompleted(num);
-  	}
-  	const addNotCompleted = (num) => {
-    	props.setNotCompleted(num);
-  	}
-  	const loadGroupsFromLocal = () => {
-    	setGroups(props.localGroups);
   	}
   	const sorted = useMemo (() => {
       	if (filter.selectedSort === 'groupTitle') return [...groups].sort((a, b) => a['title'].localeCompare(b['title']));
@@ -51,18 +40,13 @@ function App(props) {
           			<List 
             		sortedAndSearch={sortedAndSearch} groups={groups} setGroups={setGroups} 
             		addGroup={addGroup} removeGroup={removeGroup}
-            		addCompleted={addCompleted} addNotCompleted={addNotCompleted} 
-            		setLocalGroups={props.setLocalGroups} localGroups={props.localGroups}
             		filter={filter} setFilter={setFilter}
             		modalGroupVisible={modalGroupVisible} setModalGroupVisible={setModalGroupVisible}
             		/>
           		} 
           		/>
           		<Route path="/statistics" element={
-					<TaskStatistics 
-						completedTask={props.completed} 
-						notCompletedTask={props.notCompleted} 
-						loadGroupsFromLocal={loadGroupsFromLocal}/>}
+					<TaskStatistics/>}
 				/>
 				<Route path="/login" element={<Login/>}/>
 				<Route path="/register" element={<Registration/>}/>
@@ -72,12 +56,4 @@ function App(props) {
   	);
 }
 
-const mapStateToProps = (state) => {
-  	return {
-    	localGroups: state.groups,
-    	completed: state.completed,
-    	notCompleted: state.notCompleted
-  	}
-}
-
-export default connect(mapStateToProps, { setCompleted, setNotCompleted, setLocalGroups })(App);
+export default App;

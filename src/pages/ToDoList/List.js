@@ -23,8 +23,7 @@ const List = (props) => {
                      <ListGroup 
                         group={group} groups={props.groups} setGroups={props.setGroups} 
                         removeGroup={props.removeGroup} setLocalGroups={props.setLocalGroups}
-                        addCompleted={props.addCompleted} addNotCompleted={props.addNotCompleted}
-                        key={group.id}/>
+                        key={group._id}/>
                     )}
                 </div>
                 : <h1 className={styles.list}>Список груп порожній</h1>
