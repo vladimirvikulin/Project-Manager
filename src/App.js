@@ -1,11 +1,13 @@
 import React,{useMemo, useState} from 'react';
-import './styles/App.css';
-import Header from './components/Header';
-import List from './pages/List';
+import { Header } from './components/Header';
+import List from './pages/ToDoList/List';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TaskStatistics from './pages/TaskStatistics'
 import { connect } from 'react-redux';
 import { setCompleted, setNotCompleted, setLocalGroups } from './db/store';
+import { Login } from './pages/Login';
+import { Registration } from './pages/Registration';
+
 
 function App(props) {
   	const [groups, setGroups] = useState([]);
@@ -42,8 +44,8 @@ function App(props) {
 
   	return (
     	<div className= 'App'>
-      	<Header/>
       	<BrowserRouter>
+		  	<Header/>
         	<Routes>
           		<Route path="/" element={
           			<List 
@@ -56,8 +58,15 @@ function App(props) {
             		/>
           		} 
           		/>
-          	<Route path="/statistics" element={<TaskStatistics completedTask={props.completed} notCompletedTask={props.notCompleted} loadGroupsFromLocal={loadGroupsFromLocal}/>}/>
-        	</Routes>
+          		<Route path="/statistics" element={
+					<TaskStatistics 
+						completedTask={props.completed} 
+						notCompletedTask={props.notCompleted} 
+						loadGroupsFromLocal={loadGroupsFromLocal}/>}
+				/>
+				<Route path="/login" element={<Login/>}/>
+				<Route path="/register" element={<Registration/>}/>
+			</Routes>
       	</BrowserRouter>
     	</div>
   	);
