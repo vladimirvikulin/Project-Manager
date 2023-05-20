@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import AddTaskForm from './AddTaskForm';
+import AddTaskForm from '../AddTaskForm';
 import { Link } from "react-router-dom";
-import Task from './Task';
-import MyButton from './ui/button/MyButton';
-import '../styles/List.css'
-import MyModal from './ui/modal/MyModal';
+import Task from '../Task/Task';
+import MyButton from '../ui/button/MyButton';
+import styles from './Group.module.css';
+import MyModal from '../ui/modal/MyModal';
 
 const ListGroup = ({
   group, 
@@ -67,10 +67,7 @@ const ListGroup = ({
     }
     return (
         <div>
-            <div className='link'>
-              <Link onClick={checkCompleted} to='/statistics'>Статистика</Link>
-            </div>
-            <h1 className="list">{group.title}</h1>
+            <h1 className={styles.groupHeader}>{group.title}</h1>
             <MyButton onClick={() => setModalTaskVisible(true)}>
                 Створити задачу
             </MyButton>
@@ -86,8 +83,13 @@ const ListGroup = ({
                 removeTask={removeTask} statusTask={statusTask} edit={edit} editTask={editTask} value={value} setValue={setValue} saveTask={saveTask}
                 number={index + 1} task={task} key={task.id}/>)}
                  </div>
-                : <h1 className="list">Список задач порожній</h1>
+                : <h1 className={styles.groupHeader}>Список задач порожній</h1>
             }
+            <div>
+                <Link to='/statistics'>
+                    <MyButton onClick={checkCompleted} >Статистика</MyButton>
+                </Link>
+            </div>
         </div>
     );
 };

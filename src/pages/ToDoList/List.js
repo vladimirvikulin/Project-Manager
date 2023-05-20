@@ -1,10 +1,10 @@
 import React from 'react';
-import ListGroup from '../components/ListGroup';
-import AddGroupForm from '../components/AddGroupForm'
-import '../styles/App.css';
-import GroupsFilter from '../components/GroupsFilter';
-import MyModal from '../components/ui/modal/MyModal';
-import MyButton from '../components/ui/button/MyButton';
+import ListGroup from '../../components/Group/Group';
+import AddGroupForm from '../../components/AddGroupForm'
+import styles from './List.module.css'
+import GroupsFilter from '../../components/GroupsFilter';
+import MyModal from '../../components/ui/modal/MyModal';
+import MyButton from '../../components/ui/button/MyButton';
 
 const List = (props) => {
     return (
@@ -27,7 +27,7 @@ const List = (props) => {
                         key={group.id}/>
                     )}
                 </div>
-                : <h1 className="list">Список груп порожній</h1>
+                : <h1 className={styles.list}>Список груп порожній</h1>
             }
             
         </div>

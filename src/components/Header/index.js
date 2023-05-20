@@ -29,7 +29,7 @@ export const Header = () => {
                   <MyButton>Увійти</MyButton>
                 </Link>
                 <Link to="/register">
-                  <MyButton>Створити аккаунт</MyButton>
+                  <MyButton>Створити акаунт</MyButton>
                 </Link>
               </>
             )}
