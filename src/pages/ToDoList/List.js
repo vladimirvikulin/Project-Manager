@@ -25,8 +25,11 @@ const List = () => {
     const sorted = useMemo (() => {
         if (filter.selectedSort === 'groupTitle') return [...groups.items].sort((a, b) => a['title'].localeCompare(b['title']));
         else if (filter.selectedSort === 'taskTitle') {
-          [...groups.items].map((g) => g.tasks.sort((a, b) => a['title'].localeCompare(b['title'])));
-          return groups.items;
+            const filtered = [...groups.items].map(group => ({
+                ...group,
+                tasks: [...group.tasks].sort((a, b) => a.title.localeCompare(b.title))
+              }));
+            return filtered;
       }
       return groups.items
   }, [filter.selectedSort, groups.items]);
