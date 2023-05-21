@@ -6,6 +6,15 @@ export const fetchGroups = createAsyncThunk('groups/fetchGroups', async () => {
     return data;
 });
 
+export const fetchCreateGroup = createAsyncThunk('groups/fetchCreateGroup', async (params) => {
+    const {data} = await axios.post('/groups', params);
+    return data;
+});
+
+export const fetchRemoveGroup = createAsyncThunk('groups/fetchRemoveGroup', async (id) => {
+    await axios.delete(`/groups/${id}`);
+});
+
 const initialState = {
     groups: {
         items: [],
@@ -29,6 +38,12 @@ const groupsSlice = createSlice({
         [fetchGroups.rejected]: (state) => {
             state.groups.status = 'error';
             state.groups.items = [];
+        },
+        [fetchCreateGroup.fulfilled]: (state, action) => {
+            state.groups.items.push(action.payload);
+        },
+        [fetchRemoveGroup.pending]: (state, action) => {
+            state.groups.items = state.groups.items.filter((obj) => obj._id !== action.meta.arg);
         },
     }
 });

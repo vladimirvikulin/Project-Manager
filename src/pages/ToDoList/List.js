@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useMemo} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ListGroup from '../../components/Group/Group';
 import AddGroupForm from '../../components/AddGroupForm'
@@ -6,28 +6,49 @@ import styles from './List.module.css'
 import GroupsFilter from '../../components/GroupsFilter';
 import MyModal from '../../components/ui/modal/MyModal';
 import MyButton from '../../components/ui/button/MyButton';
-import { fetchGroups } from '../../redux/slices/groups';
-const List = (props) => {
+import { fetchGroups, fetchRemoveGroup } from '../../redux/slices/groups';
+const List = () => {
     const dispatch = useDispatch();
     const { groups } = useSelector(state => state.groups);
     const isGroupsLoading = groups.status === 'loading';
     React.useEffect(() => {
         dispatch(fetchGroups());
     }, []);
+    const [filter, setFilter] = useState({selectedSort: '', searchGroup: ''});
+    const [modalGroupVisible, setModalGroupVisible] = useState(false);
+    const addGroup = () => {
+        setModalGroupVisible(false);
+    }
+    const removeGroup = (group) => {
+        dispatch(fetchRemoveGroup(group._id));
+    }
+    const sorted = useMemo (() => {
+        if (filter.selectedSort === 'groupTitle') return [...groups.items].sort((a, b) => a['title'].localeCompare(b['title']));
+        else if (filter.selectedSort === 'taskTitle') {
+          [...groups.items].map((g) => g.tasks.sort((a, b) => a['title'].localeCompare(b['title'])));
+          return groups.items;
+      }
+      return groups.items
+  }, [filter.selectedSort, groups.items]);
+
+    const sortedAndSearch = useMemo (() => {
+      return sorted.filter(group => group.title.toLowerCase().includes(filter.searchGroup));
+    }, [sorted, filter.searchGroup]);
+
     return (
         <div>
-            <MyButton onClick={() => props.setModalGroupVisible(true)}>
+            <MyButton onClick={() => setModalGroupVisible(true)}>
                 Створити групу
             </MyButton>
-            <MyModal visible={props.modalGroupVisible} setVisible={props.setModalGroupVisible}>
-                <AddGroupForm addGroup = {props.addGroup}/>
+            <MyModal visible={modalGroupVisible} setVisible={setModalGroupVisible}>
+                <AddGroupForm addGroup = {addGroup}/>
             </MyModal>
-            <GroupsFilter filter={props.filter} setFilter={props.setFilter}/>
+            <GroupsFilter filter={filter} setFilter={setFilter}/>
                 <div>
-                     {isGroupsLoading? <h1 className={styles.list}>Завантаження</h1>:groups.items.map((group) => 
+                     {isGroupsLoading? <h1 className={styles.list}>Завантаження</h1>:sortedAndSearch.map((group) => 
                      <ListGroup 
-                        group={group} groups={props.groups} setGroups={props.setGroups} 
-                        removeGroup={props.removeGroup} setLocalGroups={props.setLocalGroups}
+                        group={group} groups={groups.items}
+                        removeGroup={removeGroup}
                         key={group._id}/>
                     )}
                 </div>

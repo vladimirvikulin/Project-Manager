@@ -1,17 +1,22 @@
 import React, {useState} from 'react';
 import MyButton from './ui/button/MyButton';
 import MyInput from './ui/input/MyInput';
+import { useDispatch } from 'react-redux';
+import { fetchCreateGroup } from '../redux/slices/groups';
 
 const AddGroupForm = ({addGroup}) => {
     const [title, setTitle] = useState('')
+    const dispatch = useDispatch();
     const addNewGroup = (e) => {
         e.preventDefault();
         const newGroup = {
-          id: Date.now(),
           title,
           tasks: [],
+          completed: 0,
+          notCompleted: 0,
         }
-        addGroup(newGroup);
+        dispatch(fetchCreateGroup(newGroup));
+        addGroup();
         setTitle('');
       }
     return (
