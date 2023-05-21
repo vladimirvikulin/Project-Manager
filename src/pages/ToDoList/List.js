@@ -7,7 +7,7 @@ import GroupsFilter from '../../components/GroupsFilter';
 import MyModal from '../../components/ui/modal/MyModal';
 import MyButton from '../../components/ui/button/MyButton';
 import { fetchGroups, fetchRemoveGroup } from '../../redux/slices/groups';
-const List = () => {
+const List = ({setStatisticsGroup}) => {
     const dispatch = useDispatch();
     const { groups } = useSelector(state => state.groups);
     const isGroupsLoading = groups.status === 'loading';
@@ -50,7 +50,7 @@ const List = () => {
                 <div>
                      {isGroupsLoading? <h1 className={styles.list}>Завантаження</h1>:sortedAndSearch.map((group) => 
                      <ListGroup 
-                        group={group} groups={groups.items}
+                        group={group} setStatisticsGroup={setStatisticsGroup}
                         removeGroup={removeGroup}
                         key={group._id}/>
                     )}

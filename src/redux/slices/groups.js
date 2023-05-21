@@ -15,6 +15,11 @@ export const fetchRemoveGroup = createAsyncThunk('groups/fetchRemoveGroup', asyn
     await axios.delete(`/groups/${id}`);
 });
 
+export const fetchUpdateGroup = createAsyncThunk('groups/fetchUpdateGroup', async ({updatedGroup, groupId}) => {
+    const {data} = await axios.patch(`/groups/${groupId}`, updatedGroup);
+    return data;
+});
+
 export const fetchCreateTask= createAsyncThunk('groups/fetchCreateTask', async ({newTask, id}) => {
     const {data} = await axios.post(`/tasks/${id}`, newTask);
     return data;
@@ -42,6 +47,7 @@ const groupsSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: {
+        //Get all groups
         [fetchGroups.pending]: (state) => {
             state.groups.status = 'loading';
             state.groups.items = [];
@@ -54,12 +60,25 @@ const groupsSlice = createSlice({
             state.groups.status = 'error';
             state.groups.items = [];
         },
+        //Create group
         [fetchCreateGroup.fulfilled]: (state, action) => {
             state.groups.items.push(action.payload);
         },
+        //Remove group
         [fetchRemoveGroup.pending]: (state, action) => {
             state.groups.items = state.groups.items.filter((obj) => obj._id !== action.meta.arg);
         },
+        //Update group
+        [fetchUpdateGroup.fulfilled]: (state, action) => {
+            console.log(action)
+            state.groups.items = state.groups.items.map(group => {
+                if (group._id === action.meta.arg.id) {
+                  return action.payload
+                }
+                return group;
+              });
+        },
+        //Create task
         [fetchCreateTask.fulfilled]: (state, action) => {
             state.groups.items = state.groups.items.map(group => {
                 if (group._id === action.meta.arg.id) {
@@ -71,6 +90,7 @@ const groupsSlice = createSlice({
                 return group;
               });
         },
+        //Delete task
         [fetchDeleteTask.fulfilled]: (state, action) => {
             state.groups.items = state.groups.items.map(group => {
                 if (group._id === action.meta.arg.groupId) {
@@ -82,8 +102,8 @@ const groupsSlice = createSlice({
                 return group;
               });
         },
+        //Update task
         [fetchUpdateTask.fulfilled]: (state, action) => {
-            console.log(action)
             state.groups.items = state.groups.items.map(group => {
                 if (group._id === action.meta.arg.groupId) {
                   return {

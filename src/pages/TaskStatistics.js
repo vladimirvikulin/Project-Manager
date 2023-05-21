@@ -3,16 +3,18 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import { Link } from "react-router-dom";
 import '../styles/App.css';
+import MyButton from '../components/ui/button/MyButton';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const TaskStatistics = ({completedTask, notCompletedTask, loadGroupsFromLocal}) => {
+const TaskStatistics = ({statisticsGroup}) => {
+  console.log('stats', statisticsGroup)
   const data = {
     labels: ['Виконані', 'Невиконані'],
     datasets: [
       {
         label: '# Завдань',
-        data: [completedTask, notCompletedTask] ,
+        data: [statisticsGroup.completed, statisticsGroup.notCompleted],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -27,9 +29,9 @@ const TaskStatistics = ({completedTask, notCompletedTask, loadGroupsFromLocal}) 
   };
   return (
   <div className='pieChart'>
-    <div className='link'>
-      <Link onClick={loadGroupsFromLocal} to='/'>Список</Link>
-    </div>
+    <MyButton>
+      <Link to='/'>Список</Link>
+    </MyButton>
     <Pie data={data}/>;
   </div>
   )

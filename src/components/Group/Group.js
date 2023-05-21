@@ -6,12 +6,11 @@ import MyButton from '../ui/button/MyButton';
 import styles from './Group.module.css';
 import MyModal from '../ui/modal/MyModal';
 import { useDispatch } from 'react-redux';
-import { fetchDeleteTask, fetchUpdateTask } from '../../redux/slices/groups';
+import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask } from '../../redux/slices/groups';
 
 const ListGroup = ({
-  group, 
-  groups, 
-  setGroups, 
+  group,
+  setStatisticsGroup,
   removeGroup, 
 }) => {
     const groupId = group._id;
@@ -19,10 +18,17 @@ const ListGroup = ({
     const [edit, setEdit] = useState(null);
     const [value, setValue] = useState('');
     const [modalTaskVisible, setModalTaskVisible] = useState(false);
-    const checkCompleted = () => {
+    const checkCompleted = (group) => {
         let completed = 0;
         let notCompleted = 0;
         group.tasks.map((i) => i.status ? ++notCompleted : ++completed);
+        const updatedGroup = {
+            ...group,
+            completed,
+            notCompleted,
+          };
+        dispatch(fetchUpdateGroup({updatedGroup, groupId}));
+        setStatisticsGroup(updatedGroup);
     }
     
     const removeTask = (task) => {
@@ -85,8 +91,8 @@ const ListGroup = ({
                 : <h1 className={styles.groupHeader}>Список задач порожній</h1>
             }
             <div>
-                <Link to='/statistics'>
-                    <MyButton onClick={checkCompleted} >Статистика</MyButton>
+                <Link to='/statistics/'>
+                    <MyButton onClick={() => checkCompleted(group)} >Статистика</MyButton>
                 </Link>
             </div>
         </div>
