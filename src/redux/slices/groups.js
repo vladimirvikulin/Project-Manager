@@ -25,6 +25,11 @@ export const fetchDeleteTask= createAsyncThunk('groups/fetchDeleteTask', async (
     return data;
 });
 
+export const fetchUpdateTask = createAsyncThunk('groups/fetchUpdateTask', async ({updatedTask, groupId, taskId}) => {
+    const {data} = await axios.patch(`/tasks/${groupId}/${taskId}/`, updatedTask);
+    return data;
+});
+
 const initialState = {
     groups: {
         items: [],
@@ -67,12 +72,31 @@ const groupsSlice = createSlice({
               });
         },
         [fetchDeleteTask.fulfilled]: (state, action) => {
-            console.log(action, state);
             state.groups.items = state.groups.items.map(group => {
                 if (group._id === action.meta.arg.groupId) {
                   return {
                     ...group,
                     tasks: action.payload
+                  };
+                }
+                return group;
+              });
+        },
+        [fetchUpdateTask.fulfilled]: (state, action) => {
+            console.log(action)
+            state.groups.items = state.groups.items.map(group => {
+                if (group._id === action.meta.arg.groupId) {
+                  return {
+                    ...group,
+                    tasks: group.tasks.map(task => {
+                      if (task._id === action.meta.arg.taskId) {
+                        return {
+                          ...task,
+                          status: !task.status
+                        };
+                      }
+                      return task;
+                    })
                   };
                 }
                 return group;
