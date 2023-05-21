@@ -20,6 +20,11 @@ export const fetchCreateTask= createAsyncThunk('groups/fetchCreateTask', async (
     return data;
 });
 
+export const fetchDeleteTask= createAsyncThunk('groups/fetchDeleteTask', async ({groupId, taskId}) => {
+    const {data} = await axios.delete(`/tasks/${groupId}/${taskId}/`);
+    return data;
+});
+
 const initialState = {
     groups: {
         items: [],
@@ -56,6 +61,18 @@ const groupsSlice = createSlice({
                   return {
                     ...group,
                     tasks: [...group.tasks, action.payload]
+                  };
+                }
+                return group;
+              });
+        },
+        [fetchDeleteTask.fulfilled]: (state, action) => {
+            console.log(action, state);
+            state.groups.items = state.groups.items.map(group => {
+                if (group._id === action.meta.arg.groupId) {
+                  return {
+                    ...group,
+                    tasks: action.payload
                   };
                 }
                 return group;

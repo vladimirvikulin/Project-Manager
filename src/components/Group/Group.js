@@ -5,6 +5,8 @@ import Task from '../Task/Task';
 import MyButton from '../ui/button/MyButton';
 import styles from './Group.module.css';
 import MyModal from '../ui/modal/MyModal';
+import { useDispatch } from 'react-redux';
+import { fetchDeleteTask } from '../../redux/slices/groups';
 
 const ListGroup = ({
   group, 
@@ -12,6 +14,7 @@ const ListGroup = ({
   setGroups, 
   removeGroup, 
 }) => {
+    const dispatch = useDispatch();
     const [edit, setEdit] = useState(null);
     const [value, setValue] = useState('');
     const [modalTaskVisible, setModalTaskVisible] = useState(false);
@@ -22,11 +25,9 @@ const ListGroup = ({
     }
     
     const removeTask = (task) => {
-        let i = group.tasks.indexOf(task);
-        if(i >= 0) {
-            group.tasks.splice(i,1);
-        }
-        setGroups([...groups]);
+        const groupId = group._id;
+        const taskId = task._id
+        dispatch(fetchDeleteTask({groupId, taskId}));
     }
     
     const statusTask = (task) => {
