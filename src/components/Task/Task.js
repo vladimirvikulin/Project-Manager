@@ -1,14 +1,8 @@
-import React,{useState} from 'react';
 import MyButton from '../ui/button/MyButton';
 import MyInput from '../ui/input/MyInput';
 import styles from './Task.module.css';
 
 const Task = (props) => {
-   const [priority, setPriority] = useState(false);
-    const priorityTask = () => {
-      props.task.priority = !props.task.priority;
-      setPriority(props.task.priority)
-    }
     return (
         <div className={props.task.priority ? `${styles.priorityTask} ${styles.task}` : styles.task}>
         {
@@ -23,7 +17,7 @@ const Task = (props) => {
             </div>
             : 
             <div className={!props.task.status ? styles.close : ''}>
-               <MyButton onClick={() => priorityTask()}>
+               <MyButton onClick={() => props.priorityTask(props.task)}>
                   Пріорітет
                </MyButton>    
                {props.number}. {props.task.title}

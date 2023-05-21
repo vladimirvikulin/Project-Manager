@@ -54,6 +54,15 @@ const ListGroup = ({
         setValue('');
         dispatch(fetchUpdateTask({updatedTask, groupId, taskId}));
     }
+
+    const priorityTask = (task) => {
+        const updatedTask = {
+            ...task,
+            priority: !task.priority
+          };
+        const taskId = task._id
+        dispatch(fetchUpdateTask({updatedTask, groupId, taskId}));
+    }
     return (
         <div>
             <h1 className={styles.groupHeader}>{group.title}</h1>
@@ -69,7 +78,8 @@ const ListGroup = ({
             {group.tasks.length ? 
                 <div>
                 {group.tasks.map((task, index) => <Task 
-                removeTask={removeTask} statusTask={statusTask} edit={edit} editTask={editTask} value={value} setValue={setValue} saveTask={saveTask}
+                removeTask={removeTask} statusTask={statusTask} priorityTask={priorityTask}
+                edit={edit} editTask={editTask} value={value} setValue={setValue} saveTask={saveTask}
                 number={index + 1} task={task} key={task._id}/>)}
                  </div>
                 : <h1 className={styles.groupHeader}>Список задач порожній</h1>
