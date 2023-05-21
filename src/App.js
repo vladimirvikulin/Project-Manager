@@ -1,5 +1,7 @@
-import React,{useMemo, useState} from 'react';
+import React,{useMemo, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAuthMe, selectIsAuth } from './redux/slices/auth';
 import Header  from './components/Header/Header';
 import List from './pages/ToDoList/List';
 import TaskStatistics from './pages/TaskStatistics'
@@ -8,6 +10,11 @@ import Registration from './pages/Registration/Registration';
 
 
 function App() {
+	const dispatch = useDispatch();
+	const isAuth = useSelector(selectIsAuth);
+	useEffect(() => {
+        dispatch(fetchAuthMe());
+    }, []);
   	const [groups, setGroups] = useState([]);
   	const [filter, setFilter] = useState({selectedSort: '', searchGroup: ''});
   	const [modalGroupVisible, setModalGroupVisible] = useState(false);
@@ -30,7 +37,6 @@ function App() {
   	const sortedAndSearch = useMemo (() => {
     	return sorted.filter(group => group.title.toLowerCase().includes(filter.searchGroup));
   	}, [sorted, filter.searchGroup]);
-
   	return (
     	<div className= 'App'>
       	<BrowserRouter>
