@@ -21,12 +21,6 @@ const ListGroup = ({
         group.tasks.map((i) => i.status ? ++notCompleted : ++completed);
     }
     
-    const addTask = (newTask) => {
-        group.tasks.push(newTask);
-        setGroups([...groups]);
-        setModalTaskVisible(false);
-    }
-    
     const removeTask = (task) => {
         let i = group.tasks.indexOf(task);
         if(i >= 0) {
@@ -66,7 +60,7 @@ const ListGroup = ({
                 Створити задачу
             </MyButton>
             <MyModal visible={modalTaskVisible} setVisible={setModalTaskVisible}>
-                <AddTaskForm add={addTask}/>
+                <AddTaskForm id={group._id} setVisible={setModalTaskVisible} />
             </MyModal>
             <MyButton onClick={() => removeGroup(group)}>
                   Видалити групу

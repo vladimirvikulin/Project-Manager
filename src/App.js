@@ -8,7 +8,6 @@ import TaskStatistics from './pages/TaskStatistics'
 import Login from './pages/Login/Login';
 import Registration from './pages/Registration/Registration';
 
-
 function App() {
 	const dispatch = useDispatch();
 	useEffect(() => {
