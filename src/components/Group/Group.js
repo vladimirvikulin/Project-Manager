@@ -40,19 +40,19 @@ const ListGroup = ({
     }
 
     const editTask = (task) => {
-        setEdit(task.id);
+        setEdit(task._id);
         setValue(task.title);
     }
     
     const saveTask = (task) => {
-        group.tasks.filter( i => {
-            if (i.id === task.id) i.title = value;
-            setEdit(null);
-            setValue('');
-            return i;
-        }
-        )
-        setGroups([...groups]);
+        const updatedTask = {
+            ...task,
+            title: value
+          };
+        const taskId = task._id
+        setEdit(null);
+        setValue('');
+        dispatch(fetchUpdateTask({updatedTask, groupId, taskId}));
     }
     return (
         <div>

@@ -88,15 +88,7 @@ const groupsSlice = createSlice({
                 if (group._id === action.meta.arg.groupId) {
                   return {
                     ...group,
-                    tasks: group.tasks.map(task => {
-                      if (task._id === action.meta.arg.taskId) {
-                        return {
-                          ...task,
-                          status: !task.status
-                        };
-                      }
-                      return task;
-                    })
+                    tasks: action.payload,
                   };
                 }
                 return group;

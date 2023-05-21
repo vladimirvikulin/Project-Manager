@@ -12,7 +12,7 @@ const Task = (props) => {
     return (
         <div className={props.task.priority ? `${styles.priorityTask} ${styles.task}` : styles.task}>
         {
-            props.edit === props.task.id ? 
+            props.edit === props.task._id ? 
             <div>
                <MyInput 
                   value = {props.value} 
@@ -30,7 +30,7 @@ const Task = (props) => {
             </div>
         }
         {
-        props.edit === props.task.id ? 
+        props.edit === props.task._id ? 
             <div>
                <MyButton onClick={() => props.saveTask(props.task)}>
                   Зберегти
