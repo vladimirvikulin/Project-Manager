@@ -7,7 +7,11 @@ import GroupsFilter from '../../components/GroupsFilter';
 import MyModal from '../../components/ui/modal/MyModal';
 import MyButton from '../../components/ui/button/MyButton';
 import { fetchGroups, fetchRemoveGroup } from '../../redux/slices/groups';
+import { selectIsAuth } from '../../redux/slices/auth';
+import { Navigate } from 'react-router-dom';
+
 const List = ({setStatisticsGroup}) => {
+    const isAuth = useSelector(selectIsAuth);
     const dispatch = useDispatch();
     const { groups } = useSelector(state => state.groups);
     const isGroupsLoading = groups.status === 'loading';
@@ -32,12 +36,14 @@ const List = ({setStatisticsGroup}) => {
             return filtered;
       }
       return groups.items
-  }, [filter.selectedSort, groups.items]);
+    }, [filter.selectedSort, groups.items]);
 
     const sortedAndSearch = useMemo (() => {
       return sorted.filter(group => group.title.toLowerCase().includes(filter.searchGroup));
     }, [sorted, filter.searchGroup]);
-
+    if (!isAuth) {
+        return <Navigate to='/login'/>
+    }
     return (
         <div>
             <MyButton onClick={() => setModalGroupVisible(true)}>
