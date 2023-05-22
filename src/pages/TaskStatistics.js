@@ -7,14 +7,13 @@ import MyButton from '../components/ui/button/MyButton';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const TaskStatistics = ({statisticsGroup}) => {
-  console.log('stats', statisticsGroup)
+const TaskStatistics = ({statistics}) => {
   const data = {
     labels: ['Виконані', 'Невиконані'],
     datasets: [
       {
         label: '# Завдань',
-        data: [statisticsGroup.completed, statisticsGroup.notCompleted],
+        data: [statistics.completed, statistics.notCompleted],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',

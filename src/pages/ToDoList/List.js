@@ -20,9 +20,6 @@ const List = ({setStatisticsGroup}) => {
     }, []);
     const [filter, setFilter] = useState({selectedSort: '', searchGroup: ''});
     const [modalGroupVisible, setModalGroupVisible] = useState(false);
-    const addGroup = () => {
-        setModalGroupVisible(false);
-    }
     const removeGroup = (group) => {
         dispatch(fetchRemoveGroup(group._id));
     }
@@ -50,7 +47,7 @@ const List = ({setStatisticsGroup}) => {
                 Створити групу
             </MyButton>
             <MyModal visible={modalGroupVisible} setVisible={setModalGroupVisible}>
-                <AddGroupForm addGroup = {addGroup}/>
+                <AddGroupForm setModalGroupVisible = {setModalGroupVisible}/>
             </MyModal>
             <GroupsFilter filter={filter} setFilter={setFilter}/>
                 <div>

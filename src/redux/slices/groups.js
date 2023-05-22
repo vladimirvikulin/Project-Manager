@@ -70,7 +70,6 @@ const groupsSlice = createSlice({
         },
         //Update group
         [fetchUpdateGroup.fulfilled]: (state, action) => {
-            console.log(action)
             state.groups.items = state.groups.items.map(group => {
                 if (group._id === action.meta.arg.id) {
                   return action.payload

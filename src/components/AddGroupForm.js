@@ -4,7 +4,7 @@ import MyInput from './ui/input/MyInput';
 import { useDispatch } from 'react-redux';
 import { fetchCreateGroup } from '../redux/slices/groups';
 
-const AddGroupForm = ({addGroup}) => {
+const AddGroupForm = ({setModalGroupVisible}) => {
     const [title, setTitle] = useState('')
     const dispatch = useDispatch();
     const addNewGroup = (e) => {
@@ -16,7 +16,7 @@ const AddGroupForm = ({addGroup}) => {
           notCompleted: 0,
         }
         dispatch(fetchCreateGroup(newGroup));
-        addGroup();
+        setModalGroupVisible(false);
         setTitle('');
       }
     return (

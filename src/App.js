@@ -20,7 +20,7 @@ function App() {
 		  	<Header/>
         	<Routes>
           		<Route path="/" element={<List setStatisticsGroup={setStatisticsGroup}/>}/>
-          		<Route path="/statistics" element={<TaskStatistics statisticsGroup={statisticsGroup}/>}/>
+          		<Route path="/statistics" element={<TaskStatistics statistics={statisticsGroup}/>}/>
 				<Route path="/login" element={<Login/>}/>
 				<Route path="/register" element={<Registration/>}/>
 			</Routes>
