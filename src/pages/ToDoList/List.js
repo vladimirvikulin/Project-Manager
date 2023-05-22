@@ -8,9 +8,9 @@ import MyModal from '../../components/ui/modal/MyModal';
 import MyButton from '../../components/ui/button/MyButton';
 import { fetchGroups, fetchRemoveGroup } from '../../redux/slices/groups';
 import { selectIsAuth } from '../../redux/slices/auth';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
-const List = ({setStatisticsGroup}) => {
+const List = ({setStatistics}) => {
     const isAuth = useSelector(selectIsAuth);
     const dispatch = useDispatch();
     const { groups } = useSelector(state => state.groups);
@@ -18,6 +18,16 @@ const List = ({setStatisticsGroup}) => {
     React.useEffect(() => {
         dispatch(fetchGroups());
     }, []);
+    const checkCompleted = () => {
+        let completed = 0;
+        let notCompleted = 0;
+        groups.items.map((group) => group.tasks.map((task) => task.status ? ++notCompleted : ++completed));
+        const statistics = {
+            completed,
+            notCompleted,
+          };
+        setStatistics(statistics);
+    }
     const [filter, setFilter] = useState({selectedSort: '', searchGroup: ''});
     const [modalGroupVisible, setModalGroupVisible] = useState(false);
     const removeGroup = (group) => {
@@ -43,6 +53,11 @@ const List = ({setStatisticsGroup}) => {
     }
     return (
         <div>
+            <div>
+                <Link className={styles.link} to='/statistics/'>
+                    <MyButton onClick={() => checkCompleted()} >Загальна статистика</MyButton>
+                </Link>
+            </div>
             <MyButton onClick={() => setModalGroupVisible(true)}>
                 Створити групу
             </MyButton>
@@ -53,7 +68,7 @@ const List = ({setStatisticsGroup}) => {
                 <div>
                      {isGroupsLoading? <h1 className={styles.list}>Завантаження</h1>:sortedAndSearch.map((group) => 
                      <ListGroup 
-                        group={group} setStatisticsGroup={setStatisticsGroup}
+                        group={group} setStatistics={setStatistics}
                         removeGroup={removeGroup}
                         key={group._id}/>
                     )}

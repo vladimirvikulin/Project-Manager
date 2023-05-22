@@ -10,7 +10,7 @@ import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask } from '../../redux/
 
 const ListGroup = ({
   group,
-  setStatisticsGroup,
+  setStatistics,
   removeGroup, 
 }) => {
     const groupId = group._id;
@@ -28,7 +28,7 @@ const ListGroup = ({
             notCompleted,
           };
         dispatch(fetchUpdateGroup({updatedGroup, groupId}));
-        setStatisticsGroup(updatedGroup);
+        setStatistics(updatedGroup);
     }
     
     const removeTask = (task) => {
@@ -71,6 +71,11 @@ const ListGroup = ({
     }
     return (
         <div>
+            <div>
+                <Link className={styles.link} to='/statistics/'>
+                    <MyButton onClick={() => checkCompleted(group)} >Статистика групи</MyButton>
+                </Link>
+            </div>
             <h1 className={styles.groupHeader}>{group.title}</h1>
             <MyButton onClick={() => setModalTaskVisible(true)}>
                 Створити задачу
@@ -90,11 +95,6 @@ const ListGroup = ({
                  </div>
                 : <h1 className={styles.groupHeader}>Список задач порожній</h1>
             }
-            <div>
-                <Link to='/statistics/'>
-                    <MyButton onClick={() => checkCompleted(group)} >Статистика</MyButton>
-                </Link>
-            </div>
         </div>
     );
 };

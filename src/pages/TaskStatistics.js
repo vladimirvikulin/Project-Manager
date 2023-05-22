@@ -27,11 +27,16 @@ const TaskStatistics = ({statistics}) => {
     ],
   };
   return (
-  <div className='pieChart'>
-    <MyButton>
-      <Link to='/'>Список</Link>
-    </MyButton>
-    <Pie data={data}/>;
+  <div>
+    <Link className='link' to='/'>
+      <MyButton>
+        Список
+      </MyButton>
+    </Link>
+    <div className='pieChart' >
+      <Pie data={data}/>;
+    </div>
+
   </div>
   )
 }

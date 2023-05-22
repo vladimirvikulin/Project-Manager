@@ -9,7 +9,7 @@ import Login from './pages/Login/Login';
 import Registration from './pages/Registration/Registration';
 
 function App() {
-	const [statisticsGroup, setStatisticsGroup] = useState([]);
+	const [statistics, setStatistics] = useState([]);
 	const dispatch = useDispatch();
 	useEffect(() => {
         dispatch(fetchAuthMe());
@@ -19,8 +19,8 @@ function App() {
       	<BrowserRouter>
 		  	<Header/>
         	<Routes>
-          		<Route path="/" element={<List setStatisticsGroup={setStatisticsGroup}/>}/>
-          		<Route path="/statistics" element={<TaskStatistics statistics={statisticsGroup}/>}/>
+          		<Route path="/" element={<List setStatistics={setStatistics}/>}/>
+          		<Route path="/statistics" element={<TaskStatistics statistics={statistics}/>}/>
 				<Route path="/login" element={<Login/>}/>
 				<Route path="/register" element={<Registration/>}/>
 			</Routes>
