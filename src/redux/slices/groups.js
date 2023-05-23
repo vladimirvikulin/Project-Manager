@@ -94,4 +94,6 @@ extraReducers: (builder) => {
     },
 });
 
+export const selectGroups = (state) => state.groups;
+
 export default groupsSlice.reducer

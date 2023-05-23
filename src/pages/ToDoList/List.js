@@ -6,14 +6,14 @@ import styles from './List.module.css'
 import GroupsFilter from '../../components/GroupsFilter';
 import MyModal from '../../components/ui/modal/MyModal';
 import MyButton from '../../components/ui/button/MyButton';
-import { fetchGroups, fetchRemoveGroup } from '../../redux/slices/groups';
+import { fetchGroups, fetchRemoveGroup, selectGroups } from '../../redux/slices/groups';
 import { selectIsAuth } from '../../redux/slices/auth';
 import { Link, Navigate } from 'react-router-dom';
 
 const List = ({setStatistics}) => {
     const isAuth = useSelector(selectIsAuth);
     const dispatch = useDispatch();
-    const { groups } = useSelector(state => state.groups);
+    const { groups } = useSelector(selectGroups);
     const isGroupsLoading = groups.status === 'loading';
     useEffect(() => {
         dispatch(fetchGroups());
