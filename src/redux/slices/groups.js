@@ -46,74 +46,52 @@ const groupsSlice = createSlice({
     name: 'groups',
     initialState,
     reducers: {},
-    extraReducers: {
-        //Get all groups
-        [fetchGroups.pending]: (state) => {
-            state.groups.status = 'loading';
-            state.groups.items = [];
-        },
-        [fetchGroups.fulfilled]: (state, action) => {
-            state.groups.status = 'loaded';
-            state.groups.items = action.payload;
-        },
-        [fetchGroups.rejected]: (state) => {
-            state.groups.status = 'error';
-            state.groups.items = [];
-        },
-        //Create group
-        [fetchCreateGroup.fulfilled]: (state, action) => {
-            state.groups.items.push(action.payload);
-        },
-        //Remove group
-        [fetchRemoveGroup.pending]: (state, action) => {
-            state.groups.items = state.groups.items.filter((obj) => obj._id !== action.meta.arg);
-        },
-        //Update group
-        [fetchUpdateGroup.fulfilled]: (state, action) => {
-            state.groups.items = state.groups.items.map(group => {
-                if (group._id === action.meta.arg.id) {
-                  return action.payload
-                }
-                return group;
-              });
-        },
-        //Create task
-        [fetchCreateTask.fulfilled]: (state, action) => {
-            state.groups.items = state.groups.items.map(group => {
-                if (group._id === action.meta.arg.id) {
-                  return {
-                    ...group,
-                    tasks: [...group.tasks, action.payload]
-                  };
-                }
-                return group;
-              });
-        },
-        //Delete task
-        [fetchDeleteTask.fulfilled]: (state, action) => {
-            state.groups.items = state.groups.items.map(group => {
-                if (group._id === action.meta.arg.groupId) {
-                  return {
-                    ...group,
-                    tasks: action.payload
-                  };
-                }
-                return group;
-              });
-        },
-        //Update task
-        [fetchUpdateTask.fulfilled]: (state, action) => {
-            state.groups.items = state.groups.items.map(group => {
-                if (group._id === action.meta.arg.groupId) {
-                  return {
-                    ...group,
-                    tasks: action.payload,
-                  };
-                }
-                return group;
-              });
-        },
-    }
+extraReducers: (builder) => {
+        builder
+            .addCase(fetchGroups.pending, (state) => {
+                state.groups.status = 'loading';
+                state.groups.items = [];
+            })
+            .addCase(fetchGroups.fulfilled, (state, action) => {
+                state.groups.status = 'loaded';
+                state.groups.items = action.payload;
+            })
+            .addCase(fetchGroups.rejected, (state) => {
+                state.groups.status = 'error';
+                state.groups.items = [];
+            })
+            .addCase(fetchCreateGroup.fulfilled, (state, action) => {
+                state.groups.items = [...state.groups.items, action.payload];
+            })
+            .addCase(fetchRemoveGroup.pending, (state, action) => {
+                state.groups.items = state.groups.items.filter(({ _id }) => _id !== action.meta.arg);
+            })
+            .addCase(fetchUpdateGroup.fulfilled, (state, action) => {
+                const { id } = action.meta.arg;
+                state.groups.items = state.groups.items.map((group) => (group._id === id ? action.payload : group));
+            })
+            .addCase(fetchCreateTask.fulfilled, (state, action) => {
+                const { id } = action.meta.arg;
+                state.groups.items = state.groups.items.map((group) =>
+                    group._id === id ? { ...group, tasks: [...group.tasks, action.payload] } : group
+                );
+            })
+            .addCase(fetchDeleteTask.fulfilled, (state, action) => {
+                const { groupId } = action.meta.arg;
+                state.groups.items = state.groups.items.reduce((acc, group) => {
+                    if (group._id === groupId) {
+                        return [...acc, { ...group, tasks: action.payload }];
+                    }
+                    return [...acc, group];
+                }, []);
+            })
+            .addCase(fetchUpdateTask.fulfilled, (state, action) => {
+                const { groupId } = action.meta.arg;
+                state.groups.items = state.groups.items.map((group) =>
+                    group._id === groupId ? { ...group, tasks: action.payload } : group
+                );
+            });
+    },
 });
 
 export default groupsSlice.reducer

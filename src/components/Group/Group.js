@@ -13,7 +13,7 @@ const ListGroup = ({
   setStatistics,
   removeGroup, 
 }) => {
-    const groupId = group._id;
+    const { _id: groupId, title: groupTitle, tasks } = group;
     const dispatch = useDispatch();
     const [edit, setEdit] = useState(null);
     const [value, setValue] = useState('');
@@ -21,7 +21,7 @@ const ListGroup = ({
     const checkCompleted = (group) => {
         let completed = 0;
         let notCompleted = 0;
-        group.tasks.map((i) => i.status ? ++notCompleted : ++completed);
+        tasks.map((i) => i.status ? ++notCompleted : ++completed);
         const updatedGroup = {
             ...group,
             completed,
@@ -76,7 +76,7 @@ const ListGroup = ({
                     <MyButton onClick={() => checkCompleted(group)} >Статистика групи</MyButton>
                 </Link>
             </div>
-            <h1 className={styles.groupHeader}>{group.title}</h1>
+            <h1 className={styles.groupHeader}>{groupTitle}</h1>
             <MyButton onClick={() => setModalTaskVisible(true)}>
                 Створити задачу
             </MyButton>
@@ -86,9 +86,9 @@ const ListGroup = ({
             <MyButton onClick={() => removeGroup(group)}>
                   Видалити групу
             </MyButton>
-            {group.tasks.length ? 
+            {tasks.length ? 
                 <div>
-                {group.tasks.map((task, index) => <Task 
+                {tasks.map((task, index) => <Task 
                 removeTask={removeTask} statusTask={statusTask} priorityTask={priorityTask}
                 edit={edit} editTask={editTask} value={value} setValue={setValue} saveTask={saveTask}
                 number={index + 1} task={task} key={task._id}/>)}

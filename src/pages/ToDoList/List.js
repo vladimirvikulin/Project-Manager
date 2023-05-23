@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ListGroup from '../../components/Group/Group';
 import AddGroupForm from '../../components/AddGroupForm'
@@ -15,7 +15,7 @@ const List = ({setStatistics}) => {
     const dispatch = useDispatch();
     const { groups } = useSelector(state => state.groups);
     const isGroupsLoading = groups.status === 'loading';
-    React.useEffect(() => {
+    useEffect(() => {
         dispatch(fetchGroups());
     }, []);
     const checkCompleted = () => {
