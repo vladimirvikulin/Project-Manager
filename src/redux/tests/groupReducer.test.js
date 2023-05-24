@@ -53,7 +53,6 @@ describe("Testing group slice", () => {
       it("should return updated items array when fetchUpdateGroup fulfilled", () => {
         const action = { type: fetchUpdateGroup.fulfilled.type, payload: groupToUpdateMockObject, meta: {arg : { groupId: groupToUpdateMockObject._id }}};
         const result = groupReducer(loadedMockObject, action);
-        console.log(result.groups)
         expect(result).toEqual(loadedUpdatedMockObject);
       });
       it("should return items array with pushed payload when fetchCreateTask fulfilled", () => {
