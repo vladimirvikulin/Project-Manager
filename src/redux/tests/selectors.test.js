@@ -1,4 +1,4 @@
-import { loadedMockObject, errorMockObject } from "../../mocs/state";
+import { loadedMockObject, errorMockObject } from "../../mocs/selectorsMock";
 import { selectIsAuth } from '../slices/auth';
 import { selectGroups } from "../slices/groups";
 
