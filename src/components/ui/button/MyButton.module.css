@@ -8,3 +8,8 @@
     padding: 5px 15px;
     margin: 3px;
 }
+
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }

@@ -1,69 +1,26 @@
-import React,{useMemo, useState} from 'react';
+import React,{ useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { connect } from 'react-redux';
-import { setCompleted, setNotCompleted, setLocalGroups } from './db/store';
+import { useDispatch } from 'react-redux';
+import { fetchAuthMe } from './redux/slices/auth';
 import Header  from './components/Header/Header';
 import List from './pages/ToDoList/List';
 import TaskStatistics from './pages/TaskStatistics'
 import Login from './pages/Login/Login';
 import Registration from './pages/Registration/Registration';
 
-
-function App(props) {
-  	const [groups, setGroups] = useState([]);
-  	const [filter, setFilter] = useState({selectedSort: '', searchGroup: ''});
-  	const [modalGroupVisible, setModalGroupVisible] = useState(false);
-  	const addGroup = (newGroup) => {
-    	setGroups([...groups, newGroup]);
-    	setModalGroupVisible(false);
-  	}
-  	const removeGroup = (group) => {
-    	setGroups(groups.filter((i) => i.id !== group.id));
-  	}
-  	const addCompleted = (num) => {
-    	props.setCompleted(num);
-  	}
-  	const addNotCompleted = (num) => {
-    	props.setNotCompleted(num);
-  	}
-  	const loadGroupsFromLocal = () => {
-    	setGroups(props.localGroups);
-  	}
-  	const sorted = useMemo (() => {
-      	if (filter.selectedSort === 'groupTitle') return [...groups].sort((a, b) => a['title'].localeCompare(b['title']));
-      	else if (filter.selectedSort === 'taskTitle') {
-        	[...groups].map((g) => g.tasks.sort((a, b) => a['title'].localeCompare(b['title'])));
-        	return groups;
-    	}
-    	return groups
-    }, [filter.selectedSort, groups]);
-
-  	const sortedAndSearch = useMemo (() => {
-    	return sorted.filter(group => group.title.toLowerCase().includes(filter.searchGroup));
-  	}, [sorted, filter.searchGroup]);
-
-  	return (
+function App() {
+	const [statistics, setStatistics] = useState([]);
+	const dispatch = useDispatch();
+	useEffect(() => {
+        dispatch(fetchAuthMe());
+    }, []);
+	return (
     	<div className= 'App'>
       	<BrowserRouter>
 		  	<Header/>
         	<Routes>
-          		<Route path="/" element={
-          			<List 
-            		sortedAndSearch={sortedAndSearch} groups={groups} setGroups={setGroups} 
-            		addGroup={addGroup} removeGroup={removeGroup}
-            		addCompleted={addCompleted} addNotCompleted={addNotCompleted} 
-            		setLocalGroups={props.setLocalGroups} localGroups={props.localGroups}
-            		filter={filter} setFilter={setFilter}
-            		modalGroupVisible={modalGroupVisible} setModalGroupVisible={setModalGroupVisible}
-            		/>
-          		} 
-          		/>
-          		<Route path="/statistics" element={
-					<TaskStatistics 
-						completedTask={props.completed} 
-						notCompletedTask={props.notCompleted} 
-						loadGroupsFromLocal={loadGroupsFromLocal}/>}
-				/>
+          		<Route path="/" element={<List setStatistics={setStatistics}/>}/>
+          		<Route path="/statistics" element={<TaskStatistics statistics={statistics}/>}/>
 				<Route path="/login" element={<Login/>}/>
 				<Route path="/register" element={<Registration/>}/>
 			</Routes>
@@ -72,12 +29,4 @@ function App(props) {
   	);
 }
 
-const mapStateToProps = (state) => {
-  	return {
-    	localGroups: state.groups,
-    	completed: state.completed,
-    	notCompleted: state.notCompleted
-  	}
-}
-
-export default connect(mapStateToProps, { setCompleted, setNotCompleted, setLocalGroups })(App);
+export default App;
