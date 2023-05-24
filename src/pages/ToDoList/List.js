@@ -17,7 +17,7 @@ const List = ({setStatistics}) => {
     const isGroupsLoading = groups.status === 'loading';
     useEffect(() => {
         dispatch(fetchGroups());
-    }, []);
+    }, [dispatch]);
     const checkCompleted = () => {
         let completed = 0;
         let notCompleted = 0;
