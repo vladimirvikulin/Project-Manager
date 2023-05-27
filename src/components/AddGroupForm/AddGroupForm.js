@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import MyButton from './ui/button/MyButton';
-import MyInput from './ui/input/MyInput';
+import MyButton from '../ui/button/MyButton';
+import MyInput from '../ui/input/MyInput';
 import { useDispatch } from 'react-redux';
-import { fetchCreateGroup } from '../redux/slices/groups';
+import { fetchCreateGroup } from '../../redux/slices/groups';
 
 const AddGroupForm = ({setModalGroupVisible}) => {
     const [title, setTitle] = useState('')

@@ -18,7 +18,6 @@ describe('AddTaskForm component', () => {
   beforeEach(() => {
     useDispatch.mockReturnValue(dispatchMock);
   });
-  useDispatch.mockReturnValue(dispatchMock);
   it('renders input and button', () => {
     render(<AddTaskForm setVisible={() => {}} id={1} />);
 

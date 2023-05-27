@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ListGroup from '../../components/Group/Group';
-import AddGroupForm from '../../components/AddGroupForm'
+import AddGroupForm from '../../components/AddGroupForm/AddGroupForm'
 import styles from './List.module.css'
 import GroupsFilter from '../../components/GroupsFilter';
 import MyModal from '../../components/ui/modal/MyModal';
