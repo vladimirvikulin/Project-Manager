@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListGroup from '../../components/Group/Group';
 import AddGroupForm from '../../components/AddGroupForm/AddGroupForm'
 import styles from './List.module.css'
-import GroupsFilter from '../../components/GroupsFilter';
+import GroupsFilter from '../../components/GroupFilter/GroupsFilter';
 import MyModal from '../../components/ui/modal/MyModal';
 import MyButton from '../../components/ui/button/MyButton';
 import { fetchGroups, fetchRemoveGroup, selectGroups } from '../../redux/slices/groups';

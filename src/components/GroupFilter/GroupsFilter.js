@@ -1,6 +1,6 @@
 import React from 'react';
-import MyInput from './ui/input/MyInput';
-import MySelect from './ui/select/MySelect';
+import MyInput from '../ui/input/MyInput';
+import MySelect from '../ui/select/MySelect';
 
 const GroupsFilter = ({filter, setFilter}) => {
     return (
