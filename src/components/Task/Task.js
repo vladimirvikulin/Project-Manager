@@ -9,7 +9,6 @@ const Task = (props) => {
             props.edit === props.task._id ? 
             <div>
                <MyInput 
-                  data-testid='edit-input' // Додано data-testid
                   value = {props.value} 
                   onChange = {e => props.setValue(e.target.value)} 
                   type = 'text' 

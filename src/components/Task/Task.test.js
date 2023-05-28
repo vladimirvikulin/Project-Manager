@@ -24,7 +24,7 @@ describe('Task component', () => {
     render(<Task {...props} />);
 
     expect(screen.getByText('1. task3')).toBeInTheDocument();
-    expect(screen.queryByTestId('edit-input')).toBeNull();
+    expect(screen.queryByPlaceholderText('Назва задачі')).toBeNull();
     expect(screen.getByText('Змінити')).toBeInTheDocument();
     expect(screen.getByText('Видалити')).toBeInTheDocument();
     expect(screen.getByText('Відкрити')).toBeInTheDocument();
@@ -33,14 +33,14 @@ describe('Task component', () => {
   it('renders task details in edit mode', () => {
     render(<Task {...props} edit={task._id} />);
 
-    expect(screen.getByTestId('edit-input')).toBeInTheDocument();
-    expect(screen.getByTestId('edit-input')).toHaveValue('');
+    expect(screen.getByPlaceholderText('Назва задачі')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Назва задачі')).toHaveValue('');
     expect(screen.getByText('Зберегти')).toBeInTheDocument();
   });
 
   it('calls setValue function when input value changes', () => {
     render(<Task {...props} edit={task._id} />);
-    const input = screen.getByTestId('edit-input');
+    const input = screen.getByPlaceholderText('Назва задачі');
 
     fireEvent.change(input, { target: { value: 'Updated Task' } });
 
