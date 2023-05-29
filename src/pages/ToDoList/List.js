@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ListGroup from '../../components/Group/Group';
-import AddGroupForm from '../../components/AddGroupForm'
+import AddGroupForm from '../../components/AddGroupForm/AddGroupForm'
 import styles from './List.module.css'
-import GroupsFilter from '../../components/GroupsFilter';
+import GroupsFilter from '../../components/GroupFilter/GroupsFilter';
 import MyModal from '../../components/ui/modal/MyModal';
 import MyButton from '../../components/ui/button/MyButton';
 import { fetchGroups, fetchRemoveGroup, selectGroups } from '../../redux/slices/groups';
@@ -17,7 +17,7 @@ const List = ({setStatistics}) => {
     const isGroupsLoading = groups.status === 'loading';
     useEffect(() => {
         dispatch(fetchGroups());
-    }, []);
+    }, [dispatch]);
     const checkCompleted = () => {
         let completed = 0;
         let notCompleted = 0;
