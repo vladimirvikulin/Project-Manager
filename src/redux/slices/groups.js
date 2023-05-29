@@ -67,8 +67,8 @@ extraReducers: (builder) => {
                 state.groups.items = state.groups.items.filter(({ _id }) => _id !== action.meta.arg);
             })
             .addCase(fetchUpdateGroup.fulfilled, (state, action) => {
-                const { id } = action.meta.arg;
-                state.groups.items = state.groups.items.map((group) => (group._id === id ? action.payload : group));
+                const { groupId } = action.meta.arg;
+                state.groups.items = state.groups.items.map((group) => (group._id === groupId ? action.payload : group));
             })
             .addCase(fetchCreateTask.fulfilled, (state, action) => {
                 const { id } = action.meta.arg;

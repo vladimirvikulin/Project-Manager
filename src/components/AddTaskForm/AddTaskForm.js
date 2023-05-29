@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import MyButton from './ui/button/MyButton';
-import MyInput from './ui/input/MyInput';
+import MyButton from '../ui/button/MyButton';
+import MyInput from '../ui/input/MyInput';
 import { useDispatch } from 'react-redux';
-import { fetchCreateTask } from '../redux/slices/groups';
+import { fetchCreateTask } from '../../redux/slices/groups';
 
 const AddTaskForm = ({setVisible, id}) => {
     const [title, setTitle] = useState('')
