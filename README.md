@@ -8,15 +8,15 @@ This is a project for managing your to-do list and tasks efficiently. The fronte
 
 1. Clone the repository to your local machine
 2. Navigate to the project directory in your terminal or command prompt
-4. Install the dependencies
+3. Install the dependencies
 ```bash
 $ npm install
 ``` 
-3. To run the project
+4. To run the project
 ```bash
 $ npm start
 ``` 
-4. To run tests
+5. To run tests
 ```bash
 $ npm test
 ``` 
