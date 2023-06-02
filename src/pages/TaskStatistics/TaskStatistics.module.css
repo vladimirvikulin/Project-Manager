@@ -1,0 +1,16 @@
+.link {
+    float: right;
+}
+
+.pieChart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+}
+
+.title {
+    margin-top: 15px;
+    font-size: 20px;
+    text-align: center; 
+}

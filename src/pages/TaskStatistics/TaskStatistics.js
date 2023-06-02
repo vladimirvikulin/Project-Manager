@@ -2,12 +2,14 @@ import React from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import { Link } from "react-router-dom";
-import '../styles/App.css';
-import MyButton from '../components/ui/button/MyButton';
+import styles from './TaskStatistics.module.css'
+import MyButton from '../../components/ui/button/MyButton';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const TaskStatistics = ({statistics}) => {
+  console.log(statistics)
+  console.log(statistics.hasOwnProperty('title'))
   const data = {
     labels: ['Виконані', 'Невиконані'],
     datasets: [
@@ -28,15 +30,15 @@ const TaskStatistics = ({statistics}) => {
   };
   return (
   <div>
-    <Link className='link' to='/'>
+    <Link className = {styles.link} to='/'>
       <MyButton>
         Список
       </MyButton>
     </Link>
-    <div className='pieChart' >
+    <div className={styles.title}>{statistics.hasOwnProperty('title') ? `Статистика ${statistics.title}` : 'Загальна статистика'}</div>
+    <div className={styles.pieChart}>
       <Pie data={data}/>;
     </div>
-
   </div>
   )
 }

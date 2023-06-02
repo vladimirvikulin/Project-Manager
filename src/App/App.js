@@ -1,12 +1,13 @@
 import React,{ useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { fetchAuthMe } from './redux/slices/auth';
-import Header  from './components/Header/Header';
-import List from './pages/ToDoList/List';
-import TaskStatistics from './pages/TaskStatistics'
-import Login from './pages/Login/Login';
-import Registration from './pages/Registration/Registration';
+import { fetchAuthMe } from '../redux/slices/auth';
+import './App.css';
+import Header  from '../components/Header/Header';
+import List from '../pages/ToDoList/List';
+import TaskStatistics from '../pages/TaskStatistics/TaskStatistics'
+import Login from '../pages/Login/Login';
+import Registration from '../pages/Registration/Registration';
 
 function App() {
 	const [statistics, setStatistics] = useState([]);
