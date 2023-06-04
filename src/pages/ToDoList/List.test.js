@@ -164,6 +164,7 @@ describe('List component', () => {
 
     expect(setStatisticsMock).toHaveBeenCalledTimes(1);
     expect(setStatisticsMock).toHaveBeenCalledWith({
+      topPriorityGroups: [{count: 0, group: "Group 1"}],
       completed: 0,
       notCompleted: 0,
     });

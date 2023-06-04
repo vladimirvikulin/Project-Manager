@@ -18,11 +18,23 @@ const List = ({setStatistics}) => {
     useEffect(() => {
         dispatch(fetchGroups());
     }, [dispatch]);
-    const checkCompleted = () => {
+    const checkTaskStatistics = () => {
         let completed = 0;
         let notCompleted = 0;
+        const priorityCounts = [];
+        groups.items.forEach((group) => {
+            const { title, tasks } = group;
+            const priorityCount = tasks.reduce(
+                (count, task) => count + (task.priority ? 1 : 0),
+                0
+            );
+            priorityCounts.push({ group: title, count: priorityCount });
+        });
+        priorityCounts.sort((a, b) => b.count - a.count);
+        const topPriorityGroups = priorityCounts.slice(0, 6);
         groups.items.map((group) => group.tasks.map((task) => task.status ? ++notCompleted : ++completed));
         const statistics = {
+            topPriorityGroups,
             completed,
             notCompleted,
           };
@@ -55,7 +67,7 @@ const List = ({setStatistics}) => {
         <div>
             <div>
                 <Link className={styles.link} to='/statistics/'>
-                    <MyButton onClick={() => checkCompleted()} >Загальна статистика</MyButton>
+                    <MyButton onClick={() => checkTaskStatistics()} >Загальна статистика</MyButton>
                 </Link>
             </div>
             <MyButton onClick={() => setModalGroupVisible(true)}>
