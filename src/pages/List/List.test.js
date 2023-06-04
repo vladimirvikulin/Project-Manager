@@ -100,7 +100,7 @@ describe('List component', () => {
     expect(screen.getByText('Завантаження')).toBeInTheDocument();
   });
 
-  it('renders the ListGroup components based on the groups data', () => {
+  it('renders the Group components based on the groups data', () => {
     useSelector.mockReturnValueOnce(true);
     useSelector.mockReturnValueOnce({
       groups: {

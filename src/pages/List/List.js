@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ListGroup from '../../components/Group/Group';
+import Group from '../../components/Group/Group';
 import AddGroupForm from '../../components/AddGroupForm/AddGroupForm'
 import styles from './List.module.css'
 import GroupsFilter from '../../components/GroupFilter/GroupsFilter';
@@ -79,7 +79,7 @@ const List = ({setStatistics}) => {
             <GroupsFilter filter={filter} setFilter={setFilter}/>
                 <div>
                      {isGroupsLoading? <h1 className={styles.list}>Завантаження</h1>:sortedAndSearch.map((group) => 
-                     <ListGroup 
+                     <Group 
                         group={group} setStatistics={setStatistics}
                         removeGroup={removeGroup}
                         key={group._id}/>

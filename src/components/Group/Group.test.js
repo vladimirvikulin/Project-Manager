@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { useDispatch } from 'react-redux';
 import { fetchUpdateTask, fetchDeleteTask } from '../../redux/slices/groups';
-import ListGroup from './Group';
+import Group from './Group';
 
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
@@ -15,7 +15,7 @@ jest.mock('../../redux/slices/groups.js', () => ({
   fetchDeleteTask: jest.fn(),
 }));
 
-describe('ListGroup', () => {
+describe('Group', () => {
   const group = {
     _id: '1',
     title: 'Group Title',
@@ -49,7 +49,7 @@ describe('ListGroup', () => {
   it('renders group title', () => {
     render(
       <Router>
-        <ListGroup
+        <Group
           group={group}
           setStatistics={setStatisticsMock}
           removeGroup={removeGroupMock}
@@ -64,7 +64,7 @@ describe('ListGroup', () => {
   it('renders task list', () => {
     render(
       <Router>
-        <ListGroup
+        <Group
           group={group}
           setStatistics={setStatisticsMock}
           removeGroup={removeGroupMock}
@@ -81,7 +81,7 @@ describe('ListGroup', () => {
   it('calls removeGroup when "Видалити групу" button is clicked', () => {
     render(
       <Router>
-        <ListGroup
+        <Group
           group={group}
           setStatistics={setStatisticsMock}
           removeGroup={removeGroupMock}
@@ -104,7 +104,7 @@ describe('ListGroup', () => {
 
     render(
       <Router>
-        <ListGroup
+        <Group
           group={emptyGroup}
           setStatistics={setStatisticsMock}
           removeGroup={removeGroupMock}
@@ -119,7 +119,7 @@ describe('ListGroup', () => {
   it('calls fetchDeleteTask when removeTask is called', () => {
     render(
       <Router>
-        <ListGroup
+        <Group
           group={group}
           setStatistics={setStatisticsMock}
           removeGroup={removeGroupMock}
@@ -140,7 +140,7 @@ describe('ListGroup', () => {
   it('calls fetchUpdateTask when statusTask is called', () => {
     render(
       <Router>
-        <ListGroup
+        <Group
           group={group}
           setStatistics={setStatisticsMock}
           removeGroup={removeGroupMock}
@@ -165,7 +165,7 @@ describe('ListGroup', () => {
   it('calls fetchUpdateTask when priorityTask is called', () => {
     render(
       <Router>
-        <ListGroup
+        <Group
           group={group}
           setStatistics={setStatisticsMock}
           removeGroup={removeGroupMock}
@@ -190,7 +190,7 @@ describe('ListGroup', () => {
   it('calls fetchUpdateTask when saveTask is called', () => {
     render(
       <Router>
-        <ListGroup
+        <Group
           group={group}
           setStatistics={setStatisticsMock}
           removeGroup={removeGroupMock}

@@ -8,7 +8,7 @@ import MyModal from '../ui/modal/MyModal';
 import { useDispatch } from 'react-redux';
 import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask } from '../../redux/slices/groups';
 
-const ListGroup = ({
+const Group = ({
   group,
   setStatistics,
   removeGroup, 
@@ -99,4 +99,4 @@ const ListGroup = ({
     );
 };
 
-export default ListGroup;
+export default Group;
