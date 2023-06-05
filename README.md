@@ -33,6 +33,7 @@ The main features of the My To-Do List+ application include:
 - Searching for a group by its name. 
 - Assigning tasks to specific groups. 
 - Task statistics, including the total number of completed and pending tasks, both overall and within individual groups. 
+- Task statistics for the most priority groups.
 - User authentication for secure access. 
 
 ## Сode reviews of my project
