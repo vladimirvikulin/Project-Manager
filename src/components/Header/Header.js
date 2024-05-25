@@ -25,11 +25,9 @@ const Header = () => {
           </Link>
           <div>
             {isAuth ? (
-              <>
                 <MyButton onClick={onClickLogout}>
                   Вийти
                 </MyButton>
-              </>
             ) : (
               <>
                 <Link to="/login">
