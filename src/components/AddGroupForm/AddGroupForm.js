@@ -3,6 +3,7 @@ import MyButton from '../ui/button/MyButton';
 import MyInput from '../ui/input/MyInput';
 import { useDispatch } from 'react-redux';
 import { fetchCreateGroup } from '../../redux/slices/groups';
+import PropTypes from 'prop-types';
 
 const AddGroupForm = ({setModalGroupVisible}) => {
     const [title, setTitle] = useState('')
@@ -33,4 +34,9 @@ const AddGroupForm = ({setModalGroupVisible}) => {
         </div>
     );
 }
+
+AddGroupForm.propTypes = {
+    setModalGroupVisible: PropTypes.func.isRequired,
+  };
+
 export default AddGroupForm;

@@ -3,6 +3,7 @@ import MyButton from '../ui/button/MyButton';
 import MyInput from '../ui/input/MyInput';
 import { useDispatch } from 'react-redux';
 import { fetchCreateTask } from '../../redux/slices/groups';
+import PropTypes from 'prop-types';
 
 const AddTaskForm = ({setVisible, id}) => {
     const [title, setTitle] = useState('')
@@ -31,6 +32,11 @@ const AddTaskForm = ({setVisible, id}) => {
             </form>
         </div>
     );
+};
+
+AddTaskForm.propTypes = {
+    setVisible: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
 };
 
 export default AddTaskForm;

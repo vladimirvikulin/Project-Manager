@@ -9,6 +9,7 @@ import MyButton from '../../components/ui/button/MyButton';
 import { fetchGroups, fetchRemoveGroup, selectGroups } from '../../redux/slices/groups';
 import { selectIsAuth } from '../../redux/slices/auth';
 import { Link, Navigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const List = ({setStatistics}) => {
     const isAuth = useSelector(selectIsAuth);
@@ -87,6 +88,11 @@ const List = ({setStatistics}) => {
                 </div>
         </div>
     );
+};
+
+
+List.propTypes = {
+    setStatistics: PropTypes.func.isRequired,
 };
 
 export default List;

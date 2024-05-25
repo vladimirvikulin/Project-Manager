@@ -1,6 +1,7 @@
 import MyButton from '../ui/button/MyButton';
 import MyInput from '../ui/input/MyInput';
 import styles from './Task.module.css';
+import PropTypes from 'prop-types';
 
 const Task = (props) => {
     return (
@@ -47,6 +48,24 @@ const Task = (props) => {
         }
     </div>
     );
+};
+
+Task.propTypes = {
+   task: PropTypes.shape({
+       _id: PropTypes.string.isRequired,
+       title: PropTypes.string.isRequired,
+       status: PropTypes.bool.isRequired,
+       priority: PropTypes.string
+   }).isRequired,
+   edit: PropTypes.string,
+   value: PropTypes.string.isRequired,
+   setValue: PropTypes.func.isRequired,
+   number: PropTypes.number.isRequired,
+   priorityTask: PropTypes.func.isRequired,
+   saveTask: PropTypes.func.isRequired,
+   editTask: PropTypes.func.isRequired,
+   removeTask: PropTypes.func.isRequired,
+   statusTask: PropTypes.func.isRequired
 };
 
 export default Task;
