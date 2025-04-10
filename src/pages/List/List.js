@@ -66,8 +66,11 @@ const List = ({setStatistics}) => {
     return (
         <div>
             <div>
-                <Link className={styles.link} to='/statistics/'>
-                    <MyButton onClick={() => checkTaskStatistics()} >Загальна статистика</MyButton>
+                <Link className={styles.link} to="/statistics/">
+                    <MyButton onClick={() => checkTaskStatistics()}>Загальна статистика</MyButton>
+                </Link>
+                <Link className={styles.link} to="/network/">
+                    <MyButton>Мережевий графік</MyButton>
                 </Link>
             </div>
             <MyButton onClick={() => setModalGroupVisible(true)}>

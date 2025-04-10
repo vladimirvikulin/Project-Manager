@@ -1,0 +1,36 @@
+.checkboxList {
+    width: 100%;
+    border: 1px solid khaki;
+    border-radius: 4px;
+    padding: 8px;
+    background-color: khaki;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.options {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    cursor: pointer;
+}
+
+.option input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.noOptions {
+    color: #999;
+    font-style: italic;
+}
