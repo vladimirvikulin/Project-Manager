@@ -1,10 +1,13 @@
 .task {
-    font-size: 18px;
+    font-size: 20px;
     display: flex;
-    padding: 15px;
-    margin-top: 15px;
+    padding: 10px;
+    margin-top: 10px;
     justify-content: space-between;
     align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
 }
 
 .priorityTask {
@@ -14,4 +17,47 @@
 .close {
     color: gray;
     text-decoration: line-through;
+}
+
+.taskInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.taskTitle {
+    font-weight: bold;
+}
+
+.taskDetails {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: #555;
+}
+
+.taskDetails span {
+    margin-top: 2px;
+}
+
+.taskButtons {
+    display: flex;
+    gap: 5px;
+}
+
+.editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.editForm input {
+    padding: 5px;
+    font-size: 14px;
+}
+
+.editButtons {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
 }

@@ -4,8 +4,7 @@
     border-radius: 4px;
     padding: 8px;
     background-color: khaki;
-    margin-top: 5px;
-    margin-bottom: 15px;
+    margin: 5px 0;
 }
 
 .label {
@@ -22,15 +21,16 @@
 .option {
     display: flex;
     align-items: center;
-    padding: 5px 0;
+    padding: 3px 0;
     cursor: pointer;
 }
 
 .option input[type="checkbox"] {
-    margin-right: 10px;
+    margin-right: 8px;
 }
 
 .noOptions {
     color: #999;
     font-style: italic;
+    font-size: 14px;
 }

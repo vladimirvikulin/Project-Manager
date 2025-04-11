@@ -1,15 +1,20 @@
 .myBtn {
-    font-size: 18;
-    background: transparent;
+    font-size: 16px;
     background-color: khaki;
     border: none;
     cursor: pointer;
-    color:black;
-    padding: 5px 15px;
+    color: black;
+    padding: 5px 10px;
     margin: 3px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.myBtn:hover {
+    background-color: coral;
 }
 
 .disabled {
     opacity: 0.5;
     cursor: not-allowed;
-  }
+}

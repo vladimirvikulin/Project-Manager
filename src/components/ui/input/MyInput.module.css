@@ -1,6 +1,8 @@
 .myInp {
     width: 100%;
-    margin: 5px;
-    padding: 5px 15px;
-    border: 1px solid khaki;  
+    margin: 5px 0;
+    padding: 5px 10px;
+    border: 1px solid khaki;
+    border-radius: 4px;
+    font-size: 14px;
 }

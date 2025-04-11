@@ -1,9 +1,10 @@
 .list {
-    margin-top: 15px;
-    font-size: 20px;
-    text-align: center; 
+    margin-top: 10px;
+    font-size: 18px;
+    text-align: center;
 }
 
 .link {
     float: right;
+    font-size: 14px;
 }
