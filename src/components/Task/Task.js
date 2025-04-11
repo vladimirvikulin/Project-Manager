@@ -1,9 +1,11 @@
 import MyButton from '../ui/button/MyButton';
 import MyInput from '../ui/input/MyInput';
+import MyCheckboxList from '../ui/checkbox/MyCheckboxList';
 import styles from './Task.module.css';
+import { FaStar, FaPencilAlt, FaTrash, FaLock, FaLockOpen } from 'react-icons/fa';
 
 const Task = (props) => {
-    const { task } = props;
+    const { task, taskOptions, tasks } = props;
 
     const calculateDaysLeft = (deadline) => {
         if (!deadline) return '—';
@@ -38,20 +40,31 @@ const Task = (props) => {
                         type="date" 
                         placeholder="Дедлайн (опціонально)"
                     />
+                    <MyCheckboxList
+                        value={props.dependencies}
+                        onChange={props.setDependencies}
+                        label="Залежності (опціонально)"
+                        options={taskOptions}
+                    />
                 </div>
                 : 
                 <div className={styles.taskInfo}>
                     <div className={!task.status ? styles.close : ''}>
-                        <MyButton onClick={() => props.priorityTask(task)}>
-                            Пріорітет
+                        <MyButton onClick={() => props.priorityTask(task)} className={styles.iconButton}>
+                            <FaStar className={task.priority ? styles.activeIcon : ''} />
                         </MyButton>    
                         <div className={styles.taskTitle}>
                             {props.number}. {task.title}
                         </div>
                         <div className={styles.taskDetails}>
-                            <span>Тривалість: {task.duration} дн.</span>
-                            <span>Дедлайн: {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Не вказано'}</span>
-                            <span>Залишилось: {calculateDaysLeft(task.deadline)}</span>
+                            <span className={styles.detailLarge}>Тривалість: {task.duration} дн.</span>
+                            <span className={styles.detailLarge}>Дедлайн: {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Не вказано'}</span>
+                            <span className={styles.detailLarge}>Залишилось: {calculateDaysLeft(task.deadline)}</span>
+                            <span className={styles.detailSmall}>
+                                Залежності: {task.dependencies.length 
+                                    ? task.dependencies.map(id => tasks.find(t => t._id === id)?.title).join(', ') 
+                                    : 'Немає'}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -65,14 +78,14 @@ const Task = (props) => {
                 </div>
                 :
                 <div className={styles.taskButtons}>
-                    <MyButton onClick={() => props.editTask(task)}>
-                        Змінити
+                    <MyButton onClick={() => props.editTask(task)} className={styles.iconButton}>
+                        <FaPencilAlt />
                     </MyButton>
-                    <MyButton onClick={() => props.removeTask(task)}>
-                        Видалити
+                    <MyButton onClick={() => props.removeTask(task)} className={styles.iconButton}>
+                        <FaTrash />
                     </MyButton>
-                    <MyButton onClick={() => props.statusTask(task)}>
-                        {task.status ? 'Закрити' : 'Відкрити'}
+                    <MyButton onClick={() => props.statusTask(task)} className={styles.iconButton}>
+                        {task.status ? <FaLockOpen /> : <FaLock />}
                     </MyButton>
                 </div>
             }

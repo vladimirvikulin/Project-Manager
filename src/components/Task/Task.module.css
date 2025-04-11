@@ -1,8 +1,8 @@
 .task {
-    font-size: 20px;
+    font-size: 16px;
     display: flex;
-    padding: 10px;
-    margin-top: 10px;
+    padding: 8px;
+    margin-top: 8px;
     justify-content: space-between;
     align-items: center;
     border: 1px solid #ccc;
@@ -22,42 +22,108 @@
 .taskInfo {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
 }
 
 .taskTitle {
     font-weight: bold;
+    font-size: 16px;
 }
 
 .taskDetails {
     display: flex;
     flex-direction: column;
-    font-size: 14px;
     color: #555;
 }
 
-.taskDetails span {
+.detailLarge {
+    font-size: 14px;
     margin-top: 2px;
+}
+
+.detailSmall {
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+.taskDetails span:empty:before,
+.taskDetails span:contains('Не вказано'):before {
+    content: '—';
+    color: #999;
 }
 
 .taskButtons {
     display: flex;
-    gap: 5px;
+    gap: 8px;
+}
+
+.iconButton {
+    background: none !important;
+    padding: 4px !important;
+    margin: 0 !important;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconButton svg {
+    color: #555;
+    transition: color 0.3s;
+}
+
+.iconButton:hover svg {
+    color: coral;
+}
+
+.activeIcon {
+    color: gold !important;
 }
 
 .editForm {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
+    width: 100%;
 }
 
 .editForm input {
-    padding: 5px;
-    font-size: 14px;
+    padding: 4px;
+    font-size: 12px;
+}
+
+.editForm .checkboxList {
+    margin: 4px 0;
 }
 
 .editButtons {
     display: flex;
-    gap: 5px;
-    margin-top: 5px;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+    .task {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .taskButtons {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 6px;
+    }
+
+    .taskTitle {
+        font-size: 14px;
+    }
+
+    .detailLarge {
+        font-size: 12px;
+    }
+
+    .detailSmall {
+        font-size: 9px;
+    }
 }

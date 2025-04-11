@@ -19,6 +19,7 @@ const Group = ({
     const [value, setValue] = useState('');
     const [duration, setDuration] = useState(1);
     const [deadline, setDeadline] = useState('');
+    const [dependencies, setDependencies] = useState([]);
     const [modalTaskVisible, setModalTaskVisible] = useState(false);
 
     const checkCompleted = (group) => {
@@ -53,6 +54,7 @@ const Group = ({
         setValue(task.title);
         setDuration(task.duration || 1);
         setDeadline(task.deadline ? new Date(task.deadline).toISOString().split('T')[0] : '');
+        setDependencies(task.dependencies || []);
     };
     
     const saveTask = (task) => {
@@ -61,12 +63,14 @@ const Group = ({
             title: value,
             duration: Number(duration),
             deadline: deadline ? new Date(deadline).toISOString() : undefined,
+            dependencies: dependencies || [],
         };
         const taskId = task._id;
         setEdit(null);
         setValue('');
         setDuration(1);
         setDeadline('');
+        setDependencies([]);
         dispatch(fetchUpdateTask({ updatedTask, groupId, taskId }));
     };
 
@@ -78,6 +82,13 @@ const Group = ({
         const taskId = task._id;
         dispatch(fetchUpdateTask({ updatedTask, groupId, taskId }));
     };
+
+    const taskOptions = tasks
+        .filter(t => t._id !== (edit || ''))
+        .map(task => ({
+            value: task._id,
+            name: task.title,
+        }));
 
     return (
         <div>
@@ -111,6 +122,10 @@ const Group = ({
                             setDuration={setDuration}
                             deadline={deadline}
                             setDeadline={setDeadline}
+                            dependencies={dependencies}
+                            setDependencies={setDependencies}
+                            taskOptions={taskOptions}
+                            tasks={tasks}
                             saveTask={saveTask}
                             number={index + 1} 
                             task={task} 
