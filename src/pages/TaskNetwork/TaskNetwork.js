@@ -1,19 +1,10 @@
 import React, { useMemo, useEffect, useState } from 'react';
-import ReactFlow, { 
-    Background, 
-    Controls, 
-    MiniMap, 
-    ReactFlowProvider, 
-    useNodesState, 
-    useEdgesState
-} from 'reactflow';
+import { ReactFlowProvider } from 'reactflow';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectGroups, fetchGroups, setNodePositions, resetNodePositions } from '../../redux/slices/groups';
-import { Link } from 'react-router-dom';
-import MyButton from '../../components/ui/button/MyButton';
 import dagre from 'dagre';
-import styles from './TaskNetwork.module.css';
-import 'reactflow/dist/style.css';
+import TaskNetworkInner from '../../components/TaskNetworkInner/TaskNetworkInner';
+import { calculateTimings } from '../../utils/ganttUtils';
 
 const createDagreGraph = () => {
     const graph = new dagre.graphlib.Graph();
@@ -30,7 +21,7 @@ const getLayoutedElementsForGroup = (nodes, edges) => {
     });
 
     nodes.forEach((node) => {
-        dagreGraph.setNode(node.id, { width: 150, height: 50 });
+        dagreGraph.setNode(node.id, { width: 200, height: 120 });
     });
 
     edges.forEach((edge) => {
@@ -61,8 +52,8 @@ const getLayoutedElementsForGroup = (nodes, edges) => {
         return {
             ...node,
             position: {
-                x: nodeWithPosition.x - 75,
-                y: nodeWithPosition.y - 25,
+                x: nodeWithPosition.x - 100,
+                y: nodeWithPosition.y - 60,
             },
         };
     });
@@ -70,65 +61,17 @@ const getLayoutedElementsForGroup = (nodes, edges) => {
     return { nodes: layoutedNodes, edges };
 };
 
-const TaskNetworkInner = ({ initialData, onNodesChangeHandler }) => {
-    const [isInteractive, setIsInteractive] = useState(true);
-
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialData.initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialData.initialEdges);
-
-    useEffect(() => {
-        setNodes(initialData.initialNodes);
-        setEdges(initialData.initialEdges);
-    }, [initialData, setNodes, setEdges]);
-
-    const handleInteractToggle = () => {
-        setIsInteractive((prev) => !prev);
-    };
-
-    const handleNodesChange = (changes) => {
-        onNodesChange(changes);
-        onNodesChangeHandler(changes);
-    };
-
-    return (
-        <div className={styles.container}>
-            <div className={styles.buttonWrapper}>
-                <Link to="/" className={styles.backLink}>
-                    <MyButton>Список</MyButton>
-                </Link>
-                <MyButton onClick={initialData.handleResetPositions}>Скинути позиції</MyButton>
-            </div>
-            <h1 className={styles.title}>Мережевий графік завдань</h1>
-            <div className={styles.graphWrapper}>
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    onNodesChange={handleNodesChange}
-                    onEdgesChange={onEdgesChange}
-                    fitView
-                    nodesDraggable={isInteractive}
-                    nodesConnectable={false}
-                    elementsSelectable={true}
-                >
-                    <Background />
-                    <Controls onInteractiveChange={handleInteractToggle} />
-                    <MiniMap />
-                </ReactFlow>
-            </div>
-        </div>
-    );
-};
-
 const TaskNetwork = () => {
     const dispatch = useDispatch();
     const { groups, nodePositions } = useSelector(selectGroups);
+    const [ganttData, setGanttData] = useState([]);
 
     useEffect(() => {
         dispatch(fetchGroups());
     }, [dispatch]);
 
     const initialData = useMemo(() => {
-        if (!groups.items.length) {
+        if (!groups.items || !groups.items.length) {
             return {
                 initialNodes: [
                     {
@@ -145,6 +88,7 @@ const TaskNetwork = () => {
 
         let allNodes = [];
         let allEdges = [];
+        let allTasksWithTimings = [];
         let groupOffsetX = 0;
         let groupOffsetY = 0;
 
@@ -152,18 +96,31 @@ const TaskNetwork = () => {
             const groupNodes = [];
             const groupEdges = [];
 
-            group.tasks.forEach((task) => {
+            const tasksWithTimings = calculateTimings(group.tasks || [], group.createdAt);
+
+            tasksWithTimings.forEach((task) => {
                 const savedPosition = nodePositions[task._id] || { x: 0, y: 0 };
                 groupNodes.push({
                     id: task._id,
                     type: 'default',
-                    data: { label: `${task.title} (${group.title})` },
+                    data: {
+                        label: (
+                            <div>
+                                <strong>{task.title} ({group.title})</strong><br />
+                                Тривалість: {task.duration} дн.<br />
+                                Ранній термін: {task.earliestStartDate.toLocaleDateString()} – {task.earliestFinishDate.toLocaleDateString()}<br />
+                                Пізній термін: {task.latestStartDate.toLocaleDateString()} – {task.latestFinishDate.toLocaleDateString()}
+                            </div>
+                        ),
+                    },
                     position: savedPosition,
                     style: { 
-                        background: task.priority ? '#ffcc99' : 'khaki',
+                        background: task.deadlineMissed ? '#ff9999' : (task.priority ? '#ffcc99' : 'khaki'),
                         border: '1px solid #777',
                         padding: '10px',
                         borderRadius: '4px',
+                        width: 200,
+                        textAlign: 'center',
                     },
                 });
 
@@ -201,12 +158,19 @@ const TaskNetwork = () => {
 
             allNodes = [...allNodes, ...offsetNodes];
             allEdges = [...allEdges, ...layoutedEdges];
+            allTasksWithTimings = [...allTasksWithTimings, ...tasksWithTimings];
 
             groupOffsetX += 400;
             groupOffsetY += groupHeight + 150;
         });
 
-        return { initialNodes: allNodes, initialEdges: allEdges, handleResetPositions: () => dispatch(resetNodePositions()) };
+        setGanttData(allTasksWithTimings);
+
+        return { 
+            initialNodes: allNodes, 
+            initialEdges: allEdges, 
+            handleResetPositions: () => dispatch(resetNodePositions()) 
+        };
     }, [groups, nodePositions, dispatch]);
 
     const handleNodesChange = (changes) => {
@@ -223,7 +187,11 @@ const TaskNetwork = () => {
 
     return (
         <ReactFlowProvider>
-            <TaskNetworkInner initialData={initialData} onNodesChangeHandler={handleNodesChange} />
+            <TaskNetworkInner 
+                initialData={initialData} 
+                onNodesChangeHandler={handleNodesChange} 
+                ganttData={ganttData} 
+            />
         </ReactFlowProvider>
     );
 };
