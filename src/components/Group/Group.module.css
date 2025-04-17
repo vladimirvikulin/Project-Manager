@@ -7,3 +7,40 @@
 .link {
     float: right;
 }
+
+.groupHeaderWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.executorCount {
+    display: flex;
+    font-size: 16px;
+    color: #555;
+    font-weight: normal;
+    justify-content: right;
+}
+
+.editGroupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.editGroupForm input {
+    padding: 4px;
+    font-size: 14px;
+}
+
+.editGroupForm button {
+    padding: 8px;
+    font-size: 14px;
+}

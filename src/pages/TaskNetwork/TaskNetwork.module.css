@@ -42,7 +42,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-    height: 60px;
+    height: 150px;
 }
 
 .ganttExecutorLabel {
@@ -117,4 +117,17 @@
     height: 600px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.groupSection {
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.groupTitle {
+    font-size: 20px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
 }

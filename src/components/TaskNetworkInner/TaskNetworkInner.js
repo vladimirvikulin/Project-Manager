@@ -12,7 +12,7 @@ import GanttChart from '../GanttChart/GanttChart';
 import styles from '../../pages/TaskNetwork/TaskNetwork.module.css';
 import 'reactflow/dist/style.css';
 
-const TaskNetworkInner = ({ initialData, onNodesChangeHandler, ganttData }) => {
+const TaskNetworkInner = ({ initialData, onNodesChangeHandler, ganttData, groups }) => {
     const [isInteractive, setIsInteractive] = useState(true);
     const [viewMode, setViewMode] = useState('graph');
 
@@ -69,7 +69,7 @@ const TaskNetworkInner = ({ initialData, onNodesChangeHandler, ganttData }) => {
                 </div>
             )}
             {viewMode === 'gantt' && (
-                <GanttChart ganttData={ganttData} />
+                <GanttChart ganttData={ganttData} groups={groups} />
             )}
         </div>
     );

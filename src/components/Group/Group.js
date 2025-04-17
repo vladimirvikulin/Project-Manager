@@ -3,6 +3,7 @@ import AddTaskForm from '../AddTaskForm/AddTaskForm.js';
 import { Link } from "react-router-dom";
 import Task from '../Task/Task';
 import MyButton from '../ui/button/MyButton';
+import MyInput from '../ui/input/MyInput';
 import styles from './Group.module.css';
 import MyModal from '../ui/modal/MyModal';
 import { useDispatch } from 'react-redux';
@@ -13,7 +14,7 @@ const Group = ({
     setStatistics,
     removeGroup, 
 }) => {
-    const { _id: groupId, title: groupTitle, tasks } = group;
+    const { _id: groupId, title: groupTitle, tasks, executorCount } = group;
     const dispatch = useDispatch();
     const [edit, setEdit] = useState(null);
     const [value, setValue] = useState('');
@@ -21,6 +22,9 @@ const Group = ({
     const [deadline, setDeadline] = useState('');
     const [dependencies, setDependencies] = useState([]);
     const [modalTaskVisible, setModalTaskVisible] = useState(false);
+    const [editGroup, setEditGroup] = useState(false);
+    const [editTitle, setEditTitle] = useState(groupTitle);
+    const [editExecutorCount, setEditExecutorCount] = useState(executorCount || 2);
 
     const checkCompleted = (group) => {
         let completed = 0;
@@ -83,6 +87,16 @@ const Group = ({
         dispatch(fetchUpdateTask({ updatedTask, groupId, taskId }));
     };
 
+    const saveGroup = () => {
+        const updatedGroup = {
+            ...group,
+            title: editTitle,
+            executorCount: Number(editExecutorCount),
+        };
+        dispatch(fetchUpdateGroup({ updatedGroup, groupId }));
+        setEditGroup(false);
+    };
+
     const taskOptions = tasks
         .filter(t => t._id !== (edit || ''))
         .map(task => ({
@@ -92,12 +106,28 @@ const Group = ({
 
     return (
         <div>
-            <div>
-                <Link className={styles.link} to='/statistics/'>
-                    <MyButton onClick={() => checkCompleted(group)}>Статистика групи</MyButton>
-                </Link>
-            </div>
-            <h1 className={styles.groupHeader}>{groupTitle}</h1>
+            {editGroup ? (
+                <div className={styles.editGroupForm}>
+                    <MyInput 
+                        value={editTitle} 
+                        onChange={e => setEditTitle(e.target.value)} 
+                        type="text" 
+                        placeholder="Назва групи"
+                    />
+                    <MyInput 
+                        value={editExecutorCount} 
+                        onChange={e => setEditExecutorCount(e.target.value)} 
+                        type="number" 
+                        placeholder="Кількість виконавців"
+                        min="1"
+                    />
+                    <MyButton onClick={saveGroup}>Зберегти</MyButton>
+                </div>
+            ) : (
+                <div className={styles.groupHeaderWrapper}>
+                    <h1 className={styles.groupHeader}>{groupTitle}</h1>
+                </div>
+            )}
             <MyButton onClick={() => setModalTaskVisible(true)}>
                 Створити задачу
             </MyButton>
@@ -107,6 +137,15 @@ const Group = ({
             <MyButton onClick={() => removeGroup(group)}>
                 Видалити групу
             </MyButton>
+            <Link className={styles.link} to='/statistics/'>
+                <MyButton onClick={() => checkCompleted(group)}>Статистика групи</MyButton>
+            </Link>
+            {!editGroup && (
+                <MyButton onClick={() => setEditGroup(true)}>Редагувати групу</MyButton>
+            )}
+            <span className={styles.executorCount}>
+                Виконавці: {executorCount}
+            </span>
             {tasks.length ? 
                 <div>
                     {tasks.map((task, index) => (

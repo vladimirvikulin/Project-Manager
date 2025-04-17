@@ -96,7 +96,10 @@ const TaskNetwork = () => {
             const groupNodes = [];
             const groupEdges = [];
 
-            const tasksWithTimings = calculateTimings(group.tasks || [], group.createdAt);
+            const tasksWithTimings = calculateTimings(group.tasks || [], group.createdAt).map(task => ({
+                ...task,
+                groupId: group._id,
+            }));
 
             tasksWithTimings.forEach((task) => {
                 const savedPosition = nodePositions[task._id] || { x: 0, y: 0 };
@@ -191,6 +194,7 @@ const TaskNetwork = () => {
                 initialData={initialData} 
                 onNodesChangeHandler={handleNodesChange} 
                 ganttData={ganttData} 
+                groups={groups.items}
             />
         </ReactFlowProvider>
     );
