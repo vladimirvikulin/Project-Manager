@@ -23,17 +23,29 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    width: 100%;
+}
+
+.taskHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .taskTitle {
     font-weight: bold;
     font-size: 16px;
+    flex-grow: 1;
 }
 
 .taskDetails {
     display: flex;
     flex-direction: column;
     color: #555;
+    margin-top: 8px;
+    padding: 8px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
 }
 
 .detailLarge {
@@ -78,6 +90,10 @@
 
 .activeIcon {
     color: gold !important;
+}
+
+.activeDetailsIcon {
+    color: coral !important;
 }
 
 .editForm {
