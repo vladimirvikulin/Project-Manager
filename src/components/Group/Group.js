@@ -29,13 +29,51 @@ const Group = ({
     const checkCompleted = (group) => {
         let completed = 0;
         let notCompleted = 0;
-        tasks.map((i) => i.status ? ++notCompleted : ++completed);
+        const taskDurations = [];
+        const missedDeadlines = [];
+        const dependencyStats = { withDependencies: 0, withoutDependencies: 0 };
+
+        tasks.forEach((task) => {
+            task.status ? ++notCompleted : ++completed;
+
+            const duration = task.duration || 1;
+            const existingDuration = taskDurations.find(d => d.duration === duration);
+            if (existingDuration) {
+                existingDuration.count += 1;
+            } else {
+                taskDurations.push({ duration, count: 1 });
+            }
+
+            if (task.deadline) {
+                const deadlineDate = new Date(task.deadline);
+                const today = new Date();
+                if (deadlineDate < today && task.status) {
+                    const groupMissed = missedDeadlines.find(md => md.group === groupTitle);
+                    if (groupMissed) {
+                        groupMissed.count += 1;
+                    } else {
+                        missedDeadlines.push({ group: groupTitle, count: 1 });
+                    }
+                }
+            }
+
+            if (task.dependencies && task.dependencies.length > 0) {
+                dependencyStats.withDependencies += 1;
+            } else {
+                dependencyStats.withoutDependencies += 1;
+            }
+        });
+
+        taskDurations.sort((a, b) => a.duration - b.duration);
+
         const updatedGroup = {
             ...group,
             completed,
             notCompleted,
+            taskDurations,
+            missedDeadlines,
+            dependencyStats,
         };
-        dispatch(fetchUpdateGroup({ updatedGroup, groupId }));
         setStatistics(updatedGroup);
     };
     
