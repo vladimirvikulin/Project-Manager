@@ -1,13 +1,131 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, BarElement, CategoryScale, LinearScale, LineElement, PointElement } from 'chart.js';
 import { Pie, Bar } from 'react-chartjs-2';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchGroups, selectGroups } from '../../redux/slices/groups';
 import styles from './TaskStatistics.module.css';
 import MyButton from '../../components/ui/button/MyButton';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, BarElement, CategoryScale, LinearScale, LineElement, PointElement);
 
-const TaskStatistics = ({ statistics }) => {
+const TaskStatistics = () => {
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const { groups } = useSelector(selectGroups);
+    const isGroupsLoading = groups.status === 'loading';
+    let statistics = location.state?.statistics;
+
+    useEffect(() => {
+      dispatch(fetchGroups());
+    }, [dispatch]);
+
+    if (!statistics && !isGroupsLoading) {
+        let completed = 0;
+        let notCompleted = 0;
+        const priorityCounts = [];
+        const taskDurations = [];
+        const missedDeadlines = [];
+        const dependencyStats = { withDependencies: 0, withoutDependencies: 0 };
+
+        groups.items.forEach((group) => {
+            const { title, tasks } = group;
+
+            const priorityCount = tasks.reduce(
+                (count, task) => count + (task.priority ? 1 : 0),
+                0
+            );
+            priorityCounts.push({ group: title, count: priorityCount });
+
+            tasks.forEach((task) => {
+                task.status ? ++notCompleted : ++completed;
+
+                const duration = task.duration || 1;
+                const existingDuration = taskDurations.find(d => d.duration === duration);
+                if (existingDuration) {
+                    existingDuration.count += 1;
+                } else {
+                    taskDurations.push({ duration, count: 1 });
+                }
+
+                if (task.deadline) {
+                    const deadlineDate = new Date(task.deadline);
+                    const today = new Date();
+                    if (deadlineDate < today && task.status) {
+                        const groupMissed = missedDeadlines.find(md => md.group === title);
+                        if (groupMissed) {
+                            groupMissed.count += 1;
+                        } else {
+                            missedDeadlines.push({ group: title, count: 1 });
+                        }
+                    }
+                }
+
+                if (task.dependencies && task.dependencies.length > 0) {
+                    dependencyStats.withDependencies += 1;
+                } else {
+                    dependencyStats.withoutDependencies += 1;
+                }
+            });
+        });
+
+        priorityCounts.sort((a, b) => b.count - a.count);
+        const topPriorityGroups = priorityCounts.slice(0, 6);
+
+        taskDurations.sort((a, b) => a.duration - b.duration);
+
+        statistics = {
+            topPriorityGroups,
+            completed,
+            notCompleted,
+            taskDurations,
+            missedDeadlines,
+            dependencyStats,
+            groups: groups.items.map(group => ({
+                group: group.title,
+                count: group.tasks.length,
+            })),
+            type: 'general',
+        };
+    }
+
+    if (isGroupsLoading) {
+        return (
+            <div className={styles.container}>
+                <Link className={styles.link} to="/">
+                    <MyButton>Список</MyButton>
+                </Link>
+                <div className={styles.title}>Завантаження...</div>
+            </div>
+        );
+    }
+
+    if (!statistics || groups.status === 'error') {
+        return (
+            <div className={styles.container}>
+                <Link className={styles.link} to="/">
+                    <MyButton>Список</MyButton>
+                </Link>
+                <div className={styles.title}>Не вдалося завантажити статистику. Спробуйте ще раз.</div>
+            </div>
+        );
+    }
+
+    if (!groups.items.length) {
+        return (
+            <div className={styles.container}>
+                <Link className={styles.link} to="/">
+                    <MyButton>Список</MyButton>
+                </Link>
+                <div className={styles.title}>Немає груп для відображення статистики.</div>
+            </div>
+        );
+    }
+
+    const isGroupStatistics = statistics.type === 'group';
+    console.log("isGroupStatistics", isGroupStatistics)
+    console.log("statistics.type", statistics.type)
+
     const dataForCompleted = {
         labels: ['Виконані', 'Невиконані'],
         datasets: [
@@ -157,7 +275,7 @@ const TaskStatistics = ({ statistics }) => {
         plugins: {
             title: {
                 display: true,
-                text: 'Прострочені дедлайни по групах',
+                text: isGroupStatistics ? 'Прострочені дедлайни' : 'Прострочені дедлайни по групах',
                 font: { size: 16 },
             },
             legend: { position: 'bottom' },
@@ -168,7 +286,7 @@ const TaskStatistics = ({ statistics }) => {
                 title: { display: true, text: 'Кількість прострочених' },
             },
             x: {
-                title: { display: true, text: 'Групи' },
+                title: { display: true, text: isGroupStatistics ? 'Група' : 'Групи' },
             },
         },
         maintainAspectRatio: false,
@@ -209,7 +327,7 @@ const TaskStatistics = ({ statistics }) => {
             </Link>
 
             <div className={styles.title}>
-                {statistics.hasOwnProperty('title') ? `Статистика ${statistics.title}` : 'Загальна статистика'}
+                {isGroupStatistics ? `Статистика групи "${statistics.title}"` : 'Загальна статистика'}
             </div>
 
             <div className={styles.textStats}>
@@ -225,13 +343,13 @@ const TaskStatistics = ({ statistics }) => {
                     <Pie options={optionsForCompleted} data={dataForCompleted} />
                 </div>
 
-                {statistics.hasOwnProperty('topPriorityGroups') && (
+                {!isGroupStatistics && statistics.hasOwnProperty('topPriorityGroups') && (
                     <div className={styles.chartWrapper}>
                         <Pie options={optionsForPriority} data={dataForPriority} />
                     </div>
                 )}
 
-                {statistics.hasOwnProperty('groups') && (
+                {!isGroupStatistics && statistics.hasOwnProperty('groups') && (
                     <div className={styles.chartWrapper}>
                         <Bar options={optionsForGroups} data={dataForGroups} />
                     </div>

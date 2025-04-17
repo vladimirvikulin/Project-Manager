@@ -8,11 +8,12 @@ import MyModal from '../../components/ui/modal/MyModal';
 import MyButton from '../../components/ui/button/MyButton';
 import { fetchGroups, fetchRemoveGroup, selectGroups } from '../../redux/slices/groups';
 import { selectIsAuth } from '../../redux/slices/auth';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
-const List = ({ setStatistics }) => {
+const List = () => {
     const isAuth = useSelector(selectIsAuth);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { groups } = useSelector(selectGroups);
     const isGroupsLoading = groups.status === 'loading';
 
@@ -52,7 +53,6 @@ const List = ({ setStatistics }) => {
                     const deadlineDate = new Date(task.deadline);
                     const today = new Date();
                     if (deadlineDate < today && task.status) {
-                        console.log(deadlineDate)
                         const groupMissed = missedDeadlines.find(md => md.group === title);
                         if (groupMissed) {
                             groupMissed.count += 1;
@@ -86,8 +86,9 @@ const List = ({ setStatistics }) => {
                 group: group.title,
                 count: group.tasks.length,
             })),
+            type: 'general',
         };
-        setStatistics(statistics);
+        navigate('/statistics', { state: { statistics } });
     };
 
     const [filter, setFilter] = useState({ selectedSort: '', searchGroup: '' });
@@ -120,10 +121,10 @@ const List = ({ setStatistics }) => {
     return (
         <div>
             <div>
-                <Link className={styles.link} to="/statistics/">
-                    <MyButton onClick={() => checkTaskStatistics()}>Загальна статистика</MyButton>
-                </Link>
-                <Link className={styles.link} to="/network/">
+                <div className={styles.link}>
+                    <MyButton  onClick={() => checkTaskStatistics()}>Загальна статистика</MyButton>
+                </div>
+                <Link className={styles.link} to="/network">
                     <MyButton>Мережевий графік</MyButton>
                 </Link>
             </div>
@@ -138,7 +139,6 @@ const List = ({ setStatistics }) => {
                 {isGroupsLoading ? <h1 className={styles.list}>Завантаження</h1> : sortedAndSearch.map((group) =>
                     <Group
                         group={group}
-                        setStatistics={setStatistics}
                         removeGroup={removeGroup}
                         key={group._id}
                     />

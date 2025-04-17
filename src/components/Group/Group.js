@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AddTaskForm from '../AddTaskForm/AddTaskForm.js';
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Task from '../Task/Task';
 import MyButton from '../ui/button/MyButton';
 import MyInput from '../ui/input/MyInput';
@@ -11,11 +11,11 @@ import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask } from '../../redux/
 
 const Group = ({
     group,
-    setStatistics,
     removeGroup, 
 }) => {
     const { _id: groupId, title: groupTitle, tasks, executorCount } = group;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [edit, setEdit] = useState(null);
     const [value, setValue] = useState('');
     const [duration, setDuration] = useState(1);
@@ -73,8 +73,9 @@ const Group = ({
             taskDurations,
             missedDeadlines,
             dependencyStats,
+            type: 'group',
         };
-        setStatistics(updatedGroup);
+        navigate('/statistics', { state: { statistics: updatedGroup } });
     };
     
     const removeTask = (task) => {
@@ -175,9 +176,9 @@ const Group = ({
             <MyButton onClick={() => removeGroup(group)}>
                 Видалити групу
             </MyButton>
-            <Link className={styles.link} to='/statistics/'>
-                <MyButton onClick={() => checkCompleted(group)}>Статистика групи</MyButton>
-            </Link>
+            <div className={styles.link}>
+                <MyButton className={styles.link} onClick={() => checkCompleted(group)}>Статистика групи</MyButton>
+            </div>
             {!editGroup && (
                 <MyButton onClick={() => setEditGroup(true)}>Редагувати групу</MyButton>
             )}
