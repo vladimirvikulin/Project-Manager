@@ -16,22 +16,15 @@ const GanttChart = ({ ganttData, groups }) => {
         return acc;
     }, {});
 
-    const handleOptimizeSchedule = () => {
-        setUseOptimizedSchedule(true);
-    };
-
-    const handleResetOptimization = () => {
-        setUseOptimizedSchedule(false);
+    const handleToggleOptimization = () => {
+        setUseOptimizedSchedule(prev => !prev);
     };
 
     return (
         <div className={styles.ganttContainer}>
             <div className={styles.buttonWrapper}>
-                <MyButton onClick={handleOptimizeSchedule}>
-                    Оптимізація розкладу
-                </MyButton>
-                <MyButton onClick={handleResetOptimization}>
-                    Скасувати оптимізацію
+                <MyButton onClick={handleToggleOptimization}>
+                    {useOptimizedSchedule ? 'Скасувати оптимізацію' : 'Оптимізація розкладу'}
                 </MyButton>
             </div>
 
