@@ -117,7 +117,7 @@ const TaskStatistics = () => {
                 <Link className={styles.link} to="/">
                     <MyButton>Список</MyButton>
                 </Link>
-                <div className={styles.title}>Немає груп для відображення статистики.</div>
+                <h1 className={styles.title}>Немає груп для відображення статистики.</h1>
             </div>
         );
     }

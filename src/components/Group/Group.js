@@ -6,16 +6,20 @@ import MyButton from '../ui/button/MyButton';
 import MyInput from '../ui/input/MyInput';
 import styles from './Group.module.css';
 import MyModal from '../ui/modal/MyModal';
-import { useDispatch } from 'react-redux';
-import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask } from '../../redux/slices/groups';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask, fetchInviteUser, fetchRemoveUser, fetchGroups } from '../../redux/slices/groups';
+import { selectIsAuth, selectAuthData } from '../../redux/slices/auth';
 
 const Group = ({
     group,
     removeGroup, 
 }) => {
-    const { _id: groupId, title: groupTitle, tasks, executorCount } = group;
+    const { _id: groupId, title: groupTitle, tasks, executorCount, members = [], user: ownerId } = group;
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const isAuth = useSelector(selectIsAuth);
+    const authData = useSelector(selectAuthData);
+    const isOwner = authData && ownerId && authData._id === ownerId.toString();
     const [edit, setEdit] = useState(null);
     const [value, setValue] = useState('');
     const [duration, setDuration] = useState(1);
@@ -25,6 +29,8 @@ const Group = ({
     const [editGroup, setEditGroup] = useState(false);
     const [editTitle, setEditTitle] = useState(groupTitle);
     const [editExecutorCount, setEditExecutorCount] = useState(executorCount || 2);
+    const [inviteModalVisible, setInviteModalVisible] = useState(false);
+    const [inviteEmail, setInviteEmail] = useState('');
 
     const checkCompleted = (group) => {
         let completed = 0;
@@ -136,12 +142,47 @@ const Group = ({
         setEditGroup(false);
     };
 
+    const handleInviteUser = (e) => {
+        e.preventDefault();
+        if (!inviteEmail) {
+            alert('Введіть електронну адресу');
+            return;
+        }
+        dispatch(fetchInviteUser({ groupId, email: inviteEmail }))
+            .then(({ payload }) => {
+                alert(payload.message);
+                setInviteEmail('');
+                setInviteModalVisible(false);
+                dispatch(fetchGroups());
+            })
+            .catch((error) => {
+                alert(error.response?.data?.message || 'Помилка при надсиланні запрошення');
+            });
+    };
+
+    const handleRemoveUser = (userId) => {
+        if (window.confirm('Ви впевнені, що хочете видалити цього користувача з групи?')) {
+            dispatch(fetchRemoveUser({ groupId, userId }))
+                .then(({ payload }) => {
+                    alert(payload.message);
+                    dispatch(fetchGroups());
+                })
+                .catch((error) => {
+                    alert(error.response?.data?.message || 'Помилка при видаленні користувача');
+                });
+        }
+    };
+
     const taskOptions = tasks
         .filter(t => t._id !== (edit || ''))
         .map(task => ({
             value: task._id,
             name: task.title,
         }));
+
+    if (!isAuth) {
+        return null;
+    }
 
     return (
         <div>
@@ -173,18 +214,61 @@ const Group = ({
             <MyModal visible={modalTaskVisible} setVisible={setModalTaskVisible}>
                 <AddTaskForm id={group._id} setVisible={setModalTaskVisible} />
             </MyModal>
-            <MyButton onClick={() => removeGroup(group)}>
-                Видалити групу
-            </MyButton>
+            {isOwner && (
+                <>
+                    <MyButton onClick={() => removeGroup(group)}>
+                        Видалити групу
+                    </MyButton>
+                    <MyButton onClick={() => setInviteModalVisible(true)}>
+                        Запросити користувача
+                    </MyButton>
+                </>
+            )}
             <div className={styles.link}>
-                <MyButton className={styles.link} onClick={() => checkCompleted(group)}>Статистика групи</MyButton>
+                <MyButton onClick={() => checkCompleted(group)}>Статистика групи</MyButton>
             </div>
-            {!editGroup && (
+            {!editGroup && isOwner && (
                 <MyButton onClick={() => setEditGroup(true)}>Редагувати групу</MyButton>
             )}
             <span className={styles.executorCount}>
                 Виконавці: {executorCount}
             </span>
+            {Array.isArray(members) && members.length > 0 && (
+                <div className={styles.membersList}>
+                    <h3>Учасники:</h3>
+                    <ul>
+                        {members.map((member) => (
+                            member && member._id ? (
+                                <li key={member._id} className={styles.memberItem}>
+                                    {member.fullName} ({member.email})
+                                    {isOwner && member._id.toString() !== authData?._id && (
+                                        <MyButton
+                                            onClick={() => handleRemoveUser(member._id)}
+                                            className={styles.removeMemberButton}
+                                        >
+                                            Видалити
+                                        </MyButton>
+                                    )}
+                                </li>
+                            ) : null
+                        ))}
+                    </ul>
+                </div>
+            )}
+            <MyModal visible={inviteModalVisible} setVisible={setInviteModalVisible}>
+                <div className={styles.inviteForm}>
+                    <h3>Запросити користувача</h3>
+                    <form onSubmit={handleInviteUser}>
+                        <MyInput
+                            value={inviteEmail}
+                            onChange={(e) => setInviteEmail(e.target.value)}
+                            type="email"
+                            placeholder="Електронна адреса"
+                        />
+                        <MyButton type="submit">Надіслати запрошення</MyButton>
+                    </form>
+                </div>
+            </MyModal>
             {tasks.length ? 
                 <div>
                     {tasks.map((task, index) => (

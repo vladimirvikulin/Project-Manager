@@ -1,0 +1,38 @@
+.container {
+    padding: 20px;
+}
+
+.invitationList {
+    list-style: none;
+    padding: 0;
+}
+
+.invitationItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.invitationItem div {
+    flex: 1;
+}
+
+.invitationItem p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.invitationButtons {
+    display: flex;
+    gap: 10px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}

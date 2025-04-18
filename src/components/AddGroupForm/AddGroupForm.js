@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MyButton from '../ui/button/MyButton';
 import MyInput from '../ui/input/MyInput';
 import { useDispatch } from 'react-redux';
-import { fetchCreateGroup } from '../../redux/slices/groups';
+import { fetchCreateGroup, fetchGroups } from '../../redux/slices/groups';
 
 const AddGroupForm = ({ setModalGroupVisible }) => {
     const [title, setTitle] = useState('');
@@ -18,10 +18,16 @@ const AddGroupForm = ({ setModalGroupVisible }) => {
             notCompleted: 0,
             executorCount: Number(executorCount),
         };
-        dispatch(fetchCreateGroup(newGroup));
-        setModalGroupVisible(false);
-        setTitle('');
-        setExecutorCount(2);
+        dispatch(fetchCreateGroup(newGroup))
+            .then(() => {
+                dispatch(fetchGroups());
+                setModalGroupVisible(false);
+                setTitle('');
+                setExecutorCount(2);
+            })
+            .catch((error) => {
+                alert(error.response?.data?.message || 'Помилка при створенні групи');
+            });
     };
 
     return (

@@ -36,6 +36,16 @@ export const fetchUpdateTask = createAsyncThunk('groups/fetchUpdateTask', async 
     return data;
 });
 
+export const fetchInviteUser = createAsyncThunk('groups/fetchInviteUser', async ({ groupId, email }) => {
+    const { data } = await axios.post(`/groups/${groupId}/invite`, { email });
+    return { groupId, message: data.message, group: data.group };
+});
+
+export const fetchRemoveUser = createAsyncThunk('groups/fetchRemoveUser', async ({ groupId, userId }) => {
+    const { data } = await axios.post(`/groups/${groupId}/remove-user`, { userId });
+    return { groupId, userId, message: data.message };
+});
+
 const initialState = {
     groups: {
         items: [],
@@ -98,6 +108,26 @@ const groupsSlice = createSlice({
                 const { groupId } = action.meta.arg;
                 state.groups.items = state.groups.items.map((group) =>
                     group._id === groupId ? { ...group, tasks: action.payload } : group
+                );
+            })
+            .addCase(fetchInviteUser.fulfilled, (state, action) => {
+                const { groupId, group } = action.payload;
+                state.groups.items = state.groups.items.map((g) =>
+                    g._id === groupId ? { ...g, ...group } : g
+                );
+            })
+            .addCase(fetchRemoveUser.fulfilled, (state, action) => {
+                const { groupId, userId } = action.payload;
+                state.groups.items = state.groups.items.map((group) =>
+                    group._id === groupId
+                        ? {
+                              ...group,
+                              members: group.members.filter((member) => member._id.toString() !== userId),
+                              invitedUsers: group.invitedUsers.filter(
+                                  (invite) => invite.userId.toString() !== userId
+                              ),
+                          }
+                        : group
                 );
             });
     },

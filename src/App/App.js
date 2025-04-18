@@ -9,6 +9,7 @@ import TaskStatistics from '../pages/TaskStatistics/TaskStatistics';
 import TaskNetwork from '../pages/TaskNetwork/TaskNetwork';
 import Login from '../pages/Login/Login';
 import Registration from '../pages/Registration/Registration';
+import Invitations from '../pages/Invitations/Invitations';
 
 function App() {
     const dispatch = useDispatch();
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/network" element={<TaskNetwork />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Registration />} />
+                    <Route path="/invitations" element={<Invitations />} />
                 </Routes>
             </BrowserRouter>
         </div>

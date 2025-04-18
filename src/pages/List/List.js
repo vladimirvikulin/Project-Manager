@@ -122,7 +122,7 @@ const List = () => {
         <div>
             <div>
                 <div className={styles.link}>
-                    <MyButton  onClick={() => checkTaskStatistics()}>Загальна статистика</MyButton>
+                    <MyButton onClick={() => checkTaskStatistics()}>Загальна статистика</MyButton>
                 </div>
                 <Link className={styles.link} to="/network">
                     <MyButton>Мережевий графік</MyButton>

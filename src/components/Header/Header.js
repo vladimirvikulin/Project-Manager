@@ -26,6 +26,9 @@ const Header = () => {
           <div>
             {isAuth ? (
               <>
+                <Link to="/invitations">
+                  <MyButton>Запрошення</MyButton>
+                </Link>
                 <MyButton onClick={onClickLogout}>
                   Вийти
                 </MyButton>
