@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask, fetchRemoveUser, fetchGroups } from '../../redux/slices/groups';
 import { selectIsAuth, selectAuthData } from '../../redux/slices/auth';
 import InviteUserForm from '../InviteUserForm/InviteUserForm';
-import EditGroupForm from '../EditGroupForm/EditGroupForm'; 
-import MembersList from '../MembersList/MembersList'; 
+import EditGroupForm from '../EditGroupForm/EditGroupForm';
+import MembersList from '../MembersList/MembersList';
 import { FaPlus, FaTrash, FaChartBar, FaPencilAlt } from 'react-icons/fa';
 
 const Group = ({
@@ -175,6 +175,24 @@ const Group = ({
         }
     };
 
+    const handleLeaveGroup = (userId) => {
+        if (window.confirm('Ви впевнені, що хочете вийти з цієї групи?')) {
+            dispatch(fetchRemoveUser({ groupId, userId }))
+                .then(({ payload }) => {
+                    alert(payload.message);
+                    dispatch(fetchGroups());
+                    setPermissionsState(prev => {
+                        const newState = { ...prev };
+                        delete newState[userId];
+                        return newState;
+                    });
+                })
+                .catch((error) => {
+                    alert(error.response?.data?.message || 'Помилка при виході з групи');
+                });
+        }
+    };
+
     const updatePermissionsState = (memberId, updatedPermissions) => {
         setPermissionsState(prev => ({
             ...prev,
@@ -242,6 +260,7 @@ const Group = ({
                 isOwner={isOwner}
                 authData={authData}
                 handleRemoveUser={handleRemoveUser}
+                handleLeaveGroup={handleLeaveGroup}
                 groupId={groupId}
                 permissionsState={permissionsState}
                 updatePermissionsState={updatePermissionsState}

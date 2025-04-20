@@ -19,6 +19,12 @@
     font-size: 14px;
 }
 
+.memberActions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
 .iconButton {
     position: relative;
     padding: 5px;
