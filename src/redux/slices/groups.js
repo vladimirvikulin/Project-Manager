@@ -46,6 +46,11 @@ export const fetchRemoveUser = createAsyncThunk('groups/fetchRemoveUser', async 
     return { groupId, userId, message: data.message };
 });
 
+export const fetchUpdatePermissions = createAsyncThunk('groups/fetchUpdatePermissions', async ({ groupId, userId, canAddTasks, canEditTasks, canDeleteTasks }) => {
+    const { data } = await axios.patch(`/groups/${groupId}/permissions`, { userId, canAddTasks, canEditTasks, canDeleteTasks });
+    return { groupId, updatedGroup: data };
+});
+
 const initialState = {
     groups: {
         items: [],
@@ -128,6 +133,12 @@ const groupsSlice = createSlice({
                               ),
                           }
                         : group
+                );
+            })
+            .addCase(fetchUpdatePermissions.fulfilled, (state, action) => {
+                const { groupId, updatedGroup } = action.payload;
+                state.groups.items = state.groups.items.map((g) =>
+                    g._id === groupId ? { ...g, ...updatedGroup } : g
                 );
             });
     },

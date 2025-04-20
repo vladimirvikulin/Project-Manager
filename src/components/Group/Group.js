@@ -4,22 +4,31 @@ import { useNavigate } from "react-router-dom";
 import Task from '../Task/Task';
 import MyButton from '../ui/button/MyButton';
 import MyInput from '../ui/input/MyInput';
-import styles from './Group.module.css';
 import MyModal from '../ui/modal/MyModal';
+import styles from './Group.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask, fetchInviteUser, fetchRemoveUser, fetchGroups } from '../../redux/slices/groups';
+import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask, fetchRemoveUser, fetchGroups } from '../../redux/slices/groups';
 import { selectIsAuth, selectAuthData } from '../../redux/slices/auth';
+import InviteUserForm from '../InviteUserForm/InviteUserForm';
+import EditPermissionsForm from '../EditPermissionsForm/EditPermissionsForm';
+import { FaPlus, FaTrash, FaChartBar, FaPencilAlt } from 'react-icons/fa';
 
 const Group = ({
     group,
     removeGroup, 
 }) => {
-    const { _id: groupId, title: groupTitle, tasks, executorCount, members = [], user: ownerId } = group;
+    const { _id: groupId, title: groupTitle, tasks, executorCount, members = [], user: ownerId, permissions = [] } = group;
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isAuth = useSelector(selectIsAuth);
     const authData = useSelector(selectAuthData);
     const isOwner = authData && ownerId && authData._id === ownerId.toString();
+    
+    const userPermissions = permissions.find(perm => perm.userId === authData?._id) || {};
+    const canAddTasks = isOwner || userPermissions.canAddTasks;
+    const canEditTasks = isOwner || userPermissions.canEditTasks;
+    const canDeleteTasks = isOwner || userPermissions.canDeleteTasks;
+
     const [edit, setEdit] = useState(null);
     const [value, setValue] = useState('');
     const [duration, setDuration] = useState(1);
@@ -29,8 +38,16 @@ const Group = ({
     const [editGroup, setEditGroup] = useState(false);
     const [editTitle, setEditTitle] = useState(groupTitle);
     const [editExecutorCount, setEditExecutorCount] = useState(executorCount || 2);
-    const [inviteModalVisible, setInviteModalVisible] = useState(false);
-    const [inviteEmail, setInviteEmail] = useState('');
+    const [permissionsState, setPermissionsState] = useState(
+        members.reduce((acc, member) => ({
+            ...acc,
+            [member._id]: {
+                canAddTasks: permissions.find(p => p.userId === member._id)?.canAddTasks || false,
+                canEditTasks: permissions.find(p => p.userId === member._id)?.canEditTasks || false,
+                canDeleteTasks: permissions.find(p => p.userId === member._id)?.canDeleteTasks || false,
+            },
+        }), {})
+    );
 
     const checkCompleted = (group) => {
         let completed = 0;
@@ -142,35 +159,29 @@ const Group = ({
         setEditGroup(false);
     };
 
-    const handleInviteUser = (e) => {
-        e.preventDefault();
-        if (!inviteEmail) {
-            alert('Введіть електронну адресу');
-            return;
-        }
-        dispatch(fetchInviteUser({ groupId, email: inviteEmail }))
-            .then(({ payload }) => {
-                alert(payload.message);
-                setInviteEmail('');
-                setInviteModalVisible(false);
-                dispatch(fetchGroups());
-            })
-            .catch((error) => {
-                alert(error.response?.data?.message || 'Помилка при надсиланні запрошення');
-            });
-    };
-
     const handleRemoveUser = (userId) => {
         if (window.confirm('Ви впевнені, що хочете видалити цього користувача з групи?')) {
             dispatch(fetchRemoveUser({ groupId, userId }))
                 .then(({ payload }) => {
                     alert(payload.message);
                     dispatch(fetchGroups());
+                    setPermissionsState(prev => {
+                        const newState = { ...prev };
+                        delete newState[userId];
+                        return newState;
+                    });
                 })
                 .catch((error) => {
                     alert(error.response?.data?.message || 'Помилка при видаленні користувача');
                 });
         }
+    };
+
+    const updatePermissionsState = (memberId, updatedPermissions) => {
+        setPermissionsState(prev => ({
+            ...prev,
+            [memberId]: updatedPermissions,
+        }));
     };
 
     const taskOptions = tasks
@@ -208,31 +219,38 @@ const Group = ({
                     <h1 className={styles.groupHeader}>{groupTitle}</h1>
                 </div>
             )}
-            <MyButton onClick={() => setModalTaskVisible(true)}>
-                Створити задачу
-            </MyButton>
+
+            <span className={styles.executorCount}>
+                Виконавці: {executorCount}
+            </span>
+            {canAddTasks && (
+                <button onClick={() => setModalTaskVisible(true)} className={styles.iconButton} aria-label="Створити задачу">
+                    <FaPlus />
+                    <span className={styles.tooltip}>Створити задачу</span>
+                </button>
+            )}
             <MyModal visible={modalTaskVisible} setVisible={setModalTaskVisible}>
                 <AddTaskForm id={group._id} setVisible={setModalTaskVisible} />
             </MyModal>
             {isOwner && (
                 <>
-                    <MyButton onClick={() => removeGroup(group)}>
-                        Видалити групу
-                    </MyButton>
-                    <MyButton onClick={() => setInviteModalVisible(true)}>
-                        Запросити користувача
-                    </MyButton>
+                    <button onClick={() => removeGroup(group)} className={styles.iconButton} aria-label="Видалити групу">
+                        <FaTrash />
+                        <span className={styles.tooltip}>Видалити групу</span>
+                    </button>
+                    <InviteUserForm groupId={groupId} />
                 </>
             )}
-            <div className={styles.link}>
-                <MyButton onClick={() => checkCompleted(group)}>Статистика групи</MyButton>
-            </div>
             {!editGroup && isOwner && (
-                <MyButton onClick={() => setEditGroup(true)}>Редагувати групу</MyButton>
+                <button onClick={() => setEditGroup(true)} className={styles.iconButton} aria-label="Редагувати групу">
+                    <FaPencilAlt />
+                    <span className={styles.tooltip}>Редагувати групу</span>
+                </button>
             )}
-            <span className={styles.executorCount}>
-                Виконавці: {executorCount}
-            </span>
+            <button onClick={() => checkCompleted(group)} className={`${styles.iconButton} ${styles.statsButton}`} aria-label="Статистика групи">
+                <FaChartBar />
+                <span className={styles.tooltip}>Статистика групи</span>
+            </button>
             {Array.isArray(members) && members.length > 0 && (
                 <div className={styles.membersList}>
                     <h3>Учасники:</h3>
@@ -240,14 +258,28 @@ const Group = ({
                         {members.map((member) => (
                             member && member._id ? (
                                 <li key={member._id} className={styles.memberItem}>
-                                    {member.fullName} ({member.email})
+                                    <span>{member.fullName} ({member.email})</span>
                                     {isOwner && member._id.toString() !== authData?._id && (
-                                        <MyButton
-                                            onClick={() => handleRemoveUser(member._id)}
-                                            className={styles.removeMemberButton}
-                                        >
-                                            Видалити
-                                        </MyButton>
+                                        <div>
+                                            <button
+                                                onClick={() => handleRemoveUser(member._id)}
+                                                className={styles.iconButton}
+                                                aria-label="Видалити"
+                                            >
+                                                <FaTrash />
+                                                <span className={styles.tooltip}>Видалити</span>
+                                            </button>
+                                            <EditPermissionsForm
+                                                groupId={groupId}
+                                                memberId={member._id}
+                                                initialPermissions={permissionsState[member._id] || {
+                                                    canAddTasks: false,
+                                                    canEditTasks: false,
+                                                    canDeleteTasks: false,
+                                                }}
+                                                updatePermissionsState={updatePermissionsState}
+                                            />
+                                        </div>
                                     )}
                                 </li>
                             ) : null
@@ -255,20 +287,6 @@ const Group = ({
                     </ul>
                 </div>
             )}
-            <MyModal visible={inviteModalVisible} setVisible={setInviteModalVisible}>
-                <div className={styles.inviteForm}>
-                    <h3>Запросити користувача</h3>
-                    <form onSubmit={handleInviteUser}>
-                        <MyInput
-                            value={inviteEmail}
-                            onChange={(e) => setInviteEmail(e.target.value)}
-                            type="email"
-                            placeholder="Електронна адреса"
-                        />
-                        <MyButton type="submit">Надіслати запрошення</MyButton>
-                    </form>
-                </div>
-            </MyModal>
             {tasks.length ? 
                 <div>
                     {tasks.map((task, index) => (
@@ -292,6 +310,8 @@ const Group = ({
                             number={index + 1} 
                             task={task} 
                             key={task._id}
+                            canEditTasks={canEditTasks}
+                            canDeleteTasks={canDeleteTasks}
                         />
                     ))}
                 </div>

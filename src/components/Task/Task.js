@@ -56,9 +56,12 @@ const Task = (props) => {
                 <div className={styles.taskInfo}>
                     <div className={!task.status ? styles.close : ''}>
                         <div className={styles.taskHeader}>
-                            <MyButton onClick={() => props.priorityTask(task)} className={styles.iconButton}>
-                                <FaStar className={task.priority ? styles.activeIcon : ''} />
-                            </MyButton>    
+                            {props.canEditTasks && (
+                                <button onClick={() => props.priorityTask(task)} className={styles.iconButton} aria-label={task.priority ? 'Звичайний' : 'Пріоритетний'}>
+                                    <FaStar className={task.priority ? styles.activeIcon : ''} />
+                                    <span className={styles.tooltip}>{task.priority ? 'Звичайний' : 'Пріоритетний'}</span>
+                                </button>    
+                            )} 
                             <div className={styles.taskTitle}>
                                 {props.number}. {task.title}
                             </div>
@@ -87,18 +90,28 @@ const Task = (props) => {
                 </div>
             ) : (
                 <div className={styles.taskButtons}>
-                    <MyButton onClick={toggleDetails} className={styles.iconButton}>
+                    <button onClick={toggleDetails} className={styles.iconButton} aria-label="Деталі">
                         <FaInfoCircle className={showDetails ? styles.activeDetailsIcon : ''} />
-                    </MyButton>
-                    <MyButton onClick={() => props.editTask(task)} className={styles.iconButton}>
-                        <FaPencilAlt />
-                    </MyButton>
-                    <MyButton onClick={() => props.removeTask(task)} className={styles.iconButton}>
-                        <FaTrash />
-                    </MyButton>
-                    <MyButton onClick={() => props.statusTask(task)} className={styles.iconButton}>
-                        {task.status ? <FaLockOpen /> : <FaLock />}
-                    </MyButton>
+                        <span className={styles.tooltip}>Деталі</span>
+                    </button>
+                    {props.canEditTasks && (
+                        <>
+                        <button onClick={() => props.editTask(task)} className={styles.iconButton} aria-label="Редагувати">
+                            <FaPencilAlt />
+                            <span className={styles.tooltip}>Редагувати</span>
+                        </button>
+                        <button onClick={() => props.statusTask(task)} className={styles.iconButton} aria-label={task.status ? 'Виконано' : 'Не виконано'}>
+                            {task.status ? <FaLockOpen /> : <FaLock />}
+                            <span className={styles.tooltip}>{task.status ? 'Виконано' : 'Не виконано'}</span>
+                        </button>
+                        </>
+                    )}
+                    {props.canDeleteTasks && (
+                        <button onClick={() => props.removeTask(task)} className={styles.iconButton} aria-label="Видалити">
+                            <FaTrash />
+                            <span className={styles.tooltip}>Видалити</span>
+                        </button> 
+                    )}
                 </div>
             )}
         </div>
