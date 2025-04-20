@@ -148,4 +148,9 @@ const List = () => {
     );
 };
 
+
+List.propTypes = {
+    setStatistics: PropTypes.func.isRequired,
+};
+
 export default List;

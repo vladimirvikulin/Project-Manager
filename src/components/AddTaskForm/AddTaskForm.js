@@ -72,4 +72,9 @@ const AddTaskForm = ({ setVisible, id }) => {
     );
 };
 
+AddTaskForm.propTypes = {
+    setVisible: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+};
+
 export default AddTaskForm;

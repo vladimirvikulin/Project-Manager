@@ -321,4 +321,21 @@ const Group = ({
     );
 };
 
+Group.propTypes = {
+    group: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        tasks: PropTypes.arrayOf(
+            PropTypes.shape({
+                _id: PropTypes.string.isRequired,
+                title: PropTypes.string.isRequired,
+                status: PropTypes.bool.isRequired,
+                priority: PropTypes.bool,
+            })
+        ).isRequired,
+    }).isRequired,
+    setStatistics: PropTypes.func.isRequired,
+    removeGroup: PropTypes.func.isRequired,
+};
+
 export default Group;
