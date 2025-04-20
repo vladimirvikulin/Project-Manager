@@ -5,6 +5,7 @@ import { selectGroups, fetchGroups, setNodePositions, resetNodePositions } from 
 import dagre from 'dagre';
 import TaskNetworkInner from '../../components/TaskNetworkInner/TaskNetworkInner';
 import { calculateTimings } from '../../utils/ganttUtils';
+import styles from '../../pages/TaskNetwork/TaskNetwork.module.css';
 
 const createDagreGraph = () => {
     const graph = new dagre.graphlib.Graph();
@@ -15,7 +16,7 @@ const createDagreGraph = () => {
 const getLayoutedElementsForGroup = (nodes, edges) => {
     const dagreGraph = createDagreGraph();
     dagreGraph.setGraph({ 
-        rankdir: 'TB', 
+        rankdir: 'LR',
         nodesep: 100,
         ranksep: 150,
     });
@@ -76,9 +77,10 @@ const TaskNetwork = () => {
                 initialNodes: [
                     {
                         id: 'no-tasks',
-                        type: 'default',
+                        type: 'customNode',
                         data: { label: 'Додайте задачі для відображення графіка' },
                         position: { x: 100, y: 100 },
+                        className: styles.node,
                     }
                 ],
                 initialEdges: [],
@@ -89,7 +91,6 @@ const TaskNetwork = () => {
         let allNodes = [];
         let allEdges = [];
         let allTasksWithTimings = [];
-        let groupOffsetX = 0;
         let groupOffsetY = 0;
 
         groups.items.forEach((group) => {
@@ -103,28 +104,33 @@ const TaskNetwork = () => {
 
             tasksWithTimings.forEach((task) => {
                 const savedPosition = nodePositions[task._id] || { x: 0, y: 0 };
+                const nodeClass = task.deadlineMissed
+                    ? `${styles.node} ${styles.nodeMissedDeadline}`
+                    : task.priority
+                    ? `${styles.node} ${styles.nodePriority}`
+                    : `${styles.node} ${styles.nodeNormal}`;
+
                 groupNodes.push({
                     id: task._id,
-                    type: 'default',
+                    type: 'customNode',
                     data: {
                         label: (
                             <div>
                                 <strong>{task.title} ({group.title})</strong><br />
                                 Тривалість: {task.duration} дн.<br />
-                                Ранній термін: {task.earliestStartDate.toLocaleDateString()} – {task.earliestFinishDate.toLocaleDateString()}<br />
-                                Пізній термін: {task.latestStartDate.toLocaleDateString()} – {task.latestFinishDate.toLocaleDateString()}
+                                <div className={styles.termsWrapper}>
+                                    <span className={styles.earlyTermMarker}></span>
+                                    {task.earliestStartDate.toLocaleDateString()} – {task.earliestFinishDate.toLocaleDateString()}
+                                </div>
+                                <div className={styles.termsWrapper}>
+                                    <span className={styles.lateTermMarker}></span>
+                                    {task.latestStartDate.toLocaleDateString()} – {task.latestFinishDate.toLocaleDateString()}
+                                </div>
                             </div>
                         ),
                     },
                     position: savedPosition,
-                    style: { 
-                        background: task.deadlineMissed ? '#ff9999' : (task.priority ? '#ffcc99' : 'khaki'),
-                        border: '1px solid #777',
-                        padding: '10px',
-                        borderRadius: '4px',
-                        width: 200,
-                        textAlign: 'center',
-                    },
+                    className: nodeClass,
                 });
 
                 if (task.dependencies && task.dependencies.length > 0) {
@@ -140,6 +146,37 @@ const TaskNetwork = () => {
                 }
             });
 
+            const endTasks = groupNodes.filter(
+                (node) => !groupEdges.some((edge) => edge.source === node.id)
+            );
+
+            if (groupNodes.length > 0) {
+                const endNodeId = `end-${group._id}`;
+                groupNodes.push({
+                    id: endNodeId,
+                    type: 'customNode',
+                    data: {
+                        label: (
+                            <div>
+                                <strong>Кінець ({group.title})</strong>
+                            </div>
+                        ),
+                    },
+                    position: { x: 0, y: 0 },
+                    className: `${styles.node} ${styles.nodeEnd}`,
+                });
+
+                endTasks.forEach((task) => {
+                    groupEdges.push({
+                        id: `e-${task.id}-${endNodeId}`,
+                        source: task.id,
+                        target: endNodeId,
+                        animated: false,
+                        style: { stroke: '#777', strokeWidth: 2 },
+                    });
+                });
+            }
+
             const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElementsForGroup(groupNodes, groupEdges);
 
             const maxY = Math.max(...layoutedNodes.map(node => node.position.y), 0);
@@ -153,7 +190,7 @@ const TaskNetwork = () => {
                 return {
                     ...node,
                     position: {
-                        x: node.position.x + groupOffsetX,
+                        x: node.position.x,
                         y: node.position.y + groupOffsetY,
                     },
                 };
@@ -163,7 +200,6 @@ const TaskNetwork = () => {
             allEdges = [...allEdges, ...layoutedEdges];
             allTasksWithTimings = [...allTasksWithTimings, ...tasksWithTimings];
 
-            groupOffsetX += 400;
             groupOffsetY += groupHeight + 150;
         });
 

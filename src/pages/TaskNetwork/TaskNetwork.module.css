@@ -131,3 +131,85 @@
     text-align: center;
     color: #333;
 }
+
+.node {
+    border: 1px solid #777;
+    padding: 10px;
+    border-radius: 4px;
+    width: 200px;
+    text-align: center;
+}
+
+.nodeNormal {
+    background: khaki;
+}
+
+.nodePriority {
+    background: #ffcc99;
+}
+
+.nodeMissedDeadline {
+    background: #ff9999;
+}
+
+.nodeEnd {
+    background: #d3d3d3;
+    width: 150px;
+}
+
+.termsWrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.earlyTermMarker {
+    background-color: #66cc66;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    border-radius: 2px;
+}
+
+.lateTermMarker {
+    background-color: #ff6666;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    border-radius: 2px;
+}
+
+.earlyTermMarker:hover,
+.lateTermMarker:hover {
+    position: relative;
+}
+
+.earlyTermMarker:hover::after {
+    content: "Ранні терміни";
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 10px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.lateTermMarker:hover::after {
+    content: "Пізні терміни";
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 10px;
+    white-space: nowrap;
+    z-index: 10;
+}

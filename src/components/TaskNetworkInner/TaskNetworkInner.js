@@ -4,13 +4,36 @@ import ReactFlow, {
     Controls, 
     MiniMap, 
     useNodesState, 
-    useEdgesState
+    useEdgesState,
+    Handle,
 } from 'reactflow';
 import { Link } from 'react-router-dom';
 import MyButton from '../ui/button/MyButton';
 import GanttChart from '../GanttChart/GanttChart';
 import styles from '../../pages/TaskNetwork/TaskNetwork.module.css';
 import 'reactflow/dist/style.css';
+
+const CustomNode = ({ data, className }) => {
+    return (
+        <div className={className}>
+            <Handle
+                type="source"
+                position="right"
+                style={{ background: '#555', borderRadius: '50%', width: '8px', height: '8px' }}
+            />
+            <div>{data.label}</div>
+            <Handle
+                type="target"
+                position="left"
+                style={{ background: '#555', borderRadius: '50%', width: '8px', height: '8px' }}
+            />
+        </div>
+    );
+};
+
+const nodeTypes = {
+    customNode: CustomNode,
+};
 
 const TaskNetworkInner = ({ initialData, onNodesChangeHandler, ganttData, groups }) => {
     const [isInteractive, setIsInteractive] = useState(true);
@@ -61,6 +84,7 @@ const TaskNetworkInner = ({ initialData, onNodesChangeHandler, ganttData, groups
                         nodesDraggable={isInteractive}
                         nodesConnectable={false}
                         elementsSelectable={true}
+                        nodeTypes={nodeTypes}
                     >
                         <Background />
                         <Controls onInteractiveChange={handleInteractToggle} />
