@@ -1,7 +1,6 @@
 import React from 'react';
 import MyInput from '../ui/input/MyInput';
 import MySelect from '../ui/select/MySelect';
-import PropTypes from 'prop-types';
 
 const GroupsFilter = ({filter, setFilter}) => {
     return (
@@ -22,14 +21,6 @@ const GroupsFilter = ({filter, setFilter}) => {
         />
     </div>
     );
-};
-
-GroupsFilter.propTypes = {
-    filter: PropTypes.shape({
-        searchGroup: PropTypes.string.isRequired,
-        selectedSort: PropTypes.string.isRequired
-    }).isRequired,
-    setFilter: PropTypes.func.isRequired
 };
 
 export default GroupsFilter;

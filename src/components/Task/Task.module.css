@@ -120,28 +120,6 @@
     color: coral;
 }
 
-.editForm {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 100%;
-}
-
-.editForm input {
-    padding: 4px;
-    font-size: 12px;
-}
-
-.editForm .checkboxList {
-    margin: 4px 0;
-}
-
-.editButtons {
-    display: flex;
-    gap: 4px;
-    margin-top: 4px;
-}
-
 @media (max-width: 600px) {
     .task {
         flex-direction: column;

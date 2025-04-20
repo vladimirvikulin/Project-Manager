@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import AddTaskForm from '../AddTaskForm/AddTaskForm.js';
 import { useNavigate } from "react-router-dom";
 import Task from '../Task/Task';
-import MyButton from '../ui/button/MyButton';
-import MyInput from '../ui/input/MyInput';
 import MyModal from '../ui/modal/MyModal';
 import styles from './Group.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask, fetchRemoveUser, fetchGroups } from '../../redux/slices/groups';
 import { selectIsAuth, selectAuthData } from '../../redux/slices/auth';
 import InviteUserForm from '../InviteUserForm/InviteUserForm';
-import EditPermissionsForm from '../EditPermissionsForm/EditPermissionsForm';
+import EditGroupForm from '../EditGroupForm/EditGroupForm'; 
+import MembersList from '../MembersList/MembersList'; 
 import { FaPlus, FaTrash, FaChartBar, FaPencilAlt } from 'react-icons/fa';
 
 const Group = ({
@@ -35,7 +34,7 @@ const Group = ({
     const [deadline, setDeadline] = useState('');
     const [dependencies, setDependencies] = useState([]);
     const [modalTaskVisible, setModalTaskVisible] = useState(false);
-    const [editGroup, setEditGroup] = useState(false);
+    const [modalGroupEditVisible, setModalGroupEditVisible] = useState(false);
     const [editTitle, setEditTitle] = useState(groupTitle);
     const [editExecutorCount, setEditExecutorCount] = useState(executorCount || 2);
     const [permissionsState, setPermissionsState] = useState(
@@ -156,7 +155,6 @@ const Group = ({
             executorCount: Number(editExecutorCount),
         };
         dispatch(fetchUpdateGroup({ updatedGroup, groupId }));
-        setEditGroup(false);
     };
 
     const handleRemoveUser = (userId) => {
@@ -197,29 +195,9 @@ const Group = ({
 
     return (
         <div>
-            {editGroup ? (
-                <div className={styles.editGroupForm}>
-                    <MyInput 
-                        value={editTitle} 
-                        onChange={e => setEditTitle(e.target.value)} 
-                        type="text" 
-                        placeholder="Назва групи"
-                    />
-                    <MyInput 
-                        value={editExecutorCount} 
-                        onChange={e => setEditExecutorCount(e.target.value)} 
-                        type="number" 
-                        placeholder="Кількість виконавців"
-                        min="1"
-                    />
-                    <MyButton onClick={saveGroup}>Зберегти</MyButton>
-                </div>
-            ) : (
-                <div className={styles.groupHeaderWrapper}>
-                    <h1 className={styles.groupHeader}>{groupTitle}</h1>
-                </div>
-            )}
-
+            <div className={styles.groupHeaderWrapper}>
+                <h1 className={styles.groupHeader}>{groupTitle}</h1>
+            </div>
             <span className={styles.executorCount}>
                 Виконавці: {executorCount}
             </span>
@@ -239,54 +217,35 @@ const Group = ({
                         <span className={styles.tooltip}>Видалити групу</span>
                     </button>
                     <InviteUserForm groupId={groupId} />
+                    <button onClick={() => setModalGroupEditVisible(true)} className={styles.iconButton} aria-label="Редагувати групу">
+                        <FaPencilAlt />
+                        <span className={styles.tooltip}>Редагувати групу</span>
+                    </button>
                 </>
             )}
-            {!editGroup && isOwner && (
-                <button onClick={() => setEditGroup(true)} className={styles.iconButton} aria-label="Редагувати групу">
-                    <FaPencilAlt />
-                    <span className={styles.tooltip}>Редагувати групу</span>
-                </button>
-            )}
+            <EditGroupForm
+                visible={modalGroupEditVisible}
+                setVisible={setModalGroupEditVisible}
+                group={group}
+                saveGroup={saveGroup}
+                editTitle={editTitle}
+                setEditTitle={setEditTitle}
+                editExecutorCount={editExecutorCount}
+                setEditExecutorCount={setEditExecutorCount}
+            />
             <button onClick={() => checkCompleted(group)} className={`${styles.iconButton} ${styles.statsButton}`} aria-label="Статистика групи">
                 <FaChartBar />
                 <span className={styles.tooltip}>Статистика групи</span>
             </button>
-            {Array.isArray(members) && members.length > 0 && (
-                <div className={styles.membersList}>
-                    <h3>Учасники:</h3>
-                    <ul>
-                        {members.map((member) => (
-                            member && member._id ? (
-                                <li key={member._id} className={styles.memberItem}>
-                                    <span>{member.fullName} ({member.email})</span>
-                                    {isOwner && member._id.toString() !== authData?._id && (
-                                        <div>
-                                            <button
-                                                onClick={() => handleRemoveUser(member._id)}
-                                                className={styles.iconButton}
-                                                aria-label="Видалити"
-                                            >
-                                                <FaTrash />
-                                                <span className={styles.tooltip}>Видалити</span>
-                                            </button>
-                                            <EditPermissionsForm
-                                                groupId={groupId}
-                                                memberId={member._id}
-                                                initialPermissions={permissionsState[member._id] || {
-                                                    canAddTasks: false,
-                                                    canEditTasks: false,
-                                                    canDeleteTasks: false,
-                                                }}
-                                                updatePermissionsState={updatePermissionsState}
-                                            />
-                                        </div>
-                                    )}
-                                </li>
-                            ) : null
-                        ))}
-                    </ul>
-                </div>
-            )}
+            <MembersList
+                members={members}
+                isOwner={isOwner}
+                authData={authData}
+                handleRemoveUser={handleRemoveUser}
+                groupId={groupId}
+                permissionsState={permissionsState}
+                updatePermissionsState={updatePermissionsState}
+            />
             {tasks.length ? 
                 <div>
                     {tasks.map((task, index) => (
@@ -319,23 +278,6 @@ const Group = ({
             }
         </div>
     );
-};
-
-Group.propTypes = {
-    group: PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-        tasks: PropTypes.arrayOf(
-            PropTypes.shape({
-                _id: PropTypes.string.isRequired,
-                title: PropTypes.string.isRequired,
-                status: PropTypes.bool.isRequired,
-                priority: PropTypes.bool,
-            })
-        ).isRequired,
-    }).isRequired,
-    setStatistics: PropTypes.func.isRequired,
-    removeGroup: PropTypes.func.isRequired,
 };
 
 export default Group;

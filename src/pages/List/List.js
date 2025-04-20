@@ -5,10 +5,10 @@ import AddGroupForm from '../../components/AddGroupForm/AddGroupForm';
 import styles from './List.module.css';
 import GroupsFilter from '../../components/GroupFilter/GroupsFilter';
 import MyModal from '../../components/ui/modal/MyModal';
-import MyButton from '../../components/ui/button/MyButton';
 import { fetchGroups, fetchRemoveGroup, selectGroups } from '../../redux/slices/groups';
 import { selectIsAuth } from '../../redux/slices/auth';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { FaPlus, FaChartBar, FaProjectDiagram } from 'react-icons/fa';
 
 const List = () => {
     const isAuth = useSelector(selectIsAuth);
@@ -120,17 +120,22 @@ const List = () => {
 
     return (
         <div>
-            <div>
-                <div className={styles.link}>
-                    <MyButton onClick={() => checkTaskStatistics()}>Загальна статистика</MyButton>
-                </div>
-                <Link className={styles.link} to="/network">
-                    <MyButton>Мережевий графік</MyButton>
+            <div className={styles.actions}>
+                <button className={styles.iconButton} onClick={() => checkTaskStatistics()} aria-label="Загальна статистика">
+                    <FaChartBar />
+                    <span className={styles.tooltip}>Загальна статистика</span>
+                </button>
+                <Link to="/network">
+                    <button className={styles.iconButton} aria-label="Мережевий графік">
+                        <FaProjectDiagram />
+                        <span className={styles.tooltip}>Мережевий графік</span>
+                    </button>
                 </Link>
+                <button onClick={() => setModalGroupVisible(true)} className={styles.iconButton} aria-label="Створити групу">
+                    <FaPlus />
+                    <span className={styles.tooltip}>Створити групу</span>
+                </button>
             </div>
-            <MyButton onClick={() => setModalGroupVisible(true)}>
-                Створити групу
-            </MyButton>
             <MyModal visible={modalGroupVisible} setVisible={setModalGroupVisible}>
                 <AddGroupForm setModalGroupVisible={setModalGroupVisible} />
             </MyModal>
@@ -146,11 +151,6 @@ const List = () => {
             </div>
         </div>
     );
-};
-
-
-List.propTypes = {
-    setStatistics: PropTypes.func.isRequired,
 };
 
 export default List;

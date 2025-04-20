@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups, selectGroups } from '../../redux/slices/groups';
 import styles from './TaskStatistics.module.css';
 import MyButton from '../../components/ui/button/MyButton';
-import PropTypes from 'prop-types';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, BarElement, CategoryScale, LinearScale, LineElement, PointElement);
 
@@ -376,18 +375,6 @@ const TaskStatistics = () => {
             </div>
         </div>
     );
-};
-
-TaskStatistics.propTypes = {
-  statistics: PropTypes.shape({
-      completed: PropTypes.number.isRequired,
-      notCompleted: PropTypes.number.isRequired,
-      topPriorityGroups: PropTypes.arrayOf(PropTypes.shape({
-          group: PropTypes.string.isRequired,
-          count: PropTypes.number.isRequired,
-      })),
-      title: PropTypes.string,
-  }).isRequired,
 };
 
 export default TaskStatistics;

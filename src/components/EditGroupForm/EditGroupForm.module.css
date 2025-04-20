@@ -1,0 +1,27 @@
+.editGroupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.editGroupForm input {
+    padding: 4px;
+    font-size: 14px;
+}
+
+.editGroupForm button {
+    padding: 8px;
+    font-size: 14px;
+}
+
+.editButtons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+}

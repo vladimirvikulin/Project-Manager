@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './Header.module.css';
 import Container from '@mui/material/Container';
-import MyButton from '../ui/button/MyButton';
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, selectIsAuth } from '../../redux/slices/auth';
+import { FaEnvelope, FaSignOutAlt, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
 
 const Header = () => {
   const isAuth = useSelector(selectIsAuth);
@@ -23,23 +23,33 @@ const Header = () => {
           <Link className={styles.logo} to="/">
             <div>My-To-Do-List</div>
           </Link>
-          <div>
+          <div className={styles.buttons}>
             {isAuth ? (
               <>
                 <Link to="/invitations">
-                  <MyButton>Запрошення</MyButton>
+                  <button className={styles.iconButton} aria-label="Запрошення">
+                    <FaEnvelope />
+                    <span className={styles.tooltip}>Запрошення</span>
+                  </button>
                 </Link>
-                <MyButton onClick={onClickLogout}>
-                  Вийти
-                </MyButton>
+                <button onClick={onClickLogout} className={styles.iconButton} aria-label="Вийти">
+                  <FaSignOutAlt />
+                  <span className={styles.tooltip}>Вийти</span>
+                </button>
               </>
             ) : (
               <>
                 <Link to="/login">
-                  <MyButton>Увійти</MyButton>
+                  <button className={styles.iconButton} aria-label="Увійти">
+                    <FaSignInAlt />
+                    <span className={styles.tooltip}>Увійти</span>
+                  </button>
                 </Link>
                 <Link to="/register">
-                  <MyButton>Створити акаунт</MyButton>
+                  <button className={styles.iconButton} aria-label="Створити акаунт">
+                    <FaUserPlus />
+                    <span className={styles.tooltip}>Створити акаунт</span>
+                  </button>
                 </Link>
               </>
             )}

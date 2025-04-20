@@ -1,0 +1,28 @@
+.editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px;
+}
+
+.editForm h3 {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.editForm input {
+    padding: 4px;
+    font-size: 12px;
+}
+
+.editForm .checkboxList {
+    margin: 4px 0;
+}
+
+.editButtons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+}

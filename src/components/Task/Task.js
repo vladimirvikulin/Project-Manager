@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import MyButton from '../ui/button/MyButton';
-import MyInput from '../ui/input/MyInput';
-import MyCheckboxList from '../ui/checkbox/MyCheckboxList';
+import EditTaskForm from '../EditTaskForm/EditTaskForm';
 import styles from './Task.module.css';
 import { FaStar, FaPencilAlt, FaTrash, FaLock, FaLockOpen, FaInfoCircle } from 'react-icons/fa';
 
 const Task = (props) => {
     const { task, taskOptions, tasks } = props;
     const [showDetails, setShowDetails] = useState(false);
+    const [modalTaskEditVisible, setModalTaskEditVisible] = useState(false);
 
     const calculateDaysLeft = (deadline) => {
         if (!deadline) return '—';
@@ -22,81 +21,49 @@ const Task = (props) => {
         setShowDetails(prev => !prev);
     };
 
+    const handleEditTask = () => {
+        props.editTask(task);
+        setModalTaskEditVisible(true);
+    };
+
     return (
         <div className={task.priority ? `${styles.priorityTask} ${styles.task}` : styles.task}>
-            {props.edit === task._id ? (
-                <div className={styles.editForm}>
-                    <MyInput 
-                        value={props.value} 
-                        onChange={e => props.setValue(e.target.value)} 
-                        type="text" 
-                        placeholder="Назва задачі"
-                    />
-                    <MyInput 
-                        value={props.duration} 
-                        onChange={e => props.setDuration(e.target.value)} 
-                        type="number" 
-                        placeholder="Тривалість (дні)" 
-                        min="1"
-                    />
-                    <MyInput 
-                        value={props.deadline} 
-                        onChange={e => props.setDeadline(e.target.value)} 
-                        type="date" 
-                        placeholder="Дедлайн (опціонально)"
-                    />
-                    <MyCheckboxList
-                        value={props.dependencies}
-                        onChange={props.setDependencies}
-                        label="Залежності (опціонально)"
-                        options={taskOptions}
-                    />
-                </div>
-            ) : (
-                <div className={styles.taskInfo}>
-                    <div className={!task.status ? styles.close : ''}>
-                        <div className={styles.taskHeader}>
-                            {props.canEditTasks && (
-                                <button onClick={() => props.priorityTask(task)} className={styles.iconButton} aria-label={task.priority ? 'Звичайний' : 'Пріоритетний'}>
-                                    <FaStar className={task.priority ? styles.activeIcon : ''} />
-                                    <span className={styles.tooltip}>{task.priority ? 'Звичайний' : 'Пріоритетний'}</span>
-                                </button>    
-                            )} 
-                            <div className={styles.taskTitle}>
-                                {props.number}. {task.title}
-                            </div>
+            <div className={styles.taskInfo}>
+                <div className={!task.status ? styles.close : ''}>
+                    <div className={styles.taskHeader}>
+                        {props.canEditTasks && (
+                            <button onClick={() => props.priorityTask(task)} className={styles.iconButton} aria-label={task.priority ? 'Звичайний' : 'Пріоритетний'}>
+                                <FaStar className={task.priority ? styles.activeIcon : ''} />
+                                <span className={styles.tooltip}>{task.priority ? 'Звичайний' : 'Пріоритетний'}</span>
+                            </button>    
+                        )} 
+                        <div className={styles.taskTitle}>
+                            {props.number}. {task.title}
                         </div>
-                        {showDetails && (
-                            <div className={styles.taskDetails}>
-                                <span className={styles.detailLarge}>Тривалість: {task.duration} дн.</span>
-                                <span className={styles.detailLarge}>Дедлайн: {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Не вказано'}</span>
-                                <span className={styles.detailLarge}>Залишилось: {calculateDaysLeft(task.deadline)}</span>
-                                <span className={styles.detailLarge}>Створено: {task.createdAt ? new Date(task.createdAt).toLocaleDateString() : '—'}</span>
-                                <span className={styles.detailSmall}>
-                                    Залежності: {task.dependencies.length 
-                                        ? task.dependencies.map(id => tasks.find(t => t._id === id)?.title).join(', ') 
-                                        : 'Немає'}
-                                </span>
-                            </div>
-                        )}
                     </div>
+                    {showDetails && (
+                        <div className={styles.taskDetails}>
+                            <span className={styles.detailLarge}>Тривалість: {task.duration} дн.</span>
+                            <span className={styles.detailLarge}>Дедлайн: {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Не вказано'}</span>
+                            <span className={styles.detailLarge}>Залишилось: {calculateDaysLeft(task.deadline)}</span>
+                            <span className={styles.detailLarge}>Створено: {task.createdAt ? new Date(task.createdAt).toLocaleDateString() : '—'}</span>
+                            <span className={styles.detailSmall}>
+                                Залежності: {task.dependencies.length 
+                                    ? task.dependencies.map(id => tasks.find(t => t._id === id)?.title).join(', ') 
+                                    : 'Немає'}
+                            </span>
+                        </div>
+                    )}
                 </div>
-            )}
-            {props.edit === task._id ? (
-                <div className={styles.editButtons}>
-                    <MyButton onClick={() => props.saveTask(task)}>
-                        Зберегти
-                    </MyButton>
-                </div>
-            ) : (
-                <div className={styles.taskButtons}>
-                    <button onClick={toggleDetails} className={styles.iconButton} aria-label="Деталі">
-                        <FaInfoCircle className={showDetails ? styles.activeDetailsIcon : ''} />
-                        <span className={styles.tooltip}>Деталі</span>
-                    </button>
-                    {props.canEditTasks && (
-                        <>
-                        <button onClick={() => props.editTask(task)} className={styles.iconButton} aria-label="Редагувати">
+            </div>
+            <div className={styles.taskButtons}>
+                <button onClick={toggleDetails} className={styles.iconButton} aria-label="Деталі">
+                    <FaInfoCircle className={showDetails ? styles.activeDetailsIcon : ''} />
+                    <span className={styles.tooltip}>Деталі</span>
+                </button>
+                {props.canEditTasks && (
+                    <>
+                        <button onClick={handleEditTask} className={styles.iconButton} aria-label="Редагувати">
                             <FaPencilAlt />
                             <span className={styles.tooltip}>Редагувати</span>
                         </button>
@@ -104,36 +71,32 @@ const Task = (props) => {
                             {task.status ? <FaLockOpen /> : <FaLock />}
                             <span className={styles.tooltip}>{task.status ? 'Виконано' : 'Не виконано'}</span>
                         </button>
-                        </>
-                    )}
-                    {props.canDeleteTasks && (
-                        <button onClick={() => props.removeTask(task)} className={styles.iconButton} aria-label="Видалити">
-                            <FaTrash />
-                            <span className={styles.tooltip}>Видалити</span>
-                        </button> 
-                    )}
-                </div>
-            )}
+                    </>
+                )}
+                {props.canDeleteTasks && (
+                    <button onClick={() => props.removeTask(task)} className={styles.iconButton} aria-label="Видалити">
+                        <FaTrash />
+                        <span className={styles.tooltip}>Видалити</span>
+                    </button> 
+                )}
+            </div>
+            <EditTaskForm
+                visible={modalTaskEditVisible}
+                setVisible={setModalTaskEditVisible}
+                value={props.value}
+                setValue={props.setValue}
+                duration={props.duration}
+                setDuration={props.setDuration}
+                deadline={props.deadline}
+                setDeadline={props.setDeadline}
+                dependencies={props.dependencies}
+                setDependencies={props.setDependencies}
+                taskOptions={taskOptions}
+                saveTask={() => props.saveTask(task)}
+                setEdit={props.setEdit}
+            />
         </div>
     );
-};
-
-Task.propTypes = {
-   task: PropTypes.shape({
-       _id: PropTypes.string.isRequired,
-       title: PropTypes.string.isRequired,
-       status: PropTypes.bool.isRequired,
-       priority: PropTypes.string
-   }).isRequired,
-   edit: PropTypes.string,
-   value: PropTypes.string.isRequired,
-   setValue: PropTypes.func.isRequired,
-   number: PropTypes.number.isRequired,
-   priorityTask: PropTypes.func.isRequired,
-   saveTask: PropTypes.func.isRequired,
-   editTask: PropTypes.func.isRequired,
-   removeTask: PropTypes.func.isRequired,
-   statusTask: PropTypes.func.isRequired
 };
 
 export default Task;
