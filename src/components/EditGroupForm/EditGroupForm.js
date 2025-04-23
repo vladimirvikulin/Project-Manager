@@ -4,7 +4,7 @@ import MyInput from '../ui/input/MyInput';
 import MyModal from '../ui/modal/MyModal';
 import styles from './EditGroupForm.module.css';
 
-const EditGroupForm = ({ visible, setVisible, group, saveGroup, editTitle, setEditTitle, editExecutorCount, setEditExecutorCount }) => {
+const EditGroupForm = ({ visible, setVisible, group, saveGroup, editTitle, setEditTitle }) => {
     return (
         <MyModal visible={visible} setVisible={setVisible}>
             <div className={styles.editGroupForm}>
@@ -14,13 +14,6 @@ const EditGroupForm = ({ visible, setVisible, group, saveGroup, editTitle, setEd
                     onChange={e => setEditTitle(e.target.value)} 
                     type="text" 
                     placeholder="Назва групи"
-                />
-                <MyInput 
-                    value={editExecutorCount} 
-                    onChange={e => setEditExecutorCount(e.target.value)} 
-                    type="number" 
-                    placeholder="Кількість виконавців"
-                    min="1"
                 />
                 <div className={styles.editButtons}>
                     <MyButton onClick={saveGroup}>Зберегти</MyButton>

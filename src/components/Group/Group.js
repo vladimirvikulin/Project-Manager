@@ -16,7 +16,7 @@ const Group = ({
     group,
     removeGroup, 
 }) => {
-    const { _id: groupId, title: groupTitle, tasks, executorCount, members = [], user: ownerId, permissions = [] } = group;
+    const { _id: groupId, title: groupTitle, tasks, members = [], user: ownerId, permissions = [] } = group;
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isAuth = useSelector(selectIsAuth);
@@ -33,10 +33,10 @@ const Group = ({
     const [duration, setDuration] = useState(1);
     const [deadline, setDeadline] = useState('');
     const [dependencies, setDependencies] = useState([]);
+    const [assignedTo, setAssignedTo] = useState('');
     const [modalTaskVisible, setModalTaskVisible] = useState(false);
     const [modalGroupEditVisible, setModalGroupEditVisible] = useState(false);
     const [editTitle, setEditTitle] = useState(groupTitle);
-    const [editExecutorCount, setEditExecutorCount] = useState(executorCount || 2);
     const [permissionsState, setPermissionsState] = useState(
         members.reduce((acc, member) => ({
             ...acc,
@@ -120,6 +120,7 @@ const Group = ({
         setDuration(task.duration || 1);
         setDeadline(task.deadline ? new Date(task.deadline).toISOString().split('T')[0] : '');
         setDependencies(task.dependencies || []);
+        setAssignedTo(task.assignedTo || '');
     };
     
     const saveTask = (task) => {
@@ -129,6 +130,7 @@ const Group = ({
             duration: Number(duration),
             deadline: deadline ? new Date(deadline).toISOString() : undefined,
             dependencies: dependencies || [],
+            assignedTo: assignedTo || null,
         };
         const taskId = task._id;
         setEdit(null);
@@ -136,6 +138,7 @@ const Group = ({
         setDuration(1);
         setDeadline('');
         setDependencies([]);
+        setAssignedTo('');
         dispatch(fetchUpdateTask({ updatedTask, groupId, taskId }));
     };
 
@@ -152,7 +155,6 @@ const Group = ({
         const updatedGroup = {
             ...group,
             title: editTitle,
-            executorCount: Number(editExecutorCount),
         };
         dispatch(fetchUpdateGroup({ updatedGroup, groupId }));
     };
@@ -216,9 +218,6 @@ const Group = ({
             <div className={styles.groupHeaderWrapper}>
                 <h1 className={styles.groupHeader}>{groupTitle}</h1>
             </div>
-            <span className={styles.executorCount}>
-                Виконавці: {executorCount}
-            </span>
             {canAddTasks && (
                 <button onClick={() => setModalTaskVisible(true)} className={styles.iconButton} aria-label="Створити задачу">
                     <FaPlus />
@@ -248,8 +247,6 @@ const Group = ({
                 saveGroup={saveGroup}
                 editTitle={editTitle}
                 setEditTitle={setEditTitle}
-                editExecutorCount={editExecutorCount}
-                setEditExecutorCount={setEditExecutorCount}
             />
             <button onClick={() => checkCompleted(group)} className={`${styles.iconButton} ${styles.statsButton}`} aria-label="Статистика групи">
                 <FaChartBar />
@@ -273,6 +270,7 @@ const Group = ({
                             statusTask={statusTask} 
                             priorityTask={priorityTask}
                             edit={edit} 
+                            setEdit={setEdit}
                             editTask={editTask} 
                             value={value} 
                             setValue={setValue} 
@@ -282,8 +280,11 @@ const Group = ({
                             setDeadline={setDeadline}
                             dependencies={dependencies}
                             setDependencies={setDependencies}
+                            assignedTo={assignedTo}
+                            setAssignedTo={setAssignedTo}
                             taskOptions={taskOptions}
                             tasks={tasks}
+                            members={members}
                             saveTask={saveTask}
                             number={index + 1} 
                             task={task} 

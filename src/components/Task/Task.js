@@ -4,7 +4,7 @@ import styles from './Task.module.css';
 import { FaStar, FaPencilAlt, FaTrash, FaLock, FaLockOpen, FaInfoCircle } from 'react-icons/fa';
 
 const Task = (props) => {
-    const { task, taskOptions, tasks } = props;
+    const { task, taskOptions, tasks, members } = props;
     const [showDetails, setShowDetails] = useState(false);
     const [modalTaskEditVisible, setModalTaskEditVisible] = useState(false);
 
@@ -25,6 +25,10 @@ const Task = (props) => {
         props.editTask(task);
         setModalTaskEditVisible(true);
     };
+
+    const assignedMember = task.assignedTo
+        ? members.find(member => member._id === task.assignedTo)
+        : null;
 
     return (
         <div className={task.priority ? `${styles.priorityTask} ${styles.task}` : styles.task}>
@@ -47,6 +51,9 @@ const Task = (props) => {
                             <span className={styles.detailLarge}>Дедлайн: {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Не вказано'}</span>
                             <span className={styles.detailLarge}>Залишилось: {calculateDaysLeft(task.deadline)}</span>
                             <span className={styles.detailLarge}>Створено: {task.createdAt ? new Date(task.createdAt).toLocaleDateString() : '—'}</span>
+                            <span className={styles.detailLarge}>
+                                Виконавець: {assignedMember ? (assignedMember.fullName || assignedMember.email) : 'Не призначено'}
+                            </span>
                             <span className={styles.detailSmall}>
                                 Залежності: {task.dependencies.length 
                                     ? task.dependencies.map(id => tasks.find(t => t._id === id)?.title).join(', ') 
@@ -91,7 +98,10 @@ const Task = (props) => {
                 setDeadline={props.setDeadline}
                 dependencies={props.dependencies}
                 setDependencies={props.setDependencies}
+                assignedTo={props.assignedTo}
+                setAssignedTo={props.setAssignedTo}
                 taskOptions={taskOptions}
+                members={members}
                 saveTask={() => props.saveTask(task)}
                 setEdit={props.setEdit}
             />
