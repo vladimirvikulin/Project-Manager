@@ -153,10 +153,9 @@ export const calculateTimings = (tasks, groupCreatedAt) => {
     }
 };
 
-export const optimizeGantt = (tasks, numExecutors = 1) => {
+export const optimizeSchedule = (tasks, members) => {
     const sortedTasks = [...tasks].sort((a, b) => a.earliestStart - b.earliestStart);
-    
-    let executors = Array.from({ length: numExecutors }, () => []);
+    let executors = members.map(() => []);
 
     sortedTasks.forEach(task => {
         let placed = false;
@@ -210,105 +209,8 @@ export const optimizeGantt = (tasks, numExecutors = 1) => {
             if (bestExecutorIndex !== -1 && canPlace) {
                 executors[bestExecutorIndex].push(task);
             } else {
-                console.warn(`Cannot place task ${task.title}: no available executors within limit of ${numExecutors}.`);
+                console.warn(`Cannot place task ${task.title}: no available executors among ${members.length} members.`);
             }
-        }
-    });
-
-    let optimizedExecutors = Array.from({ length: numExecutors }, () => []);
-    executors.forEach((executor, executorIndex) => {
-        executor.forEach(task => {
-            let placed = false;
-            for (let i = 0; i < optimizedExecutors.length; i++) {
-                const canFit = optimizedExecutors[i].every(existingTask => {
-                    return (
-                        existingTask.earliestFinish <= task.earliestStart ||
-                        task.earliestFinish <= existingTask.earliestStart
-                    );
-                });
-
-                if (canFit) {
-                    const canPlace = task.dependencies.every(depId => {
-                        const depRow = optimizedExecutors.find(row => row.some(t => t._id === depId));
-                        if (!depRow) return true;
-                        return depRow.find(t => t._id === depId).earliestFinish <= task.earliestStart;
-                    });
-
-                    if (canPlace) {
-                        optimizedExecutors[i].push(task);
-                        placed = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!placed) {
-                let bestExecutorIndex = -1;
-                let minOverlaps = Infinity;
-
-                for (let i = 0; i < optimizedExecutors.length; i++) {
-                    const overlaps = optimizedExecutors[i].filter(existingTask => {
-                        return !(
-                            existingTask.earliestFinish <= task.earliestStart ||
-                            task.earliestFinish <= existingTask.earliestStart
-                        );
-                    }).length;
-
-                    if (overlaps < minOverlaps) {
-                        minOverlaps = overlaps;
-                        bestExecutorIndex = i;
-                    }
-                }
-
-                const canPlace = task.dependencies.every(depId => {
-                    const depRow = optimizedExecutors.find(row => row.some(t => t._id === depId));
-                    if (!depRow) return true;
-                    return depRow.find(t => t._id === depId).earliestFinish <= task.earliestStart;
-                });
-
-                if (bestExecutorIndex !== -1 && canPlace) {
-                    optimizedExecutors[bestExecutorIndex].push(task);
-                } else {
-                    console.warn(`Cannot place task ${task.title} in optimized stage: no available executors within limit of ${numExecutors}.`);
-                }
-            }
-        });
-    });
-
-    return optimizedExecutors;
-};
-
-export const optimizeSchedule = (tasks) => {
-    const sortedTasks = [...tasks].sort((a, b) => a.earliestStart - b.earliestStart);
-    let executors = [];
-
-    sortedTasks.forEach(task => {
-        let placed = false;
-        for (let i = 0; i < executors.length; i++) {
-            const canFit = executors[i].every(existingTask => {
-                return (
-                    existingTask.earliestFinish <= task.earliestStart ||
-                    task.earliestFinish <= existingTask.earliestStart
-                );
-            });
-
-            if (canFit) {
-                const canPlace = task.dependencies.every(depId => {
-                    const depRow = executors.find(row => row.some(t => t._id === depId));
-                    if (!depRow) return true;
-                    return depRow.find(t => t._id === depId).earliestFinish <= task.earliestStart;
-                });
-
-                if (canPlace) {
-                    executors[i].push(task);
-                    placed = true;
-                    break;
-                }
-            }
-        }
-
-        if (!placed) {
-            executors.push([task]);
         }
     });
 

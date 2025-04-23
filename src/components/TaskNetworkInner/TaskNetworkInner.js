@@ -10,7 +10,7 @@ import ReactFlow, {
 import { Link } from 'react-router-dom';
 import MyButton from '../ui/button/MyButton';
 import GanttChart from '../GanttChart/GanttChart';
-import styles from '../../pages/TaskNetwork/TaskNetwork.module.css';
+import styles from './TaskNetworkInner.module.css';
 import 'reactflow/dist/style.css';
 
 const CustomNode = ({ data, className }) => {

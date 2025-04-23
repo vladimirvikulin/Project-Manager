@@ -100,6 +100,7 @@ const TaskNetwork = () => {
             const tasksWithTimings = calculateTimings(group.tasks || [], group.createdAt).map(task => ({
                 ...task,
                 groupId: group._id,
+                members: group.members || [],
             }));
 
             tasksWithTimings.forEach((task) => {
