@@ -2,8 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../axios.js';
 import { fetchGroups } from './groups.js';
 
-export const fetchAuth = createAsyncThunk('auth/fetchAuth', async (params) => {
+export const fetchAuth = createAsyncThunk('auth/fetchAuth', async (params, { dispatch }) => {
     const { data } = await axios.post('/auth/login', params);
+    await dispatch(fetchAuthMe());
     return data;
 });
 
@@ -12,13 +13,15 @@ export const fetchAuthMe = createAsyncThunk('auth/fetchAuthMe', async () => {
     return data;
 });
 
-export const fetchRegister = createAsyncThunk('auth/fetchRegister', async (params) => {
+export const fetchRegister = createAsyncThunk('auth/fetchRegister', async (params, { dispatch }) => {
     const { data } = await axios.post('/auth/register', params);
+    await dispatch(fetchAuthMe());
     return data;
 });
 
 export const fetchManageInvitation = createAsyncThunk('auth/fetchManageInvitation', async ({ groupId, action }, { dispatch }) => {
     const { data } = await axios.post('/auth/invitations', { groupId, action });
+    await dispatch(fetchAuthMe());
     dispatch(fetchGroups());
     return { groupId, action, message: data.message, group: data.group };
 });
@@ -75,12 +78,11 @@ const authSlice = createSlice({
                 state.data = null;
             })
             .addCase(fetchManageInvitation.fulfilled, (state, action) => {
-                const { groupId, action: invitationAction } = action.payload;
+                const { groupId } = action.payload;
                 if (state.data && state.data.pendingInvitations) {
-                    state.data.pendingInvitations = state.data.pendingInvitations.map((invite) =>
-                        invite.groupId === groupId && invite.status === 'pending'
-                            ? { ...invite, status: invitationAction === 'accept' ? 'accepted' : 'declined' }
-                            : invite
+                    state.data.pendingInvitations = state.data.pendingInvitations.filter(
+                        (invite) =>
+                            !(invite.groupId.toString() === groupId.toString() && invite.status === 'pending')
                     );
                 }
             });

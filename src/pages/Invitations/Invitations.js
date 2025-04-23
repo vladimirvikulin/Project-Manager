@@ -1,21 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MyButton from '../../components/ui/button/MyButton';
 import styles from './Invitations.module.css';
-import { fetchManageInvitation } from '../../redux/slices/auth';
+import { fetchManageInvitation, fetchAuthMe } from '../../redux/slices/auth';
 import { selectAuthData } from '../../redux/slices/auth';
 
 const Invitations = () => {
     const dispatch = useDispatch();
     const authData = useSelector(selectAuthData);
 
+    useEffect(() => {
+        dispatch(fetchAuthMe());
+    }, [dispatch]);
+
     const pendingInvitations = authData?.pendingInvitations?.filter(
         (invite) => invite.status === 'pending'
     ) || [];
 
     const handleInvitation = (groupId, action) => {
-        dispatch(fetchManageInvitation({ groupId, action }))
+        const groupIdString = groupId._id ? groupId._id.toString() : groupId.toString();
+        dispatch(fetchManageInvitation({ groupId: groupIdString, action }))
             .then(({ payload }) => {
                 alert(payload.message);
             })
@@ -35,17 +40,28 @@ const Invitations = () => {
             ) : (
                 <ul className={styles.invitationList}>
                     {pendingInvitations.map((invite) => (
-                        <li key={invite.groupId._id} className={styles.invitationItem}>
+                        <li key={invite.groupId?._id || invite.groupId} className={styles.invitationItem}>
                             <div>
-                                <strong>Група: {invite.groupId.title}</strong>
-                                <p>Запрошення від: {invite.invitedBy.fullName} ({invite.invitedBy.email})</p>
+                                <strong>Група: {invite.groupId?.title || 'Невідома група'}</strong>
+                                <p>
+                                    Запрошення від:{' '}
+                                    {invite.invitedBy?.fullName
+                                        ? `${invite.invitedBy.fullName} (${invite.invitedBy.email})`
+                                        : 'Невідомий користувач'}
+                                </p>
                                 <p>Дата: {new Date(invite.invitedAt).toLocaleDateString()}</p>
                             </div>
                             <div className={styles.invitationButtons}>
-                                <MyButton onClick={() => handleInvitation(invite.groupId._id, 'accept')}>
+                                <MyButton
+                                    onClick={() => handleInvitation(invite.groupId, 'accept')}
+                                    disabled={!invite.groupId || !invite.invitedBy}
+                                >
                                     Прийняти
                                 </MyButton>
-                                <MyButton onClick={() => handleInvitation(invite.groupId._id, 'decline')}>
+                                <MyButton
+                                    onClick={() => handleInvitation(invite.groupId, 'decline')}
+                                    disabled={!invite.groupId || !invite.invitedBy}
+                                >
                                     Відхилити
                                 </MyButton>
                             </div>
