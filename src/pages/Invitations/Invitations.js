@@ -32,7 +32,7 @@ const Invitations = () => {
     return (
         <div className={styles.container}>
             <Link to="/">
-                <MyButton>Назад до списку</MyButton>
+                <MyButton>Назад</MyButton>
             </Link>
             <h2>Ваші запрошення</h2>
             {pendingInvitations.length === 0 ? (

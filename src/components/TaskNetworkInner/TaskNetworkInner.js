@@ -8,10 +8,10 @@ import ReactFlow, {
     Handle,
 } from 'reactflow';
 import { Link } from 'react-router-dom';
-import MyButton from '../ui/button/MyButton';
-import GanttChart from '../GanttChart/GanttChart';
 import styles from './TaskNetworkInner.module.css';
 import 'reactflow/dist/style.css';
+import GanttChart from '../GanttChart/GanttChart';
+import { FaList, FaProjectDiagram, FaChartBar, FaRedo } from 'react-icons/fa';
 
 const CustomNode = ({ data, className }) => {
     return (
@@ -59,20 +59,46 @@ const TaskNetworkInner = ({ initialData, onNodesChangeHandler, ganttData, groups
     return (
         <div className={styles.container}>
             <div className={styles.buttonWrapper}>
-                <Link to="/" className={styles.backLink}>
-                    <MyButton>Список</MyButton>
-                </Link>
-                {viewMode === 'graph' && (
-                    <MyButton onClick={initialData.handleResetPositions}>Скинути позиції</MyButton>
-                )}
-                <MyButton onClick={() => setViewMode('graph')}>
-                    Мережевий графік
-                </MyButton>
-                <MyButton onClick={() => setViewMode('gantt')}>
-                    Діаграма Ганта
-                </MyButton>
+                <div className={styles.buttonGroup}>
+                    <Link to="/" className={styles.backLink}>
+                        <button className={styles.iconButton} aria-label="Список">
+                            <FaList />
+                            <span className={styles.tooltip}>Список</span>
+                        </button>
+                    </Link>
+                    <button
+                        onClick={() => setViewMode('graph')}
+                        className={`${styles.iconButton} ${viewMode === 'graph' ? styles.activeIcon : ''}`}
+                        aria-label="Мережевий графік"
+                    >
+                        <FaProjectDiagram />
+                        <span className={styles.tooltip}>Мережевий графік</span>
+                    </button>
+                    <button
+                        onClick={() => setViewMode('gantt')}
+                        className={`${styles.iconButton} ${viewMode === 'gantt' ? styles.activeIcon : ''}`}
+                        aria-label="Діаграма Ганта"
+                    >
+                        <FaChartBar />
+                        <span className={styles.tooltip}>Діаграма Ганта</span>
+                    </button>
+                </div>
             </div>
-            <h1 className={styles.title}>Мережевий графік завдань</h1>
+            <h1 className={styles.title}>
+                {viewMode === 'graph' ? 'Мережевий графік завдань' : 'Діаграма Ганта'}
+            </h1>
+            {viewMode === 'graph' && (
+                <div className={styles.buttonGroup && styles.buttonWrapper}>
+                    <button
+                        onClick={initialData.handleResetPositions}
+                        className={styles.iconButton}
+                        aria-label="Скинути позиції"
+                    >
+                        <FaRedo />
+                        <span className={styles.tooltip}>Скинути позиції</span>
+                    </button>
+                </div>
+            )}
             {viewMode === 'graph' && (
                 <div className={styles.graphWrapper}>
                     <ReactFlow

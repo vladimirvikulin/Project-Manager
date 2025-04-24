@@ -87,7 +87,7 @@
 }
 
 .iconButton:hover svg {
-    color: coral; 
+    color: #007bff; 
 }
 
 .iconButton:hover .tooltip {
@@ -117,7 +117,7 @@
 }
 
 .activeDetailsIcon {
-    color: coral;
+    color: #007bff !important;
 }
 
 @media (max-width: 600px) {

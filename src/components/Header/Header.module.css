@@ -50,7 +50,7 @@
 }
 
 .iconButton:hover svg {
-    color: coral;
+    color: #007bff;
 }
 
 .iconButton:hover .tooltip {

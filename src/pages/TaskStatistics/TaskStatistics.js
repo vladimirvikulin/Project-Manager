@@ -93,7 +93,7 @@ const TaskStatistics = () => {
         return (
             <div className={styles.container}>
                 <Link className={styles.link} to="/">
-                    <MyButton>Список</MyButton>
+                    <MyButton>Назад</MyButton>
                 </Link>
                 <div className={styles.title}>Завантаження...</div>
             </div>
@@ -104,7 +104,7 @@ const TaskStatistics = () => {
         return (
             <div className={styles.container}>
                 <Link className={styles.link} to="/">
-                    <MyButton>Список</MyButton>
+                    <MyButton>Назад</MyButton>
                 </Link>
                 <div className={styles.title}>Не вдалося завантажити статистику. Спробуйте ще раз.</div>
             </div>
@@ -115,7 +115,7 @@ const TaskStatistics = () => {
         return (
             <div className={styles.container}>
                 <Link className={styles.link} to="/">
-                    <MyButton>Список</MyButton>
+                    <MyButton>Назад</MyButton>
                 </Link>
                 <h1 className={styles.title}>Немає груп для відображення статистики.</h1>
             </div>
@@ -323,7 +323,7 @@ const TaskStatistics = () => {
     return (
         <div className={styles.container}>
             <Link className={styles.link} to="/">
-                <MyButton>Список</MyButton>
+                <MyButton>Назад</MyButton>
             </Link>
 
             <div className={styles.title}>

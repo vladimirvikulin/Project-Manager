@@ -29,7 +29,7 @@
 }
 
 .editPermissionsButton:hover svg {
-    color: coral;
+    color: #007bff;
 }
 
 .editPermissionsButton:hover .tooltip {
