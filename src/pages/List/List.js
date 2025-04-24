@@ -91,7 +91,7 @@ const List = () => {
         navigate('/statistics', { state: { statistics } });
     };
 
-    const [filter, setFilter] = useState({ selectedSort: '', searchGroup: '' });
+    const [filter, setFilter] = useState({ selectedSort: '', searchTask: '' });
     const [modalGroupVisible, setModalGroupVisible] = useState(false);
 
     const removeGroup = (group) => {
@@ -99,20 +99,52 @@ const List = () => {
     };
 
     const sorted = useMemo(() => {
-        if (filter.selectedSort === 'groupTitle') return [...groups.items].sort((a, b) => a['title'].localeCompare(b['title']));
-        else if (filter.selectedSort === 'taskTitle') {
-            const filtered = [...groups.items].map(group => ({
+        const items = [...groups.items];
+        if (filter.selectedSort === 'groupTitle') {
+            return items.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (filter.selectedSort === 'taskTitle') {
+            return items.map(group => ({
                 ...group,
                 tasks: [...group.tasks].sort((a, b) => a.title.localeCompare(b.title))
             }));
-            return filtered;
+        } else if (filter.selectedSort === 'createdAtAsc') {
+            return items.map(group => ({
+                ...group,
+                tasks: [...group.tasks].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            }));
+        } else if (filter.selectedSort === 'createdAtDesc') {
+            return items.map(group => ({
+                ...group,
+                tasks: [...group.tasks].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            }));
+        } else if (filter.selectedSort === 'deadlineAsc') {
+            return items.map(group => ({
+                ...group,
+                tasks: [...group.tasks].sort((a, b) => {
+                    const dateA = a.deadline ? new Date(a.deadline) : new Date('9999-12-31');
+                    const dateB = b.deadline ? new Date(b.deadline) : new Date('9999-12-31');
+                    return dateA - dateB;
+                })
+            }));
+        } else if (filter.selectedSort === 'deadlineDesc') {
+            return items.map(group => ({
+                ...group,
+                tasks: [...group.tasks].sort((a, b) => {
+                    const dateA = a.deadline ? new Date(a.deadline) : new Date('9999-12-31');
+                    const dateB = b.deadline ? new Date(b.deadline) : new Date('9999-12-31');
+                    return dateB - dateA;
+                })
+            }));
         }
-        return groups.items;
+        return items;
     }, [filter.selectedSort, groups.items]);
 
     const sortedAndSearch = useMemo(() => {
-        return sorted.filter(group => group.title.toLowerCase().includes(filter.searchGroup));
-    }, [sorted, filter.searchGroup]);
+        if (!filter.searchTask) return sorted;
+        return sorted.filter(group =>
+            group.tasks.some(task => task.title.toLowerCase().includes(filter.searchTask))
+        );
+    }, [sorted, filter.searchTask]);
 
     if (!isAuth) {
         return <Navigate to='/login' />;
