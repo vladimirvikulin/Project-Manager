@@ -6,6 +6,8 @@ import dagre from 'dagre';
 import TaskNetworkInner from '../../components/TaskNetworkInner/TaskNetworkInner';
 import { calculateTimings } from '../../utils/ganttUtils';
 import styles from '../../pages/TaskNetwork/TaskNetwork.module.css';
+import { selectIsAuth } from '../../redux/slices/auth';
+import { Navigate } from 'react-router-dom';
 
 const createDagreGraph = () => {
     const graph = new dagre.graphlib.Graph();
@@ -63,6 +65,7 @@ const getLayoutedElementsForGroup = (nodes, edges) => {
 };
 
 const TaskNetwork = () => {
+    const isAuth = useSelector(selectIsAuth)
     const dispatch = useDispatch();
     const { groups, nodePositions } = useSelector(selectGroups);
     const [ganttData, setGanttData] = useState([]);
@@ -225,6 +228,10 @@ const TaskNetwork = () => {
         }
     };
 
+    if (!isAuth) {
+        return <Navigate to="/login" />;
+    }
+    
     return (
         <ReactFlowProvider>
             <TaskNetworkInner 

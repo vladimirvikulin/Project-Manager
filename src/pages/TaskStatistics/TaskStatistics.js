@@ -1,17 +1,19 @@
 import React, { useEffect } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, BarElement, CategoryScale, LinearScale, LineElement, PointElement } from 'chart.js';
 import { Pie, Bar } from 'react-chartjs-2';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups, selectGroups } from '../../redux/slices/groups';
 import styles from './TaskStatistics.module.css';
 import MyButton from '../../components/ui/button/MyButton';
+import { selectIsAuth } from '../../redux/slices/auth';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, BarElement, CategoryScale, LinearScale, LineElement, PointElement);
 
 const TaskStatistics = () => {
     const location = useLocation();
     const dispatch = useDispatch();
+    const isAuth = useSelector(selectIsAuth)
     const { groups } = useSelector(selectGroups);
     const isGroupsLoading = groups.status === 'loading';
     let statistics = location.state?.statistics;
@@ -19,6 +21,10 @@ const TaskStatistics = () => {
     useEffect(() => {
       dispatch(fetchGroups());
     }, [dispatch]);
+
+    if (!isAuth) {
+        return <Navigate to="/login" />;
+    }
 
     if (!statistics && !isGroupsLoading) {
         let completed = 0;

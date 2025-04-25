@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AddTaskForm from '../AddTaskForm/AddTaskForm.js';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import Task from '../Task/Task';
 import MyModal from '../ui/modal/MyModal';
 import styles from './Group.module.css';
@@ -210,7 +210,7 @@ const Group = ({
         }));
 
     if (!isAuth) {
-        return null;
+        return <Navigate to="/login" />;
     }
 
     return (

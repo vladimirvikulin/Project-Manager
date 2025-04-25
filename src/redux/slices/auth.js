@@ -31,6 +31,19 @@ export const fetchRegister = createAsyncThunk('auth/fetchRegister', async (param
     }
 });
 
+export const fetchUpdateProfile = createAsyncThunk('auth/fetchUpdateProfile', async (formData, { rejectWithValue }) => {
+    try {
+        const { data } = await axios.patch('/auth/profile', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.response?.data?.message || 'Не вдалося оновити профіль');
+    }
+});
+
 export const fetchManageInvitation = createAsyncThunk('auth/fetchManageInvitation', async ({ groupId, action }, { dispatch, rejectWithValue }) => {
     try {
         const { data } = await axios.post('/auth/invitations', { groupId, action });
@@ -102,6 +115,19 @@ const authSlice = createSlice({
             .addCase(fetchRegister.rejected, (state, action) => {
                 state.status = 'error';
                 state.data = null;
+                state.error = action.payload;
+            })
+            .addCase(fetchUpdateProfile.pending, (state) => {
+                state.status = 'loading';
+                state.error = null;
+            })
+            .addCase(fetchUpdateProfile.fulfilled, (state, action) => {
+                state.status = 'loaded';
+                state.data = action.payload;
+                state.error = null;
+            })
+            .addCase(fetchUpdateProfile.rejected, (state, action) => {
+                state.status = 'error';
                 state.error = action.payload;
             })
             .addCase(fetchManageInvitation.fulfilled, (state, action) => {

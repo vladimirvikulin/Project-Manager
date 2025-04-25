@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, selectIsAuth } from '../../redux/slices/auth';
-import { FaEnvelope, FaSignOutAlt, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
+import { FaEnvelope, FaSignOutAlt, FaSignInAlt, FaUserPlus, FaUser } from 'react-icons/fa';
 
 const Header = () => {
   const isAuth = useSelector(selectIsAuth);
@@ -26,6 +26,12 @@ const Header = () => {
           <div className={styles.buttons}>
             {isAuth ? (
               <>
+                <Link to="/profile">
+                  <button className={styles.iconButton} aria-label="Профіль">
+                    <FaUser />
+                    <span className={styles.tooltip}>Профіль</span>
+                  </button>
+                </Link>
                 <Link to="/invitations">
                   <button className={styles.iconButton} aria-label="Запрошення">
                     <FaEnvelope />

@@ -10,6 +10,8 @@ import TaskNetwork from '../pages/TaskNetwork/TaskNetwork';
 import Login from '../pages/Login/Login';
 import Registration from '../pages/Registration/Registration';
 import Invitations from '../pages/Invitations/Invitations';
+import Profile from '../pages/Profile/Profile';
+import Footer from '../components/Footer/Footer';
 
 function App() {
     const dispatch = useDispatch();
@@ -28,7 +30,9 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Registration />} />
                     <Route path="/invitations" element={<Invitations />} />
+                    <Route path="/profile" element={<Profile />} />
                 </Routes>
+                <Footer />
             </BrowserRouter>
         </div>
     );

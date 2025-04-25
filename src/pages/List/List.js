@@ -151,45 +151,36 @@ const List = () => {
     }
 
     return (
-        <div className={styles.pageWrapper}>
-            <div className={styles.contentWrapper}>
-                <div className={styles.actions}>
-                    <button className={styles.iconButton} onClick={() => checkTaskStatistics()} aria-label="Загальна статистика">
-                        <FaChartBar />
-                        <span className={styles.tooltip}>Загальна статистика</span>
+        <div>
+            <div className={styles.actions}>
+                <button className={styles.iconButton} onClick={() => checkTaskStatistics()} aria-label="Загальна статистика">
+                    <FaChartBar />
+                    <span className={styles.tooltip}>Загальна статистика</span>
+                </button>
+                <Link to="/network">
+                    <button className={styles.iconButton} aria-label="Мережевий графік">
+                        <FaProjectDiagram />
+                        <span className={styles.tooltip}>Мережевий графік</span>
                     </button>
-                    <Link to="/network">
-                        <button className={styles.iconButton} aria-label="Мережевий графік">
-                            <FaProjectDiagram />
-                            <span className={styles.tooltip}>Мережевий графік</span>
-                        </button>
-                    </Link>
-                    <button onClick={() => setModalGroupVisible(true)} className={styles.iconButton} aria-label="Створити групу">
-                        <FaPlus />
-                        <span className={styles.tooltip}>Створити групу</span>
-                    </button>
-                </div>
-                <MyModal visible={modalGroupVisible} setVisible={setModalGroupVisible}>
-                    <AddGroupForm setModalGroupVisible={setModalGroupVisible} />
-                </MyModal>
-                <GroupsFilter filter={filter} setFilter={setFilter} />
-                <div>
-                    {isGroupsLoading ? <h1 className={styles.list}>Завантаження</h1> : sortedAndSearch.map((group) =>
-                        <Group
-                            group={group}
-                            removeGroup={removeGroup}
-                            key={group._id}
-                        />
-                    )}
-                </div>
+                </Link>
+                <button onClick={() => setModalGroupVisible(true)} className={styles.iconButton} aria-label="Створити групу">
+                    <FaPlus />
+                    <span className={styles.tooltip}>Створити групу</span>
+                </button>
             </div>
-            <footer className={styles.footer}>
-                <div className={styles.footerContent}>
-                    <p>Project Manager App &copy; 2025</p>
-                    <p>Версія: 1.0.0</p>
-                    <p>Зв’язок: v5o4v7a9@gmail.com</p>
-                </div>
-            </footer>
+            <MyModal visible={modalGroupVisible} setVisible={setModalGroupVisible}>
+                <AddGroupForm setModalGroupVisible={setModalGroupVisible} />
+            </MyModal>
+            <GroupsFilter filter={filter} setFilter={setFilter} />
+            <div>
+                {isGroupsLoading ? <h1 className={styles.list}>Завантаження</h1> : sortedAndSearch.map((group) =>
+                    <Group
+                        group={group}
+                        removeGroup={removeGroup}
+                        key={group._id}
+                    />
+                )}
+            </div>
         </div>
     );
 };
