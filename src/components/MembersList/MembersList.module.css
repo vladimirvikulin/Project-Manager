@@ -19,6 +19,11 @@
     font-size: 14px;
 }
 
+.memberName {
+    cursor: help; 
+    text-decoration: none;
+}
+
 .memberActions {
     display: flex;
     gap: 8px;

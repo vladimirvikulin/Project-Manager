@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserById, selectUserProfile } from '../../redux/slices/auth';
 import EditPermissionsForm from '../EditPermissionsForm/EditPermissionsForm';
+import UserProfileModal from '../UserProfileModal/UserProfileModal';
 import styles from './MembersList.module.css';
 import { FaTrash, FaSignOutAlt } from 'react-icons/fa';
 
 const MembersList = ({ members, isOwner, authData, handleRemoveUser, handleLeaveGroup, groupId, permissionsState, updatePermissionsState }) => {
+    const dispatch = useDispatch();
+    const userProfile = useSelector(selectUserProfile);
+    const [modalVisible, setModalVisible] = useState(false);
+
     if (!Array.isArray(members) || members.length === 0) {
         return null;
     }
+
+    const handleViewProfile = (memberId) => {
+        dispatch(fetchUserById(memberId))
+            .then(() => {
+                setModalVisible(true);
+            })
+            .catch((error) => {
+                alert(error.payload || 'Помилка при отриманні даних користувача');
+            });
+    };
 
     return (
         <div className={styles.membersList}>
@@ -15,7 +32,12 @@ const MembersList = ({ members, isOwner, authData, handleRemoveUser, handleLeave
                 {members.map((member) => (
                     member && member._id ? (
                         <li key={member._id} className={styles.memberItem}>
-                            <span>{member.fullName} ({member.email})</span>
+                            <span
+                                className={styles.memberName}
+                                onClick={() => handleViewProfile(member._id)}
+                            >
+                                {member.fullName} ({member.email})
+                            </span>
                             <div className={styles.memberActions}>
                                 {authData?._id === member._id.toString() && !isOwner && (
                                     <button
@@ -54,6 +76,11 @@ const MembersList = ({ members, isOwner, authData, handleRemoveUser, handleLeave
                     ) : null
                 ))}
             </ul>
+            <UserProfileModal
+                visible={modalVisible}
+                setVisible={setModalVisible}
+                user={userProfile}
+            />
         </div>
     );
 };

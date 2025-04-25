@@ -21,6 +21,7 @@ const Profile = () => {
     const [bio, setBio] = useState('');
     const [avatarUrl, setAvatarUrl] = useState('');
     const [avatarFile, setAvatarFile] = useState(null);
+    const [error, setError] = useState(null);
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -40,7 +41,35 @@ const Profile = () => {
         }
     };
 
+    const handleFullNameChange = (e) => {
+        const newFullName = e.target.value;
+        if (newFullName.length <= 50) {
+            setFullName(newFullName);
+        } else {
+            setError('Ім’я не може перевищувати 50 символів');
+        }
+    };
+
+    const handlePhoneChange = (e) => {
+        const newPhone = e.target.value;
+        if (newPhone.length <= 20) {
+            setPhone(newPhone);
+        } else {
+            setError('Номер телефону не може перевищувати 20 символів');
+        }
+    };
+
+    const handleBioChange = (e) => {
+        const newBio = e.target.value;
+        if (newBio.length <= 500) {
+            setBio(newBio);
+        } else {
+            setError('Опис профілю не може перевищувати 500 символів');
+        }
+    };
+
     const handleSaveProfile = async () => {
+        setError(null);
         const formData = new FormData();
         formData.append('fullName', fullName);
         formData.append('phone', phone);
@@ -57,6 +86,8 @@ const Profile = () => {
             setBio(updatedUser.bio || '');
             setAvatarUrl(updatedUser.avatarUrl ? `${BACKEND_URL}${updatedUser.avatarUrl}` : '');
             setAvatarFile(null);
+        } else {
+            setError(result.payload || 'Помилка при збереженні профілю');
         }
     };
 
@@ -73,6 +104,11 @@ const Profile = () => {
             <Typography classes={{ root: styles.title }} variant="h5">
                 Профіль користувача
             </Typography>
+            {error && (
+                <Typography color="error" className={styles.error}>
+                    {error}
+                </Typography>
+            )}
             <div className={styles.profileContent}>
                 <div className={styles.avatarSection}>
                     {avatarUrl ? (
@@ -101,7 +137,7 @@ const Profile = () => {
                     <TextField
                         label="Ім'я"
                         value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
+                        onChange={handleFullNameChange}
                         fullWidth
                         className={styles.field}
                     />
@@ -115,18 +151,19 @@ const Profile = () => {
                     <TextField
                         label="Телефон"
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        onChange={handlePhoneChange}
                         fullWidth
                         className={styles.field}
                     />
                     <TextField
                         label="Опис профілю"
                         value={bio}
-                        onChange={(e) => setBio(e.target.value)}
+                        onChange={handleBioChange}
                         fullWidth
                         multiline
                         rows={3}
                         className={styles.field}
+                        helperText={`${bio.length}/500`}
                     />
                     <div className={styles.infoItem}>
                         <Typography variant="body1">

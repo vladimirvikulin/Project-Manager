@@ -55,10 +55,20 @@ export const fetchManageInvitation = createAsyncThunk('auth/fetchManageInvitatio
     }
 });
 
+export const fetchUserById = createAsyncThunk('auth/fetchUserById', async (userId, { rejectWithValue }) => {
+    try {
+        const { data } = await axios.get(`/users/${userId}`);
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.response?.data?.message || 'Не вдалося отримати дані користувача');
+    }
+});
+
 const initialState = {
     data: null,
     status: 'loading',
     error: null,
+    userProfile: null,
 };
 
 const authSlice = createSlice({
@@ -138,6 +148,21 @@ const authSlice = createSlice({
                             !(invite.groupId.toString() === groupId.toString() && invite.status === 'pending')
                     );
                 }
+            })
+            .addCase(fetchUserById.pending, (state) => {
+                state.status = 'loading';
+                state.userProfile = null;
+                state.error = null;
+            })
+            .addCase(fetchUserById.fulfilled, (state, action) => {
+                state.status = 'loaded';
+                state.userProfile = action.payload;
+                state.error = null;
+            })
+            .addCase(fetchUserById.rejected, (state, action) => {
+                state.status = 'error';
+                state.userProfile = null;
+                state.error = action.payload;
             });
     },
 });
@@ -145,6 +170,7 @@ const authSlice = createSlice({
 export const selectIsAuth = (state) => Boolean(state.auth.data);
 export const selectAuthData = (state) => state.auth.data;
 export const selectAuthError = (state) => state.auth.error;
+export const selectUserProfile = (state) => state.auth.userProfile;
 export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
