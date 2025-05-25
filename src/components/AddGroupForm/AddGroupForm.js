@@ -21,7 +21,7 @@ const AddGroupForm = ({ setModalGroupVisible }) => {
                 setTitle('');
             })
             .catch((error) => {
-                alert(error.response?.data?.message || 'Помилка при створенні групи');
+                alert(error.response?.data?.message || 'Помилка при створенні проєкту');
             });
     };
 
@@ -32,9 +32,9 @@ const AddGroupForm = ({ setModalGroupVisible }) => {
                     value={title} 
                     onChange={e => setTitle(e.target.value)} 
                     type="text" 
-                    placeholder="Назва групи"
+                    placeholder="Назва проєкту"
                 />
-                <MyButton onClick={addNewGroup}>Додати групу</MyButton>
+                <MyButton onClick={addNewGroup}>Додати проєкт</MyButton>
             </form>
         </div>
     );

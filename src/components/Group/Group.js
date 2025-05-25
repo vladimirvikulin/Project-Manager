@@ -5,16 +5,16 @@ import Task from '../Task/Task';
 import MyModal from '../ui/modal/MyModal';
 import styles from './Group.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask, fetchRemoveUser, fetchGroups } from '../../redux/slices/groups';
+import { fetchDeleteTask, fetchUpdateGroup, fetchUpdateTask, fetchRemoveUser, fetchGroups, fetchInviteUser } from '../../redux/slices/groups';
 import { selectIsAuth, selectAuthData } from '../../redux/slices/auth';
 import InviteUserForm from '../InviteUserForm/InviteUserForm';
 import EditGroupForm from '../EditGroupForm/EditGroupForm';
 import MembersList from '../MembersList/MembersList';
-import { FaPlus, FaTrash, FaChartBar, FaPencilAlt } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaChartBar, FaPencilAlt, FaUserPlus } from 'react-icons/fa';
 
 const Group = ({
     group,
-    removeGroup, 
+    removeGroup,
 }) => {
     const { _id: groupId, title: groupTitle, tasks, members = [], user: ownerId, permissions = [] } = group;
     const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const Group = ({
     const isAuth = useSelector(selectIsAuth);
     const authData = useSelector(selectAuthData);
     const isOwner = authData && ownerId && authData._id === ownerId.toString();
-    
+
     const userPermissions = permissions.find(perm => perm.userId === authData?._id) || {};
     const canAddTasks = isOwner || userPermissions.canAddTasks;
     const canEditTasks = isOwner || userPermissions.canEditTasks;
@@ -36,6 +36,8 @@ const Group = ({
     const [assignedTo, setAssignedTo] = useState('');
     const [modalTaskVisible, setModalTaskVisible] = useState(false);
     const [modalGroupEditVisible, setModalGroupEditVisible] = useState(false);
+    const [modalInviteVisible, setModalInviteVisible] = useState(false);
+    const [inviteEmail, setInviteEmail] = useState('');
     const [editTitle, setEditTitle] = useState(groupTitle);
     const [permissionsState, setPermissionsState] = useState(
         members.reduce((acc, member) => ({
@@ -99,12 +101,12 @@ const Group = ({
         };
         navigate('/statistics', { state: { statistics: updatedGroup } });
     };
-    
+
     const removeTask = (task) => {
         const taskId = task._id;
         dispatch(fetchDeleteTask({ groupId, taskId }));
     };
-    
+
     const statusTask = (task) => {
         const updatedTask = {
             ...task,
@@ -122,7 +124,7 @@ const Group = ({
         setDependencies(task.dependencies || []);
         setAssignedTo(task.assignedTo || '');
     };
-    
+
     const saveTask = (task) => {
         const updatedTask = {
             ...task,
@@ -159,8 +161,26 @@ const Group = ({
         dispatch(fetchUpdateGroup({ updatedGroup, groupId }));
     };
 
+    const handleInviteUser = (e) => {
+        e.preventDefault();
+        if (!inviteEmail) {
+            alert('Введіть електронну адресу');
+            return;
+        }
+        dispatch(fetchInviteUser({ groupId, email: inviteEmail }))
+            .then(({ payload }) => {
+                alert(payload.message);
+                setInviteEmail('');
+                setModalInviteVisible(false);
+                dispatch(fetchGroups());
+            })
+            .catch((error) => {
+                alert(error.response?.data?.message || 'Помилка при надсиланні запрошення');
+            });
+    };
+
     const handleRemoveUser = (userId) => {
-        if (window.confirm('Ви впевнені, що хочете видалити цього користувача з групи?')) {
+        if (window.confirm('Ви впевнені, що хочете видалити цього користувача з проєкту?')) {
             dispatch(fetchRemoveUser({ groupId, userId }))
                 .then(({ payload }) => {
                     alert(payload.message);
@@ -178,7 +198,7 @@ const Group = ({
     };
 
     const handleLeaveGroup = (userId) => {
-        if (window.confirm('Ви впевнені, що хочете вийти з цієї групи?')) {
+        if (window.confirm('Ви впевнені, що хочете вийти з цього проєкту?')) {
             dispatch(fetchRemoveUser({ groupId, userId }))
                 .then(({ payload }) => {
                     alert(payload.message);
@@ -190,7 +210,7 @@ const Group = ({
                     });
                 })
                 .catch((error) => {
-                    alert(error.response?.data?.message || 'Помилка при виході з групи');
+                    alert(error.response?.data?.message || 'Помилка при виході з проєкту');
                 });
         }
     };
@@ -214,32 +234,50 @@ const Group = ({
     }
 
     return (
-        <div>
+        <div className={styles.groupContainer}>
+            <h1 className={styles.groupHeader}>{groupTitle}</h1>
             <div className={styles.groupHeaderWrapper}>
-                <h1 className={styles.groupHeader}>{groupTitle}</h1>
+                <div className={styles.actions}>
+                    {canAddTasks && (
+                        <button onClick={() => setModalTaskVisible(true)} className={styles.iconButton} aria-label="Створити задачу">
+                            <FaPlus />
+                            <span className={styles.tooltip}>Створити задачу</span>
+                        </button>
+                    )}
+                    {isOwner && (
+                        <>
+                            <button onClick={() => removeGroup(group)} className={styles.iconButton} aria-label="Видалити проєкт">
+                                <FaTrash />
+                                <span className={styles.tooltip}>Видалити проєкт</span>
+                            </button>
+                            <button onClick={() => setModalInviteVisible(true)} className={styles.iconButton} aria-label="Запросити користувача">
+                                <FaUserPlus />
+                                <span className={styles.tooltip}>Запросити користувача</span>
+                            </button>
+                            <button onClick={() => setModalGroupEditVisible(true)} className={styles.iconButton} aria-label="Редагувати проєкт">
+                                <FaPencilAlt />
+                                <span className={styles.tooltip}>Редагувати проєкт</span>
+                            </button>
+                        </>
+                    )}
+                    <button onClick={() => checkCompleted(group)} className={styles.iconButton} aria-label="Статистика проєкту">
+                        <FaChartBar />
+                        <span className={styles.tooltip}>Статистика проєкту</span>
+                    </button>
+                </div>
             </div>
-            {canAddTasks && (
-                <button onClick={() => setModalTaskVisible(true)} className={styles.iconButton} aria-label="Створити задачу">
-                    <FaPlus />
-                    <span className={styles.tooltip}>Створити задачу</span>
-                </button>
-            )}
             <MyModal visible={modalTaskVisible} setVisible={setModalTaskVisible}>
                 <AddTaskForm id={group._id} setVisible={setModalTaskVisible} />
             </MyModal>
-            {isOwner && (
-                <>
-                    <button onClick={() => removeGroup(group)} className={styles.iconButton} aria-label="Видалити групу">
-                        <FaTrash />
-                        <span className={styles.tooltip}>Видалити групу</span>
-                    </button>
-                    <InviteUserForm groupId={groupId} />
-                    <button onClick={() => setModalGroupEditVisible(true)} className={styles.iconButton} aria-label="Редагувати групу">
-                        <FaPencilAlt />
-                        <span className={styles.tooltip}>Редагувати групу</span>
-                    </button>
-                </>
-            )}
+            <MyModal visible={modalInviteVisible} setVisible={setModalInviteVisible}>
+                <InviteUserForm
+                    visible={modalInviteVisible}
+                    setVisible={setModalInviteVisible}
+                    inviteEmail={inviteEmail}
+                    setInviteEmail={setInviteEmail}
+                    handleInviteUser={handleInviteUser}
+                />
+            </MyModal>
             <EditGroupForm
                 visible={modalGroupEditVisible}
                 setVisible={setModalGroupEditVisible}
@@ -248,10 +286,6 @@ const Group = ({
                 editTitle={editTitle}
                 setEditTitle={setEditTitle}
             />
-            <button onClick={() => checkCompleted(group)} className={`${styles.iconButton} ${styles.statsButton}`} aria-label="Статистика групи">
-                <FaChartBar />
-                <span className={styles.tooltip}>Статистика групи</span>
-            </button>
             <MembersList
                 members={members}
                 isOwner={isOwner}
@@ -262,18 +296,18 @@ const Group = ({
                 permissionsState={permissionsState}
                 updatePermissionsState={updatePermissionsState}
             />
-            {tasks.length ? 
-                <div>
+            {tasks.length ? (
+                <div className={styles.taskList}>
                     {tasks.map((task, index) => (
-                        <Task 
-                            removeTask={removeTask} 
-                            statusTask={statusTask} 
+                        <Task
+                            removeTask={removeTask}
+                            statusTask={statusTask}
                             priorityTask={priorityTask}
-                            edit={edit} 
+                            edit={edit}
                             setEdit={setEdit}
-                            editTask={editTask} 
-                            value={value} 
-                            setValue={setValue} 
+                            editTask={editTask}
+                            value={value}
+                            setValue={setValue}
                             duration={duration}
                             setDuration={setDuration}
                             deadline={deadline}
@@ -286,16 +320,17 @@ const Group = ({
                             tasks={tasks}
                             members={members}
                             saveTask={saveTask}
-                            number={index + 1} 
-                            task={task} 
+                            number={index + 1}
+                            task={task}
                             key={task._id}
                             canEditTasks={canEditTasks}
                             canDeleteTasks={canDeleteTasks}
                         />
                     ))}
                 </div>
-                : <h1 className={styles.groupHeader}>Список задач порожній</h1>
-            }
+            ) : (
+                <h1 className={styles.groupHeader}>Список задач порожній</h1>
+            )}
         </div>
     );
 };

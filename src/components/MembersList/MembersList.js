@@ -43,22 +43,14 @@ const MembersList = ({ members, isOwner, authData, handleRemoveUser, handleLeave
                                     <button
                                         onClick={() => handleLeaveGroup(member._id)}
                                         className={styles.iconButton}
-                                        aria-label="Вийти з групи"
+                                        aria-label="Вийти з проєкту"
                                     >
                                         <FaSignOutAlt />
-                                        <span className={styles.tooltip}>Вийти з групи</span>
+                                        <span className={styles.tooltip}>Вийти з проєкту</span>
                                     </button>
                                 )}
                                 {isOwner && member._id.toString() !== authData?._id && (
                                     <>
-                                        <button
-                                            onClick={() => handleRemoveUser(member._id)}
-                                            className={styles.iconButton}
-                                            aria-label="Видалити"
-                                        >
-                                            <FaTrash />
-                                            <span className={styles.tooltip}>Видалити</span>
-                                        </button>
                                         <EditPermissionsForm
                                             groupId={groupId}
                                             memberId={member._id}
@@ -69,6 +61,14 @@ const MembersList = ({ members, isOwner, authData, handleRemoveUser, handleLeave
                                             }}
                                             updatePermissionsState={updatePermissionsState}
                                         />
+                                        <button
+                                            onClick={() => handleRemoveUser(member._id)}
+                                            className={styles.iconButton}
+                                            aria-label="Видалити"
+                                        >
+                                            <FaTrash />
+                                            <span className={styles.tooltip}>Видалити</span>
+                                        </button>
                                     </>
                                 )}
                             </div>

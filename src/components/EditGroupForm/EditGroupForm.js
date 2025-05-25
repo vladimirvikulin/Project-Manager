@@ -8,12 +8,12 @@ const EditGroupForm = ({ visible, setVisible, group, saveGroup, editTitle, setEd
     return (
         <MyModal visible={visible} setVisible={setVisible}>
             <div className={styles.editGroupForm}>
-                <h3>Редагувати групу</h3>
+                <h3>Редагувати проєкт</h3>
                 <MyInput 
                     value={editTitle} 
                     onChange={e => setEditTitle(e.target.value)} 
                     type="text" 
-                    placeholder="Назва групи"
+                    placeholder="Назва проєкту"
                 />
                 <div className={styles.editButtons}>
                     <MyButton onClick={saveGroup}>Зберегти</MyButton>

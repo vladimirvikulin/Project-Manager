@@ -1,3 +1,23 @@
+.listContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    margin-top: 55px;
+}
+
+.mainContent {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease;
+}
+
+.mainContentOpen {
+    margin-left: 25%;
+}
+
 .list {
     margin-top: 10px;
     font-size: 18px;
@@ -6,9 +26,10 @@
 
 .actions {
     display: flex;
-    justify-content: flex-end;
     gap: 10px;
-    margin-bottom: 15px;
+    margin: 10px 0;
+    margin-right: 25px;
+    justify-content: flex-end;
 }
 
 .iconButton {
@@ -41,7 +62,7 @@
     visibility: hidden;
     opacity: 0;
     position: absolute;
-    bottom: 125%;
+    top: 125%;
     left: 50%;
     transform: translateX(-50%);
     background-color: #333;

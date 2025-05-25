@@ -2,13 +2,20 @@
     background-color: white;
     padding: 10px 0;
     border-bottom: 1px solid khaki;
-    margin-bottom: 30px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+    box-sizing: border-box;
 }
 
 .inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .logo {
@@ -30,6 +37,7 @@
 .buttons {
     display: flex;
     gap: 10px;
+    margin-right: 20px;
 }
 
 .iconButton {
@@ -73,4 +81,18 @@
     white-space: nowrap;
     z-index: 10;
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+@media (max-width: 600px) {
+    .inner {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .buttons {
+        justify-content: center;
+        margin-right: 0;
+    }
+    .logo {
+        margin-bottom: 10px;
+    }
 }

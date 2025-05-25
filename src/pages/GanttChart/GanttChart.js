@@ -1,11 +1,41 @@
-import React, { useState } from 'react';
-import { optimizeSchedule } from '../../utils/ganttUtils';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchGroups, selectGroups } from '../../redux/slices/groups';
+import { selectIsAuth } from '../../redux/slices/auth';
+import { Navigate, Link } from 'react-router-dom';
+import MyButton from '../../components/ui/button/MyButton';
 import styles from './GanttChart.module.css';
-import { FaCogs } from 'react-icons/fa';
+import { optimizeSchedule } from '../../utils/ganttUtils';
 
-const GanttChart = ({ ganttData, groups }) => {
+const GanttChart = () => {
+    const dispatch = useDispatch();
+    const { groups } = useSelector(selectGroups);
+    const isAuth = useSelector(selectIsAuth);
+    const isGroupsLoading = groups.status === 'loading';
+
     const [useOptimizedSchedule, setUseOptimizedSchedule] = useState(false);
     const DAY_WIDTH = 30;
+
+    useEffect(() => {
+        dispatch(fetchGroups());
+    }, [dispatch]);
+
+    const ganttData = groups.items.flatMap(group =>
+        group.tasks.map(task => ({
+            ...task,
+            groupId: group._id,
+            members: group.members,
+            earliestStartDate: new Date(task.earliestStartDate || task.createdAt),
+            earliestFinishDate: new Date(task.earliestFinishDate || task.deadline || task.createdAt),
+            latestFinishDate: new Date(task.deadline || task.earliestFinishDate || task.createdAt),
+            deadlineMissed: task.deadline && new Date(task.deadline) < new Date(),
+            assignedTo: task.assignedTo || null,
+        }))
+    );
+
+    const handleToggleOptimization = () => {
+        setUseOptimizedSchedule(prev => !prev);
+    };
 
     const groupedTasks = ganttData.reduce((acc, task) => {
         const groupId = task.groupId;
@@ -19,32 +49,37 @@ const GanttChart = ({ ganttData, groups }) => {
         return acc;
     }, {});
 
-    const handleToggleOptimization = () => {
-        setUseOptimizedSchedule(prev => !prev);
-    };
+    if (!isAuth) {
+        return <Navigate to="/login" />;
+    }
+
+    if (isGroupsLoading) {
+        return <div>Завантаження...</div>;
+    }
 
     return (
-        <div>
+        <div className={styles.container}>
             <div className={styles.buttonWrapper}>
-                <div className={styles.buttonGroup}>
-                    <button
-                        onClick={handleToggleOptimization}
-                        className={`${styles.iconButton} ${useOptimizedSchedule ? styles.activeIcon : ''}`}
-                        aria-label={useOptimizedSchedule ? 'Скасувати оптимізацію' : 'Оптимізація розкладу'}
-                    >
-                        <FaCogs />
-                        <span className={styles.tooltip}>
-                            {useOptimizedSchedule ? 'Скасувати оптимізацію' : 'Оптимізація розкладу'}
-                        </span>
-                    </button>
+                <div className={styles.buttonGroupLeft}>
+                    <Link to="/" className={styles.backLink}>
+                        <MyButton>Назад</MyButton>
+                    </Link>
                 </div>
             </div>
-
+            <h1 className={styles.title}>Діаграма Ганта</h1>
+            <div className={styles.optimizationButtonWrapper}>
+                <MyButton
+                    onClick={handleToggleOptimization}
+                    className={useOptimizedSchedule ? styles.activeButton : ''}
+                >
+                    {useOptimizedSchedule ? 'Скасувати оптимізацію' : 'Оптимізувати розклад'}
+                </MyButton>
+            </div>
             <div className={styles.ganttContainer}>
                 {Object.keys(groupedTasks).map(groupId => {
                     const { tasks: groupTasks, members } = groupedTasks[groupId];
-                    const group = groups.find(g => g._id === groupId);
-                    const groupTitle = group ? group.title : 'Невідома група';
+                    const group = groups.items.find(g => g._id === groupId);
+                    const groupTitle = group ? group.title : 'Невідомий проєкт';
 
                     const minStartDate = new Date(Math.min(...groupTasks.map(task => task.earliestStartDate)));
                     const maxFinishDate = new Date(Math.max(...groupTasks.map(task => task.latestFinishDate)));

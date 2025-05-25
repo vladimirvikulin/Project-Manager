@@ -15,7 +15,7 @@ const GroupsFilter = ({filter, setFilter}) => {
             onChange={selectedSort => setFilter({...filter, selectedSort})}
             defaultValue='Сортування'
             options={[
-                {value: 'groupTitle', name: 'За назвою групи'},
+                {value: 'groupTitle', name: 'За назвою проєкту'},
                 {value: 'taskTitle', name: 'За назвою задачі'},
                 {value: 'createdAtAsc', name: 'За датою створення (спочатку старі)'},
                 {value: 'createdAtDesc', name: 'За датою створення (спочатку нові)'},

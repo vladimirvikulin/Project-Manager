@@ -1,23 +1,26 @@
+.groupContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
 .groupHeader {
     margin-top: 15px;
     font-size: 20px;
-    text-align: center; 
+    text-align: center;
 }
 
 .groupHeaderWrapper {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
+    justify-content: flex-end;
     margin-bottom: 15px;
+    margin-right: 25px;
 }
 
-.executorCount {
+.actions {
     display: flex;
-    font-size: 16px;
-    color: #555;
-    font-weight: normal;
-    justify-content: right;
+    gap: 10px;
 }
 
 .iconButton {
@@ -26,6 +29,9 @@
     background: none;
     border: none;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .iconButton svg {
@@ -58,4 +64,8 @@
     white-space: nowrap;
     z-index: 10;
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+.taskList {
+    margin-top: 15px;
 }

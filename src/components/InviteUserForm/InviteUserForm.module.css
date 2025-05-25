@@ -11,45 +11,27 @@
     margin-bottom: 10px;
 }
 
-.iconButton {
-    position: relative;
-    padding: 5px;
-    background: none;
+.inviteInput {
+    width: 100%;
+    margin: 5px 0;
+    padding: 5px 10px;
+    border: 1px solid khaki;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.inviteButton {
+    font-size: 16px;
+    background-color: khaki;
     border: none;
     cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.iconButton svg {
-    font-size: 18px;
     color: black;
-    transition: color 0.2s ease-in-out;
-}
-
-.iconButton:hover svg {
-    color: #007bff;
-}
-
-.iconButton:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
-}
-
-.tooltip {
-    visibility: hidden;
-    opacity: 0;
-    position: absolute;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
-    color: white;
-    padding: 5px 8px;
+    padding: 5px 10px;
+    margin: 3px;
     border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 10;
-    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    transition: background-color 0.3s;
+}
+
+.inviteButton:hover {
+    background-color: coral;
 }

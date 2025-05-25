@@ -54,10 +54,10 @@
 }
 
 .bio {
-    word-break: break-word; /* Переносить слова на новий рядок */
-    white-space: pre-wrap; /* Зберігає перенесення рядків */
-    max-height: 150px; /* Обмежуємо максимальну висоту */
-    overflow-y: auto; /* Додаємо скрол, якщо текст довший */
-    display: block; /* Забезпечує коректне відображення блоку */
-    line-height: 1.5; /* Збільшуємо висоту рядка для кращої читаності */
+    word-break: break-word;
+    white-space: pre-wrap;
+    max-height: 150px;
+    overflow-y: auto;
+    display: block;
+    line-height: 1.5;
 }

@@ -1,3 +1,42 @@
+.container {
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.buttonWrapper {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 10px;
+}
+
+.buttonGroupLeft {
+    display: flex;
+    gap: 10px;
+}
+
+.backLink {
+    text-decoration: none;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.optimizationButtonWrapper {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
 .ganttContainer {
     width: 100%;
     overflow-x: auto;
@@ -100,7 +139,7 @@
 }
 
 .ganttTaskContent:hover {
-    cursor: help; 
+    cursor: help;
 }
 
 .groupSection {
@@ -116,51 +155,12 @@
     color: #333;
 }
 
-.buttonWrapper {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: flex-end;
-}
-
-.buttonGroup {
-    display: flex;
-    gap: 10px;
-}
-
-.iconButton {
-    position: relative;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    color: #555;
-    transition: color 0.2s;
-}
-
-.iconButton:hover {
-    color: #000;
-}
-
-.activeIcon {
-    color: #007bff;
-}
-
-.tooltip {
-    visibility: hidden;
-    position: absolute;
-    top: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
+.activeButton {
+    background-color: #007bff;
     color: white;
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 10;
+    border-color: #007bff;
 }
 
-.iconButton:hover .tooltip {
-    visibility: visible;
+.activeButton:hover {
+    background-color: #0056b3;
 }

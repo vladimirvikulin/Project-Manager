@@ -4,10 +4,11 @@
     padding: 15px 0;
     text-align: center;
     border-top: 1px solid #e7e7e7;
-    margin-top: 20px;
+    width: 100%;
 }
 
 .footerContent {
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     font-size: 14px;

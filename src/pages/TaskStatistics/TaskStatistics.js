@@ -123,7 +123,7 @@ const TaskStatistics = () => {
                 <Link className={styles.link} to="/">
                     <MyButton>Назад</MyButton>
                 </Link>
-                <h1 className={styles.title}>Немає груп для відображення статистики.</h1>
+                <h1 className={styles.title}>Немає проєктів для відображення статистики.</h1>
             </div>
         );
     }
@@ -188,7 +188,7 @@ const TaskStatistics = () => {
         plugins: {
             title: {
                 display: true,
-                text: 'Найважливіші групи',
+                text: 'Найважливіші проєкти',
                 font: { size: 16 },
             },
             legend: { position: 'bottom' },
@@ -213,7 +213,7 @@ const TaskStatistics = () => {
         plugins: {
             title: {
                 display: true,
-                text: 'Завдання по групах',
+                text: 'Завдання по проєктам',
                 font: { size: 16 },
             },
             legend: { position: 'bottom' },
@@ -224,7 +224,7 @@ const TaskStatistics = () => {
                 title: { display: true, text: 'Кількість завдань' },
             },
             x: {
-                title: { display: true, text: 'Групи' },
+                title: { display: true, text: 'Проєкти' },
             },
         },
         maintainAspectRatio: false,
@@ -281,7 +281,7 @@ const TaskStatistics = () => {
         plugins: {
             title: {
                 display: true,
-                text: isGroupStatistics ? 'Прострочені дедлайни' : 'Прострочені дедлайни по групах',
+                text: isGroupStatistics ? 'Прострочені дедлайни' : 'Прострочені дедлайни по проєктам',
                 font: { size: 16 },
             },
             legend: { position: 'bottom' },
@@ -292,7 +292,7 @@ const TaskStatistics = () => {
                 title: { display: true, text: 'Кількість прострочених' },
             },
             x: {
-                title: { display: true, text: isGroupStatistics ? 'Група' : 'Групи' },
+                title: { display: true, text: isGroupStatistics ? 'Проєкт' : 'Проєкти' },
             },
         },
         maintainAspectRatio: false,
@@ -333,7 +333,7 @@ const TaskStatistics = () => {
             </Link>
 
             <div className={styles.title}>
-                {isGroupStatistics ? `Статистика групи "${statistics.title}"` : 'Загальна статистика'}
+                {isGroupStatistics ? `Статистика проєкту "${statistics.title}"` : 'Загальна статистика'}
             </div>
 
             <div className={styles.textStats}>

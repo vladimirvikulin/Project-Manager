@@ -42,7 +42,7 @@ const Invitations = () => {
                     {pendingInvitations.map((invite) => (
                         <li key={invite.groupId?._id || invite.groupId} className={styles.invitationItem}>
                             <div>
-                                <strong>Група: {invite.groupId?.title || 'Невідома група'}</strong>
+                                <strong>Проєкт: {invite.groupId?.title || 'Невідомий проєкт'}</strong>
                                 <p>
                                     Запрошення від:{' '}
                                     {invite.invitedBy?.fullName
