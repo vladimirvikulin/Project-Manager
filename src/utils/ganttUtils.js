@@ -153,65 +153,112 @@ export const calculateTimings = (tasks, groupCreatedAt) => {
     }
 };
 
-export const optimizeSchedule = (tasks, members) => {
-    const sortedTasks = [...tasks].sort((a, b) => a.earliestStart - b.earliestStart);
-    let executors = members.map(() => []);
+export const sortTasksWithDependencies = (tasks) => {
+    const sortedTasks = [];
+    const visited = new Set();
+    const taskMap = new Map(tasks.map(task => [task._id, task]));
 
-    sortedTasks.forEach(task => {
-        let placed = false;
-        for (let i = 0; i < executors.length; i++) {
-            const canFit = executors[i].every(existingTask => {
-                return (
-                    existingTask.earliestFinish <= task.earliestStart ||
-                    task.earliestFinish <= existingTask.earliestStart
+    const visit = (taskId) => {
+        if (visited.has(taskId)) return;
+        visited.add(taskId);
+
+        const task = taskMap.get(taskId);
+        if (task && task.dependencies) {
+            task.dependencies.forEach(depId => visit(depId));
+        }
+        if (task) sortedTasks.push(task);
+    };
+
+    tasks.forEach(task => {
+        if (!visited.has(task._id)) {
+            visit(task._id);
+        }
+    });
+
+    return sortedTasks;
+};
+
+export const calculateTaskLevel = (occupiedIntervals, startDay, endDay) => {
+    let level = 0;
+    for (let currentLevel = 0; ; currentLevel++) {
+        const hasOverlap = occupiedIntervals.some(interval =>
+            interval.level === currentLevel && !((interval.endDay <= startDay) || (endDay <= interval.startDay))
+        );
+        if (!hasOverlap) {
+            level = currentLevel;
+            break;
+        }
+    }
+    return level;
+};
+
+export const optimizeSchedule = (tasks, members, groupCreatedAt) => {
+    const adjustedTasks = calculateTimings(tasks, groupCreatedAt);
+    const minStartDate = new Date(Math.min(...adjustedTasks.map(task => task.earliestStartDate)));
+    const executors = [];
+
+    let executorCount = 1;
+    let allTasksAssigned = false;
+
+    while (!allTasksAssigned) {
+        executors.length = 0;
+        for (let i = 0; i < executorCount; i++) {
+            executors.push({ tasks: [], occupiedIntervals: [] });
+        }
+
+        allTasksAssigned = true;
+        for (const task of adjustedTasks) {
+            let assigned = false;
+            for (const executor of executors) {
+                const startDay = Math.floor((new Date(task.earliestStartDate) - minStartDate) / (1000 * 60 * 60 * 24));
+                const taskDays = task.duration || Math.ceil((new Date(task.earliestFinishDate) - new Date(task.earliestStartDate)) / (1000 * 60 * 60 * 24));
+                const endDay = startDay + taskDays;
+
+                const hasOverlap = executor.occupiedIntervals.some(interval =>
+                    !(interval.endDay <= startDay || endDay <= interval.startDay)
                 );
-            });
 
-            if (canFit) {
-                const canPlace = task.dependencies.every(depId => {
-                    const depRow = executors.find(row => row.some(t => t._id === depId));
-                    if (!depRow) return true;
-                    return depRow.find(t => t._id === depId).earliestFinish <= task.earliestStart;
-                });
-
-                if (canPlace) {
-                    executors[i].push(task);
-                    placed = true;
+                if (!hasOverlap) {
+                    executor.tasks.push(task);
+                    executor.occupiedIntervals.push({ startDay, endDay, level: 0 });
+                    assigned = true;
                     break;
                 }
             }
-        }
 
-        if (!placed) {
-            let bestExecutorIndex = -1;
-            let minOverlaps = Infinity;
-
-            for (let i = 0; i < executors.length; i++) {
-                const overlaps = executors[i].filter(existingTask => {
-                    return !(
-                        existingTask.earliestFinish <= task.earliestStart ||
-                        task.earliestFinish <= existingTask.earliestStart
-                    );
-                }).length;
-
-                if (overlaps < minOverlaps) {
-                    minOverlaps = overlaps;
-                    bestExecutorIndex = i;
-                }
-            }
-
-            const canPlace = task.dependencies.every(depId => {
-                const depRow = executors.find(row => row.some(t => t._id === depId));
-                if (!depRow) return true;
-                return depRow.find(t => t._id === depId).earliestFinish <= task.earliestStart;
-            });
-
-            if (bestExecutorIndex !== -1 && canPlace) {
-                executors[bestExecutorIndex].push(task);
-            } else {
-                console.warn(`Cannot place task ${task.title}: no available executors among ${members.length} members.`);
+            if (!assigned) {
+                allTasksAssigned = false;
+                break;
             }
         }
+
+        if (!allTasksAssigned) {
+            executorCount++;
+        }
+    }
+
+    executors.forEach(executor => {
+        executor.tasks.sort((a, b) => new Date(a.earliestStartDate) - new Date(b.earliestStartDate));
+        const taskOffsets = new Map();
+        executor.occupiedIntervals = [];
+
+        executor.tasks.forEach((task, index) => {
+            const startDay = Math.floor((new Date(task.earliestStartDate) - minStartDate) / (1000 * 60 * 60 * 24));
+            const taskDays = task.duration || Math.ceil((new Date(task.earliestFinishDate) - new Date(task.earliestStartDate)) / (1000 * 60 * 60 * 24));
+            const endDay = startDay + taskDays;
+
+            const level = calculateTaskLevel(executor.occupiedIntervals, startDay, endDay);
+
+            taskOffsets.set(task._id, level * 50);
+            executor.occupiedIntervals.push({ startDay, endDay, level });
+        });
+
+        const maxLevel = Math.max(...Array.from(taskOffsets.values()).map(offset => offset / 50), 0);
+        executor.tasks = executor.tasks.map(task => ({
+            ...task,
+            offsetY: taskOffsets.get(task._id) || 0,
+        }));
+        executor.maxLevel = maxLevel;
     });
 
     return executors;

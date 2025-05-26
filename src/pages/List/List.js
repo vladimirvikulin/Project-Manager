@@ -10,7 +10,7 @@ import { selectIsAuth, selectAuthData } from '../../redux/slices/auth';
 import { Navigate, Link } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Header from '../../components/Header/Header';
-import { FaChartBar, FaProjectDiagram, FaPlus, FaCalendar } from 'react-icons/fa'; // Додаємо FaChartGantt
+import { FaChartBar, FaProjectDiagram, FaPlus, FaCalendar } from 'react-icons/fa';
 
 const List = () => {
     const isAuth = useSelector(selectIsAuth);
