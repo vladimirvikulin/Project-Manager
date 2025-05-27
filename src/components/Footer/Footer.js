@@ -5,9 +5,7 @@ const Footer = () => {
     return (
         <footer className={styles.footer}>
             <div className={styles.footerContent}>
-                <p>Project Manager App &copy; 2025</p>
-                <p>Версія: 1.0.0</p>
-                <p>Зв’язок: v5o4v7a9@gmail.com</p>
+                <p>&copy; 2025 Management App. All rights reserved.</p>
             </div>
         </footer>
     );

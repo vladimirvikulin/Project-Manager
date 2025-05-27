@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Sidebar.module.css';
 import MyButton from '../ui/button/MyButton';
 
+const BACKEND_URL = 'http://localhost:5000';
+
 const Sidebar = ({ isOpen, toggleSidebar, authData, setModalGroupVisible }) => {
     const navigate = useNavigate();
     return (
@@ -21,6 +23,7 @@ const Sidebar = ({ isOpen, toggleSidebar, authData, setModalGroupVisible }) => {
                 </Link>
             </div>
             <div className={styles.buttonContainer}>
+                <MyButton onClick={() => { toggleSidebar(); navigate('/'); }}>Головна</MyButton>
                 <MyButton onClick={() => { toggleSidebar(); navigate('/profile'); }}>Профіль</MyButton>
                 <MyButton onClick={() => { toggleSidebar(); navigate('/invitations'); }}>Запрошення</MyButton>
                 <MyButton onClick={() => { toggleSidebar(); navigate('/statistics'); }}>Загальна статистика</MyButton>
@@ -33,7 +36,5 @@ const Sidebar = ({ isOpen, toggleSidebar, authData, setModalGroupVisible }) => {
         </div>
     );
 };
-
-const BACKEND_URL = 'http://localhost:5000';
 
 export default Sidebar;

@@ -3,11 +3,20 @@
     margin-top: 60px;
     padding: 30px;
     max-width: 800px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.backLink {
+    display: inline-block;
+    margin-bottom: 20px;
 }
 
 .title {
     text-align: center;
     margin-bottom: 20px;
+    color: #333333;
 }
 
 .profileContent {
@@ -36,7 +45,7 @@
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    background-color: #f0f0f0;
+    background-color: #E6ECF4;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -57,6 +66,7 @@
 
 .infoItem {
     margin-bottom: 10px;
+    color: #333333;
 }
 
 .saveButton {
@@ -71,8 +81,8 @@
 .changePhotoButton {
     position: absolute;
     top: 40%;
-    background: #fff;
-    border: 1px solid #ddd;
+    background: #FFFFFF;
+    border: 1px solid #D3DDE8;
     border-radius: 50%;
     padding: 8px;
     cursor: pointer;
@@ -89,11 +99,11 @@
 }
 
 .changePhotoButton:hover {
-    background-color: #f0f0f0;
+    background-color: #E6ECF4;
 }
 
 .changePhotoButton:hover svg {
-    color: #007bff;
+    color: #4A90E2;
 }
 
 .changePhotoButton:hover .tooltip {
@@ -108,7 +118,7 @@
     top: -40px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333;
+    background-color: #333333;
     color: white;
     padding: 5px 8px;
     border-radius: 4px;
@@ -116,4 +126,10 @@
     white-space: nowrap;
     z-index: 10;
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+.error {
+    color: #D32F2F;
+    text-align: center;
+    margin-bottom: 10px;
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { fetchUpdateProfile, selectIsAuth, selectAuthData } from '../../redux/slices/auth';
 import styles from './Profile.module.css';
 import Paper from '@mui/material/Paper';
@@ -101,6 +101,9 @@ const Profile = () => {
 
     return (
         <Paper classes={{ root: styles.root }}>
+            <Link to="/" className={styles.backLink}>
+                <MyButton>Назад</MyButton>
+            </Link>
             <Typography classes={{ root: styles.title }} variant="h5">
                 Профіль користувача
             </Typography>

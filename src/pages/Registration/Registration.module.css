@@ -1,9 +1,12 @@
 .root {
     width: 400px;
-    padding: 50px;
-    border: 1px solid khaki;
+    padding: 30px;
+    border: 1px solid #D3DDE8;
     margin: 50px auto;
     text-align: center;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .field {
@@ -11,10 +14,10 @@
 }
 
 .title {
-    color: khaki;
+    color: #4A90E2;
     text-align: center !important;
     font-weight: bold !important;
-    margin-bottom: 30px !important;
+    margin-bottom: 20px !important;
 }
 
 .passwordFieldWrapper {
@@ -31,12 +34,12 @@
     border: none;
     cursor: pointer;
     font-size: 18px;
-    color: #555;
+    color: #555555;
     transition: color 0.2s;
 }
 
 .eyeIcon:hover {
-    color: #000;
+    color: #333333;
 }
 
 .eyeIcon:hover .tooltip {
@@ -51,7 +54,7 @@
     bottom: 125%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333;
+    background-color: #333333;
     color: white;
     padding: 5px 8px;
     border-radius: 4px;
@@ -62,8 +65,14 @@
 }
 
 .errorMessage {
-    color: #d32f2f;
+    color: #D32F2F;
     font-size: 14px;
     margin-top: 10px;
     text-align: center;
+}
+
+.root .largeButton {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
 }

@@ -1,10 +1,12 @@
 .footer {
     flex-shrink: 0;
-    background-color: #f8f8f8;
+    background-color: #FFFFFF;
     padding: 15px 0;
     text-align: center;
-    border-top: 1px solid #e7e7e7;
+    border-top: 1px solid #D3DDE8;
     width: 100%;
+    z-index: 100;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .footerContent {
@@ -12,7 +14,7 @@
     max-width: 1200px;
     margin: 0 auto;
     font-size: 14px;
-    color: #666;
+    color: #666666;
 }
 
 .footerContent p {
@@ -20,10 +22,11 @@
 }
 
 .footerContent a {
-    color: #007bff;
+    color: #4A90E2;
     text-decoration: none;
 }
 
 .footerContent a:hover {
     text-decoration: underline;
+    color: #357ABD;
 }

@@ -36,7 +36,10 @@ const Invitations = () => {
             </Link>
             <h2>Ваші запрошення</h2>
             {pendingInvitations.length === 0 ? (
-                <p>Немає активних запрошень.</p>
+                <div className={styles.noInvitations}>
+                    <span className={styles.sadEmoji}>😢</span>
+                    <p className={styles.noInvitationsText}>Немає активних запрошень.</p>
+                </div>
             ) : (
                 <ul className={styles.invitationList}>
                     {pendingInvitations.map((invite) => (

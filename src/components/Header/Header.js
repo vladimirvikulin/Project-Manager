@@ -21,7 +21,7 @@ const Header = ({ toggleSidebar, showMenuButton = true }) => {
             <Container maxWidth={false}>
                 <div className={styles.inner}>
                     <Link className={styles.logo} to="/">
-                        <div>My-To-Do-List</div>
+                        <div>Management-App</div>
                     </Link>
                     <div className={styles.buttons}>
                         {showMenuButton && (

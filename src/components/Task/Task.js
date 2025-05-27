@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import EditTaskForm from '../EditTaskForm/EditTaskForm';
 import styles from './Task.module.css';
-import { FaStar, FaPencilAlt, FaTrash, FaLock, FaLockOpen, FaInfoCircle } from 'react-icons/fa';
+import { FaStar, FaPencilAlt, FaTrash, FaLock, FaLockOpen, FaInfoCircle, FaCheck } from 'react-icons/fa';
 
 const Task = (props) => {
     const { task, taskOptions, tasks, members } = props;
@@ -31,37 +31,42 @@ const Task = (props) => {
         : null;
 
     return (
-        <div className={task.priority ? `${styles.priorityTask} ${styles.task}` : styles.task}>
+        <div className={`${styles.task} ${task.priority ? styles.priorityTask : ''} ${!task.status ? styles.completedTask : ''}`}>
             <div className={styles.taskInfo}>
-                <div className={!task.status ? styles.close : ''}>
-                    <div className={styles.taskHeader}>
-                        {props.canEditTasks && (
-                            <button onClick={() => props.priorityTask(task)} className={styles.iconButton} aria-label={task.priority ? 'Звичайний' : 'Пріоритетний'}>
-                                <FaStar className={task.priority ? styles.activeIcon : ''} />
-                                <span className={styles.tooltip}>{task.priority ? 'Звичайний' : 'Пріоритетний'}</span>
-                            </button>    
-                        )} 
+                <div className={styles.taskHeader}>
+                    {props.canEditTasks && (
+                        <button onClick={() => props.priorityTask(task)} className={styles.iconButton} aria-label={task.priority ? 'Звичайний' : 'Пріоритетний'}>
+                            <FaStar className={task.priority ? styles.activeIcon : ''} />
+                            <span className={styles.tooltip}>{task.priority ? 'Звичайний' : 'Пріоритетний'}</span>
+                        </button>    
+                    )} 
+                    <div className={styles.taskTitleWrapper}>
                         <div className={styles.taskTitle}>
                             {props.number}. {task.title}
                         </div>
+                        {!task.status && (
+                            <span className={styles.completedLabel}>
+                                <FaCheck className={styles.checkIcon} /> Виконано
+                            </span>
+                        )}
                     </div>
-                    {showDetails && (
-                        <div className={styles.taskDetails}>
-                            <span className={styles.detailLarge}>Тривалість: {task.duration} дн.</span>
-                            <span className={styles.detailLarge}>Дедлайн: {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Не вказано'}</span>
-                            <span className={styles.detailLarge}>Залишилось: {calculateDaysLeft(task.deadline)}</span>
-                            <span className={styles.detailLarge}>Створено: {task.createdAt ? new Date(task.createdAt).toLocaleDateString() : '—'}</span>
-                            <span className={styles.detailLarge}>
-                                Виконавець: {assignedMember ? (assignedMember.fullName || assignedMember.email) : 'Не призначено'}
-                            </span>
-                            <span className={styles.detailSmall}>
-                                Залежності: {task.dependencies.length 
-                                    ? task.dependencies.map(id => tasks.find(t => t._id === id)?.title).join(', ') 
-                                    : 'Немає'}
-                            </span>
-                        </div>
-                    )}
                 </div>
+                {showDetails && (
+                    <div className={styles.taskDetails}>
+                        <span className={styles.detailLarge}>Тривалість: {task.duration} дн.</span>
+                        <span className={styles.detailLarge}>Дедлайн: {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'Не вказано'}</span>
+                        <span className={styles.detailLarge}>Залишилось: {calculateDaysLeft(task.deadline)}</span>
+                        <span className={styles.detailLarge}>Створено: {task.createdAt ? new Date(task.createdAt).toLocaleDateString() : '—'}</span>
+                        <span className={styles.detailLarge}>
+                            Виконавець: {assignedMember ? (assignedMember.fullName || assignedMember.email) : 'Не призначено'}
+                        </span>
+                        <span className={styles.detailLarge}>
+                            Залежності: {task.dependencies.length 
+                                ? task.dependencies.map(id => tasks.find(t => t._id === id)?.title).join(', ') 
+                                : 'Немає'}
+                        </span>
+                    </div>
+                )}
             </div>
             <div className={styles.taskButtons}>
                 <button onClick={toggleDetails} className={styles.iconButton} aria-label="Деталі">

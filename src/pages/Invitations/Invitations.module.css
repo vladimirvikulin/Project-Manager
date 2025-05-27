@@ -1,6 +1,13 @@
 .container {
     padding: 20px;
     margin-top: 20px;
+    background-color: #F5F7FA;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
 }
 
 .invitationList {
@@ -14,9 +21,10 @@
     align-items: center;
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f9f9f9;
+    border: 1px solid #D3DDE8;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .invitationItem div {
@@ -26,6 +34,7 @@
 .invitationItem p {
     margin: 5px 0;
     font-size: 14px;
+    color: #333333;
 }
 
 .invitationButtons {
@@ -35,5 +44,37 @@
 
 h2 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    color: #333333;
+}
+
+.noInvitations {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #333333;
+    padding: 20px 0;
+    flex-grow: 1;
+}
+
+.noInvitationsText {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #333333;
+    line-height: 1.5;
+}
+
+.sadEmoji {
+    font-size: 72px;
+    color: #4A90E2;
+    background-color: #E6ECF4;
+    border-radius: 50%;
+    padding: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

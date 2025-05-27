@@ -1,25 +1,40 @@
 .node {
-    border: 1px solid #777;
+    border: 1px solid #D3DDE8;
     padding: 10px;
-    border-radius: 4px;
+    border-radius: 6px;
     width: 200px;
     text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background-color: #FFFFFF;
+    transition: transform 0.2s ease;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+}
+
+.node:hover {
+    transform: scale(1.02);
 }
 
 .nodeNormal {
-    background: khaki;
+    background: #90EE90;
 }
 
 .nodePriority {
-    background: #ffcc99;
+    background: #FFCC99;
 }
 
 .nodeMissedDeadline {
-    background: #ff9999;
+    background: #FF9999;
 }
 
 .nodeEnd {
-    background: #d3d3d3;
+    background: #D3D3D3;
     width: 150px;
 }
 
@@ -27,10 +42,11 @@
     display: flex;
     align-items: center;
     gap: 5px;
+    margin-top: 5px;
 }
 
 .earlyTermMarker {
-    background-color: #66cc66;
+    background-color: #66CC66;
     width: 12px;
     height: 12px;
     display: inline-block;
@@ -38,7 +54,7 @@
 }
 
 .lateTermMarker {
-    background-color: #ff6666;
+    background-color: #FF6666;
     width: 12px;
     height: 12px;
     display: inline-block;
@@ -56,7 +72,7 @@
     top: -25px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333;
+    background-color: #333333;
     color: white;
     padding: 2px 5px;
     border-radius: 3px;
@@ -71,7 +87,7 @@
     top: -25px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333;
+    background-color: #333333;
     color: white;
     padding: 2px 5px;
     border-radius: 3px;

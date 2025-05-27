@@ -3,6 +3,7 @@
     margin-top: 30px;
     max-width: 100%;
     overflow-x: hidden;
+    background-color: #F5F7FA;
 }
 
 .buttonWrapper {
@@ -11,6 +12,9 @@
     margin-bottom: 20px;
     justify-content: space-between;
     align-items: center;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .buttonGroup {
@@ -31,18 +35,24 @@
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
-    color: #333;
+    color: #333333;
 }
 
 .optimizationButtonWrapper {
-    text-align: left;
+    text-align: center;
     margin-bottom: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .ganttContainer {
     width: 100%;
     padding: 20px 0;
     overflow-x: auto;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .scrollableSection {
@@ -50,9 +60,13 @@
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
     display: block;
-    max-width: 90vw;
+    max-width: 100%;
     min-width: 100%;
     margin: 0 auto;
+    border: 1px solid #D3DDE8;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    position: relative;
 }
 
 .ganttWrapper {
@@ -67,18 +81,18 @@
     position: sticky;
     top: 0;
     z-index: 1;
-    background: #fff;
+    background: #FFFFFF;
+    border-bottom: 1px solid #D3DDE8;
 }
 
 .ganttTimelineSpacer {
-    width: 120px;
-    flex: 0 0 120px;
+    width: 200px;
+    flex: 0 0 200px;
 }
 
 .ganttTimeline {
     display: flex;
-    border-bottom: 1px solid #ccc;
-    background: #f5f5f5;
+    background: #E6ECF4;
 }
 
 .ganttTimelineCell {
@@ -86,8 +100,8 @@
     text-align: center;
     font-size: 12px;
     padding: 10px 0;
-    border-right: 1px solid #ddd;
-    color: #333;
+    border-right: 1px solid #D3DDE8;
+    color: #333333;
     transform: rotate(-45deg);
     transform-origin: center;
     white-space: nowrap;
@@ -99,22 +113,33 @@
 
 .ganttRow {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     margin-bottom: 20px;
     min-height: 60px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #D3DDE8;
+    position: relative;
 }
 
 .ganttExecutorLabel {
-    width: 120px;
-    flex: 0 0 120px;
-    text-align: right;
+    width: 200px;
+    flex: 0 0 200px;
     padding-right: 10px;
     font-weight: bold;
-    color: #555;
-    position: sticky;
+    color: #333333;
+    position: absolute;
     left: 0;
-    background: #fff;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
     z-index: 1;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    max-width: 200px;
 }
 
 .ganttRowContent {
@@ -122,35 +147,44 @@
     flex: 1;
     height: 100%;
     min-width: 0;
+    margin-left: 200px;
     background: repeating-linear-gradient(
         to right,
-        #ddd,
-        #ddd 1px,
+        #D3DDE8,
+        #D3DDE8 1px,
         transparent 1px,
         transparent 40px
     );
+    z-index: 2; 
 }
 
 .ganttTask {
-    border-radius: 4px;
+    border-radius: 6px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 8px;
     box-sizing: border-box;
-    color: #333;
-    font-size: 10px;
+    color: #333333;
+    font-size: 12px;
     line-height: 1.5;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 40px;
+    transition: transform 0.2s ease;
+}
+
+.ganttTask:hover {
+    transform: scale(1.02);
 }
 
 .ganttTaskMissed {
-    background: #ff9999;
+    background: #FF9999;
+    color: #333333;
 }
 
 .ganttTaskNormal {
-    background: #90ee90;
+    background: #4A90E2;
+    color: #FFFFFF;
 }
 
 .ganttTaskContent {
@@ -168,23 +202,27 @@
 .groupSection {
     margin-bottom: 40px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #D3DDE8;
     width: 100%;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .groupTitle {
+    padding-top: 20px;
     font-size: 20px;
     margin-bottom: 15px;
     text-align: center;
-    color: #333;
+    color: #333333;
 }
 
 .activeButton {
-    background-color: #007bff;
+    background-color: #4A90E2;
     color: white;
-    border-color: #007bff;
+    border-color: #4A90E2;
 }
 
 .activeButton:hover {
-    background-color: #0056b3;
+    background-color: #357ABD;
 }

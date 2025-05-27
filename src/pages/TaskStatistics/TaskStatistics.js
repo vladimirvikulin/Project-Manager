@@ -13,13 +13,13 @@ ChartJS.register(ArcElement, Tooltip, Legend, Title, BarElement, CategoryScale, 
 const TaskStatistics = () => {
     const location = useLocation();
     const dispatch = useDispatch();
-    const isAuth = useSelector(selectIsAuth)
+    const isAuth = useSelector(selectIsAuth);
     const { groups } = useSelector(selectGroups);
     const isGroupsLoading = groups.status === 'loading';
     let statistics = location.state?.statistics;
 
     useEffect(() => {
-      dispatch(fetchGroups());
+        dispatch(fetchGroups());
     }, [dispatch]);
 
     if (!isAuth) {
@@ -129,8 +129,6 @@ const TaskStatistics = () => {
     }
 
     const isGroupStatistics = statistics.type === 'group';
-    console.log("isGroupStatistics", isGroupStatistics)
-    console.log("statistics.type", statistics.type)
 
     const dataForCompleted = {
         labels: ['Виконані', 'Невиконані'],
@@ -151,6 +149,7 @@ const TaskStatistics = () => {
                 display: true,
                 text: 'Статистика виконання',
                 font: { size: 16 },
+                color: '#333333',
             },
             legend: { position: 'bottom' },
         },
@@ -165,9 +164,9 @@ const TaskStatistics = () => {
                 data: statistics.topPriorityGroups?.map((item) => item.count) || [],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)', 
                     'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(75, 192, 192, 0.2)', 
                     'rgba(153, 102, 255, 0.2)',
                     'rgba(255, 159, 64, 0.2)',
                 ],
@@ -190,6 +189,7 @@ const TaskStatistics = () => {
                 display: true,
                 text: 'Найважливіші проєкти',
                 font: { size: 16 },
+                color: '#333333',
             },
             legend: { position: 'bottom' },
         },
@@ -215,16 +215,19 @@ const TaskStatistics = () => {
                 display: true,
                 text: 'Завдання по проєктам',
                 font: { size: 16 },
+                color: '#333333',
             },
             legend: { position: 'bottom' },
         },
         scales: {
             y: {
                 beginAtZero: true,
-                title: { display: true, text: 'Кількість завдань' },
+                title: { display: true, text: 'Кількість завдань', color: '#333333' },
+                ticks: { color: '#333333' },
             },
             x: {
-                title: { display: true, text: 'Проєкти' },
+                title: { display: true, text: 'Проєкти', color: '#333333' },
+                ticks: { color: '#333333' },
             },
         },
         maintainAspectRatio: false,
@@ -249,16 +252,19 @@ const TaskStatistics = () => {
                 display: true,
                 text: 'Розподіл тривалості задач',
                 font: { size: 16 },
+                color: '#333333',
             },
             legend: { position: 'bottom' },
         },
         scales: {
             x: {
-                title: { display: true, text: 'Тривалість (дні)' },
+                title: { display: true, text: 'Тривалість (дні)', color: '#333333' },
+                ticks: { color: '#333333' },
             },
             y: {
                 beginAtZero: true,
-                title: { display: true, text: 'Кількість задач' },
+                title: { display: true, text: 'Кількість задач', color: '#333333' },
+                ticks: { color: '#333333' },
             },
         },
         maintainAspectRatio: false,
@@ -283,16 +289,19 @@ const TaskStatistics = () => {
                 display: true,
                 text: isGroupStatistics ? 'Прострочені дедлайни' : 'Прострочені дедлайни по проєктам',
                 font: { size: 16 },
+                color: '#333333',
             },
             legend: { position: 'bottom' },
         },
         scales: {
             y: {
                 beginAtZero: true,
-                title: { display: true, text: 'Кількість прострочених' },
+                title: { display: true, text: 'Кількість прострочених', color: '#333333' },
+                ticks: { color: '#333333' },
             },
             x: {
-                title: { display: true, text: isGroupStatistics ? 'Проєкт' : 'Проєкти' },
+                title: { display: true, text: isGroupStatistics ? 'Проєкт' : 'Проєкти', color: '#333333' },
+                ticks: { color: '#333333' },
             },
         },
         maintainAspectRatio: false,
@@ -320,6 +329,7 @@ const TaskStatistics = () => {
                 display: true,
                 text: 'Розподіл залежностей',
                 font: { size: 16 },
+                color: '#333333',
             },
             legend: { position: 'bottom' },
         },
@@ -376,7 +386,7 @@ const TaskStatistics = () => {
                 {statistics.hasOwnProperty('dependencyStats') && (
                     <div className={styles.chartWrapper}>
                         <Pie options={optionsForDependencies} data={dataForDependencies} />
-                    </div>
+                </div>
                 )}
             </div>
         </div>

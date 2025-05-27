@@ -110,7 +110,7 @@ const Registration = () => {
                         {authError}
                     </div>
                 )}
-                <MyButton disabled={!isValid} type='submit'>
+                <MyButton disabled={!isValid} type='submit' className={styles.largeButton}>
                     Зареєструватися
                 </MyButton>
             </form>  

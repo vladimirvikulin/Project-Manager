@@ -126,13 +126,20 @@ const List = () => {
                             <span className={styles.tooltip}>Створити проєкт</span>
                         </button>
                     </div>
-                    <div>
-                        {isGroupsLoading ? <h1 className={styles.list}>Завантаження</h1> : sortedAndSearch.map((group) =>
-                            <Group
-                                group={group}
-                                removeGroup={removeGroup}
-                                key={group._id}
-                            />
+                    <div className={styles.groupsWrapper}>
+                        {isGroupsLoading ? (
+                            <h1 className={styles.list}>Завантаження</h1>
+                        ) : sortedAndSearch.length > 0 ? (
+                            sortedAndSearch.map((group) => (
+                                <div className={styles.groupItem} key={group._id}>
+                                    <Group
+                                        group={group}
+                                        removeGroup={removeGroup}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <h1 className={styles.list}>Проєктів немає</h1>
                         )}
                     </div>
                 </div>

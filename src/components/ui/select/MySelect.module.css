@@ -1,15 +1,17 @@
 .mySelect {
     margin: 5px 0;
-    background-color: khaki;
-    border: 1px solid khaki;
-    border-radius: 4px;
-    padding: 5px;
+    background-color: #FFFFFF;
+    border: 1px solid #D3DDE8;
+    border-radius: 6px;
+    padding: 8px;
     font-size: 14px;
     width: 100%;
     cursor: pointer;
+    transition: border-color 0.2s ease;
 }
 
 .mySelect:focus {
     outline: none;
-    border-color: coral;
+    border-color: #4A90E2;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.2);
 }
