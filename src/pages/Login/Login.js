@@ -89,7 +89,7 @@ const Login = () => {
                         <span className={styles.tooltip}>{showPassword ? 'Приховати пароль' : 'Показати пароль'}</span>
                     </button>
                 </div>
-                {authError && (
+                {authError !== 'Access denied' && (
                     <div className={styles.errorMessage}>
                         {authError}
                     </div>

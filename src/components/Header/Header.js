@@ -60,7 +60,7 @@ const Header = ({ toggleSidebar, showMenuButton = true }) => {
                                 <Link to="/register">
                                     <button className={styles.iconButton} aria-label="Створити акаунт">
                                         <FaUserPlus />
-                                        <span className={styles.tooltip}>Створити акаунт</span>
+                                        <span className={styles.tooltip}>Зареєструватися</span>
                                     </button>
                                 </Link>
                             </>

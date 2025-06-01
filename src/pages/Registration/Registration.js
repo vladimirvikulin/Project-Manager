@@ -48,7 +48,7 @@ const Registration = () => {
     return (
         <Paper classes={{ root: styles.root }}>
             <Typography classes={{ root: styles.title }} variant="h5">
-                Створення акаунта
+                Створення облікового запису
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <TextField
@@ -105,7 +105,7 @@ const Registration = () => {
                         <span className={styles.tooltip}>{showPassword ? 'Приховати пароль' : 'Показати пароль'}</span>
                     </button>
                 </div>
-                {authError && (
+                {authError !== 'Access denied' && (
                     <div className={styles.errorMessage}>
                         {authError}
                     </div>
