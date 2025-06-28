@@ -91,7 +91,10 @@ const GanttChart = () => {
                         const durationDays = task.duration || Math.ceil((new Date(task.earliestFinishDate) - start) / (1000 * 60 * 60 * 24));
                         return new Date(start.getTime() + durationDays * 24 * 60 * 60 * 1000);
                     })));
-                    const totalDays = Math.max(10, Math.ceil((maxFinishDate - minStartDate) / (1000 * 60 * 60 * 24)));
+                    let totalDays = Math.max(10, Math.ceil((maxFinishDate - minStartDate) / (1000 * 60 * 60 * 24)));
+                    if (totalDays < 24) {
+                        totalDays = 24;
+                    }
                     const totalWidth = totalDays * DAY_WIDTH + 200;
 
                     const timelineDates = [];
