@@ -1,8 +1,8 @@
-# My To-Do List+
+# Project Manager
 
 ## Description
 
-This is a project for managing your to-do list and tasks efficiently. The frontend is built with React and is covered with tests to ensure a reliable user experience.
+This is a web application for project planning and management, designed to enhance team collaboration and task efficiency. Built with React, Node.js, Express, and MongoDB, it offers an intuitive UI with Ukrainian localization, advanced analytics (network diagrams, optimized Gantt charts), and secure authentication.
 
 ## How to run
 
@@ -25,16 +25,14 @@ $ npm test
 
 The main features of the My To-Do List+ application include:
 
-- Adding, editing, and deleting tasks. 
-- Creating and deleting task groups. 
-- Setting task priority by color-highlighting the corresponding row. 
-- Marking tasks as completed. 
-- Sorting groups or tasks by name. 
-- Searching for a group by its name. 
-- Assigning tasks to specific groups. 
-- Task statistics, including the total number of completed and pending tasks, both overall and within individual groups. 
-- Task statistics for the most priority groups.
-- User authentication for secure access. 
+- Adding, editing, and deleting tasks and projects.
+- Creating, updating, and deleting task groups with user permissions.
+- Setting task priorities and marking tasks as completed.
+- Sorting and searching projects/tasks by name or other criteria.
+- Assigning tasks to specific projects and managing team members with invitations.
+- Detailed task statistics, including completed/pending tasks, priority groups, and missed deadlines.
+- Visualization tools: network diagrams, optimized Gantt charts, and various statistical charts (Pie, Bar).
+- Secure user authentication and profile management with avatar support.
 
 ## Сode reviews of my project
 
@@ -52,7 +50,7 @@ The main features of the My To-Do List+ application include:
 
 ## Server
 
-[Server](https://github.com/vladimirvikulin/To-Do-List-Server) 
+[Server](https://github.com/vladimirvikulin/Project-Manager-Server) 
 
 ## Acknowledgements
 
